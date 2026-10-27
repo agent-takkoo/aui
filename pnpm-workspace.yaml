@@ -1,0 +1,24 @@
+packages:
+  - apps/*
+  - packages/*
+allowBuilds:
+  esbuild: true
+minimumReleaseAgeExclude:
+  - "@storybook/addon-a11y@10.6.4"
+  - "@storybook/addon-docs@10.6.4"
+  - "@storybook/builder-vite@10.6.4"
+  - "@storybook/react-dom-shim@10.6.4"
+  - "@storybook/react-vite@10.6.4"
+  - "@storybook/react@10.6.4"
+  - "@typescript-eslint/eslint-plugin@8.72.1"
+  - "@typescript-eslint/parser@8.72.1"
+  - "@typescript-eslint/project-service@8.72.1"
+  - "@typescript-eslint/scope-manager@8.72.1"
+  - "@typescript-eslint/tsconfig-utils@8.72.1"
+  - "@typescript-eslint/type-utils@8.72.1"
+  - "@typescript-eslint/types@8.72.1"
+  - "@typescript-eslint/typescript-estree@8.72.1"
+  - "@typescript-eslint/utils@8.72.1"
+  - "@typescript-eslint/visitor-keys@8.72.1"
+  - storybook@10.6.4
+  - typescript-eslint@8.72.1

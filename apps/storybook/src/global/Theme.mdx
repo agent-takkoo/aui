@@ -1,0 +1,99 @@
+import { Canvas, Meta, Source } from "@storybook/addon-docs/blocks";
+import { defaultTheme } from "@ai-system/design-system";
+import * as ThemeStories from "./Theme.stories";
+import { ThemeShapeTable, ThemeColorTable } from "./ThemeReference";
+import providerSource from "../../../../packages/design-system/src/theme/provider.tsx?raw";
+
+<Meta of={ThemeStories} />
+
+# Theme
+
+프로젝트는 `defaultTheme`을 기준으로 색상·radius·글꼴·typography를 정하고 `ThemeProvider`에 주입해요. 이 페이지의 표와 전체 객체는 패키지에서 실제로 export하는 값을 읽어서 보여줘요.
+
+## Theme에 들어가는 값
+
+`Theme` 객체는 여섯 필드로 구성돼요. `light`와 `dark`는 같은 색상 token을 모두 제공해야 해요.
+
+<ThemeShapeTable />
+
+## 색상 token과 기본값
+
+배경과 그 위에 올라가는 글자·아이콘 색은 함께 정해요. 예를 들어 `primary`를 바꾸면 `primaryForeground`가 그 위에서 읽히는지도 확인해요.
+
+<ThemeColorTable />
+
+## 전체 기본 객체
+
+아래 JSON은 별도 예시 값이 아니라 현재 `defaultTheme`이에요.
+
+<Source code={JSON.stringify(defaultTheme, null, 2)} language="json" />
+
+## 프로젝트에 주입하기
+
+기존 기본값을 펼친 다음 프로젝트에서 바꿀 역할색을 지정해요. 아래 예제는 주요 행동의 배경·글자·포커스를 라이트와 다크에 각각 정해요.
+
+```tsx
+import "@ai-system/design-system/styles.css";
+import {
+  ThemeProvider,
+  defaultTheme,
+  defineTheme,
+} from "@ai-system/design-system";
+
+const projectTheme = defineTheme({
+  ...defaultTheme,
+  name: "my-service",
+  radius: "0.75rem",
+  typography: {
+    ...defaultTheme.typography,
+    body: {
+      ...defaultTheme.typography.body,
+      size: "1rem",
+      lineHeight: "1.5rem",
+    },
+  },
+  light: {
+    ...defaultTheme.light,
+    primary: "#135a45",
+    primaryForeground: "#ffffff",
+    ring: "#135a45",
+  },
+  dark: {
+    ...defaultTheme.dark,
+    primary: "#8de0bb",
+    primaryForeground: "#102b21",
+    ring: "#8de0bb",
+  },
+});
+
+export function Root() {
+  return (
+    <ThemeProvider theme={projectTheme} mode="system">
+      <App />
+    </ThemeProvider>
+  );
+}
+```
+
+`defineTheme()`은 필수값을 검사하고 객체를 고정해요. `ThemeProvider`의 theme을 생략하면 `defaultTheme`을 사용해요. mode는 별도 prop이며 `light`가 기본이고, `dark`나 기기 설정을 따르는 `system`을 선택할 수 있어요.
+
+## 적용되는 범위
+
+Provider는 현재 모드의 값을 `--ds-primary` 같은 CSS 변수로 변환해 자기 범위에 적용해요. 중첩한 Provider와 팝업은 가까운 theme을 사용해요.
+
+색상·radius·글꼴과 역할별 typography는 theme에서 바꿀 수 있어요. `typography`에는 display·title·heading·body·sub·caption·input·micro 역할의 size·lineHeight·weight·letterSpacing과 강조용 weights가 있어요. 제목과 본문은 역할값을 따르고 버튼·라벨 등의 강조 굵기는 weights를 사용해요. 입력은 자동 확대를 막기 위해 최소 16px을 유지해요. overlay는 모달 뒤 가림막, shadow는 그림자의 기준색이에요.
+
+배치 간격과 버튼·입력의 최소 높이는 패키지가 관리해요. 각각 Global/Spacing·Base의 컴포넌트에서 확인해요. 투명도·currentColor·움직임과 표면별 그림자 크기는 컴포넌트 규칙이에요.
+
+## 직접 바꿔보기
+
+`radius`는 일반 버튼·입력·카드·Panel·Sidebar·모달·메뉴·팝오버의 기준이에요. 작은 버튼과 Skeleton은 기준에서 2px, 배지와 메뉴 항목은 4px을 빼되 0보다 작아지지 않아요. SegmentedControl 바깥은 기준에 최대 4px을 더해 안쪽 선택 면을 감싸요. 기준이 0이면 이 표면들도 모두 각지게 표시돼요.
+
+아바타·spinner·아바타 Skeleton은 원형, FilterChip은 pill 형태를 유지해요. 화면 가장자리에 붙는 Drawer 모서리는 0이고 모바일 하단 Drawer의 위쪽만 theme을 따라요. 간격의 정해진 단계와 그림자의 크기·투명도는 컴포넌트 규칙이며 theme은 그림자 색을 정해요.
+
+<Canvas of={ThemeStories.Custom} />
+
+<details>
+  <summary>ThemeProvider 내부 구현 보기</summary>
+  <Source code={providerSource} language="tsx" />
+</details>

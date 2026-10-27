@@ -1,0 +1,40 @@
+{
+  "name": "ai-system",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.18.0",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "pnpm build:package && pnpm --parallel --filter @ai-system/design-system --filter @ai-system/storybook dev",
+    "storybook": "pnpm dev",
+    "build:package": "pnpm --filter @ai-system/design-system build",
+    "build:storybook": "pnpm --filter @ai-system/storybook build",
+    "build": "pnpm build:package && pnpm build:storybook",
+    "lint": "eslint .",
+    "typecheck": "pnpm build:package && pnpm -r typecheck && tsc --noEmit -p tsconfig.tools.json",
+    "test:unit": "pnpm build:package && pnpm test:unit:built",
+    "test:unit:built": "node --test tests/*.test.mjs",
+    "test:package": "pnpm build:package && node scripts/check-package.mjs",
+    "pack:package": "pnpm build:package && pnpm --filter @ai-system/design-system pack --pack-destination ../../artifacts",
+    "test:e2e": "pnpm build && playwright test",
+    "test:e2e:built": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "storybook:serve": "node scripts/serve-storybook.mjs",
+    "check": "pnpm lint && pnpm typecheck && pnpm test:unit:built && pnpm build:storybook && pnpm test:e2e:built && node scripts/check-package.mjs",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.64.1",
+    "@types/node": "^25.0.0",
+    "eslint": "10.13.0",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "prettier": "3.9.8",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.1"
+  }
+}

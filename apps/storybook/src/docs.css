@@ -1,0 +1,148 @@
+html,
+body {
+  margin: 0;
+}
+.docs-fullscreen {
+  min-block-size: 100dvh;
+  padding: clamp(1rem, 4vw, 3rem);
+}
+.docs-canvas {
+  min-block-size: 16rem;
+  padding: 1.5rem;
+}
+.docs-page {
+  max-inline-size: 68rem;
+  margin-inline: auto;
+}
+.docs-intro {
+  max-inline-size: 42rem;
+  padding-block: 1.5rem 2.5rem;
+}
+.docs-eyebrow {
+  margin: 0 0 1rem;
+  color: var(--ds-muted-foreground);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+.docs-intro h1 {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+}
+.docs-intro p:last-child {
+  margin-block-start: 1rem;
+  color: var(--ds-muted-foreground);
+  max-inline-size: 38rem;
+}
+.docs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.docs-tile {
+  min-inline-size: 0;
+  border: 1px solid var(--ds-border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+.docs-tile h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.0625rem;
+}
+.docs-origin {
+  margin-block-end: 1.25rem !important;
+  color: var(--ds-muted-foreground);
+  font-size: 0.75rem;
+}
+.docs-swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 0.75rem;
+}
+.docs-swatch {
+  overflow: hidden;
+  border: 1px solid var(--ds-border);
+  border-radius: 0.75rem;
+}
+.docs-swatch-color {
+  block-size: 4rem;
+}
+.docs-swatch-copy {
+  padding: 0.75rem;
+  font-size: 0.75rem;
+}
+.docs-theme-preview {
+  min-block-size: 16rem;
+  padding: 1.5rem;
+  border-radius: 1rem;
+}
+.docs-rule {
+  border-block-start: 1px solid var(--ds-separator);
+  padding-block: 1rem;
+}
+.docs-code {
+  overflow-x: auto;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background: var(--ds-muted);
+  font-family: ui-monospace, monospace;
+  font-size: 0.8125rem;
+  white-space: pre-wrap;
+}
+.docs-theme-reference {
+  padding: 1rem;
+  border: 1px solid var(--ds-border);
+  border-radius: 0.75rem;
+}
+.docs-reference-scroll {
+  max-inline-size: 100%;
+  overflow-x: auto;
+}
+.docs-theme-reference table {
+  inline-size: 100%;
+  min-inline-size: 44rem;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  text-align: left;
+}
+.docs-theme-reference caption {
+  padding-block-end: 0.75rem;
+  font-weight: 700;
+  text-align: left;
+}
+.docs-theme-reference :is(th, td) {
+  padding: 0.75rem;
+  border-block-end: 1px solid var(--ds-separator);
+  vertical-align: top;
+}
+.docs-theme-reference thead th {
+  background: var(--ds-muted);
+}
+.docs-theme-reference code {
+  overflow-wrap: anywhere;
+}
+.docs-reference-swatch {
+  display: inline-block;
+  inline-size: 1rem;
+  block-size: 1rem;
+  margin-inline-end: 0.375rem;
+  border: 1px solid var(--ds-border);
+  border-radius: 0.25rem;
+  vertical-align: middle;
+}
+@media (max-width: 40rem) {
+  .docs-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .docs-tile {
+    padding: 1rem;
+  }
+}
+/* Docs의 예제도 별도 iframe으로 렌더링해 실제 media query를 적용한다. */
+[data-docs-viewport="mobile"] div:has(> iframe[id^="iframe--"]) {
+  width: 390px !important;
+  max-width: 100%;
+  height: 844px !important;
+  margin-inline: auto;
+}
