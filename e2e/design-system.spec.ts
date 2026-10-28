@@ -363,6 +363,55 @@ test("세그먼트는 방향키로 선택하고 필터는 즉시 해제한다", 
   await expect(page.getByText("모든 조건을 해제했어요")).toBeVisible();
 });
 
+test("칩 묶음은 방향키로 하나를 고르고 직접 입력 칩은 포커스 테두리를 보인다", async ({
+  page,
+}) => {
+  await openStory(page, "components-chip-group--default");
+  await page.getByRole("radio", { name: "1정거장 전", exact: true }).focus();
+  await page.keyboard.press("ArrowRight", { delay: 60 });
+  await expect(
+    page.getByRole("radio", { name: "2정거장 전", exact: true }),
+  ).toBeChecked();
+  await expect(page.getByRole("status")).toHaveText("선택: 2정거장 전");
+  await openStory(page, "components-chip-group--with-input");
+  await page.getByRole("textbox", { name: "직접 (m)" }).fill("800");
+  await page.getByRole("textbox", { name: "직접 (m)" }).press("Enter");
+  await expect(page.getByRole("status")).toHaveText("선택: 800m (직접)");
+});
+
+test("목록 행은 버튼이고 고른 행은 aria-current를 가진다", async ({ page }) => {
+  await openStory(page, "components-list-item--list");
+  const row = page.getByRole("button", { name: /이수역5번출구/ });
+  await row.click();
+  await expect(row).toHaveAttribute("aria-current", "true");
+  await expect(page.getByRole("status")).toHaveText("선택: 이수역5번출구");
+  await openStory(page, "components-list-item--picker");
+  await page.getByRole("button", { name: "탈 버스 지우기" }).click();
+  await expect(
+    page.getByRole("button", { name: /탈 버스 몰라도 된다/ }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: /내릴 정류장 정류장 이름/ }).click();
+  await expect(
+    page.getByRole("button", { name: "내릴 정류장 지우기" }),
+  ).toBeVisible();
+});
+
+test("하단 행동 바는 화면 아래에 고정되고 본문 끝을 가리지 않는다", async ({
+  page,
+}) => {
+  await openStory(page, "layout-bottom-bar--default");
+  const bar = page.getByRole("button", { name: /깨우기/ });
+  await expect(bar).toBeVisible();
+  const viewport = page.viewportSize()!;
+  const box = (await bar.boundingBox())!;
+  expect(box.y + box.height).toBeLessThanOrEqual(viewport.height);
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await page.waitForTimeout(200);
+  const after = (await bar.boundingBox())!;
+  expect(Math.round(after.y)).toBe(Math.round(box.y));
+  await expect(page.getByText("본문 12.")).toBeInViewport();
+});
+
 test("팝업은 포커스를 가두고 Escape 후 열었던 버튼으로 돌아온다", async ({
   page,
 }) => {
