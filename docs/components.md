@@ -30,6 +30,7 @@ theme을 생략하면 공통 기본값 `defaultTheme`을 사용해요. Storybook
 
 - `Button`의 variant는 `primary`, `secondary`, `soft`, `outline`, `ghost`, `destructive`, `quiet`예요. size는 `sm`, `md`, `lg`이고 기본은 `primary`·`md`예요.
 - `Button`은 기본 `type="button"`이에요. form 제출에는 `type="submit"`을 적어요. `loading`이면 라벨을 유지하고 실행을 막아요. `fullWidth`로 전체 폭을 선택해요.
+- `Icon`의 이름은 plus·close·back·search·check·menu·trash·more에 더해 chevron-right·chevron-down·star·star-filled·share·settings·clock·location·warning·info예요. 목록 행 화살표는 chevron-right, 즐겨찾기는 star, 공유 시트는 share를 써요.
 - `IconButton`은 `icon`과 `label`이 필수예요. `ButtonLink`와 `LinkRow`는 `href`가 필수예요. 라우터 전용 이동 연결은 소비 프로젝트가 맡아요.
 - `Input`의 `inputSize`는 `md` 56px와 `sm` 44px예요. `Textarea`는 네 줄이 기본이에요. `name`, `type`, `inputMode`, `autoComplete`, ref, 기본 이벤트와 ARIA 속성을 유지해요.
 
