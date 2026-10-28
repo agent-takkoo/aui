@@ -21,7 +21,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "기존 서비스 toss.css와 cream.css에서 금융 의미색을 제외한 token을 추출했어요. light·dark를 모두 정의해야 하고 theme은 ThemeProvider에서 주입해요. 중첩한 theme과 팝업도 같은 범위를 따라요.",
+          "프로젝트의 역할색·글꼴·typography·radius를 ThemeProvider에 주입해요. light·dark를 모두 정의하고, 중첩한 Theme와 팝업도 가까운 provider의 값을 따라요.",
       },
     },
   },

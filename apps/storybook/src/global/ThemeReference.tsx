@@ -54,7 +54,8 @@ const descriptions: Record<keyof ColorTokens, string> = {
   destructive: "삭제·오류·위험 행동",
   destructiveForeground: "destructive 위의 글자와 아이콘",
   border: "outline 버튼·배지·메뉴의 경계",
-  input: "입력 경계를 위한 역할색. 현재 Input은 투명 경계를 기본으로 사용해요.",
+  input:
+    "Select 등의 입력 경계를 위한 역할색. Input은 투명 경계를 기본으로 사용해요.",
   ring: "키보드 포커스 표시",
   surfacePressed: "눌리거나 비활성화된 표면",
   field: "입력과 Textarea의 기본 배경",

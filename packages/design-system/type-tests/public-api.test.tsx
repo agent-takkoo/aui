@@ -11,6 +11,22 @@ import {
   Panel,
   Sidebar,
   Drawer,
+  Checkbox,
+  Switch,
+  RadioGroup,
+  Select,
+  Slider,
+  Toggle,
+  ToggleGroup,
+  Tabs,
+  Accordion,
+  Collapsible,
+  Tooltip,
+  Progress,
+  Table,
+  TableCell,
+  ScrollArea,
+  AspectRatio,
 } from "../src/index.js";
 
 export const valid = (
@@ -74,3 +90,46 @@ export const invalidDrawer = (
     본문
   </Drawer>
 );
+
+// @ts-expect-error Checkbox에 primitive asChild를 열지 않는다.
+export const invalidCheckbox = <Checkbox asChild />;
+// @ts-expect-error Switch의 색은 theme으로 정한다.
+export const invalidSwitch = <Switch color="red" />;
+// @ts-expect-error RadioGroup은 임의 className을 받지 않는다.
+export const invalidRadio = <RadioGroup options={[]} className="custom" />;
+// @ts-expect-error Select는 옵션 배열 API를 사용한다.
+export const invalidSelect = <Select options={[]} style={{ width: 100 }} />;
+// @ts-expect-error Slider는 단일 숫자 값이다.
+export const invalidSlider = <Slider value={[10, 20]} />;
+// @ts-expect-error Toggle의 임의 style은 허용하지 않는다.
+export const invalidToggle = <Toggle style={{ color: "red" }}>굵게</Toggle>;
+export const invalidToggleGroup = (
+  // @ts-expect-error multiple 모드는 문자열 배열을 받는다.
+  <ToggleGroup type="multiple" value="bold" options={[]} aria-label="서식" />
+);
+// @ts-expect-error Tabs에는 임의 className이 없다.
+export const invalidTabs = <Tabs label="설정" items={[]} className="custom" />;
+export const invalidAccordion = (
+  // @ts-expect-error single Accordion은 문자열 값이다.
+  <Accordion type="single" value={[]} items={[]} />
+);
+export const invalidCollapsible = (
+  // @ts-expect-error Collapsible의 트리거 외형은 패키지가 관리한다.
+  <Collapsible label="설명" asChild>
+    내용
+  </Collapsible>
+);
+export const invalidTooltip = (
+  // @ts-expect-error Tooltip 내용은 짧은 문자열이다.
+  <Tooltip content={<Button>실행</Button>} trigger={<Button>도움말</Button>} />
+);
+// @ts-expect-error Progress에 접근 가능한 이름이 필요하다.
+export const invalidProgress = <Progress value={20} />;
+// @ts-expect-error 구식 HTML 크기 속성으로 Table 외형을 바꾸지 않는다.
+export const invalidTable = <Table caption="표" width={100} />;
+// @ts-expect-error 셀의 임의 정렬 속성은 허용하지 않는다.
+export const invalidCell = <TableCell align="right">내용</TableCell>;
+// @ts-expect-error ScrollArea 높이는 preset을 사용한다.
+export const invalidScroll = <ScrollArea label="목록" height={100} />;
+// @ts-expect-error AspectRatio 비율은 공개 preset을 사용한다.
+export const invalidRatio = <AspectRatio ratio={2} />;

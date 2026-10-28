@@ -87,9 +87,9 @@ Provider는 현재 모드의 값을 `--ds-primary` 같은 CSS 변수로 변환�
 
 ## 직접 바꿔보기
 
-`radius`는 일반 버튼·입력·카드·Panel·Sidebar·모달·메뉴·팝오버의 기준이에요. 작은 버튼과 Skeleton은 기준에서 2px, 배지와 메뉴 항목은 4px을 빼되 0보다 작아지지 않아요. SegmentedControl 바깥은 기준에 최대 4px을 더해 안쪽 선택 면을 감싸요. 기준이 0이면 이 표면들도 모두 각지게 표시돼요.
+`radius`는 일반 버튼·입력·카드·Panel·Sidebar·모달·메뉴·팝오버와 Select·Accordion·Toast·Table 등의 기준이에요. 작은 버튼과 Skeleton은 기준에서 2px, 배지와 메뉴 항목은 4px을 빼되 0보다 작아지지 않아요. SegmentedControl 바깥은 기준에 최대 4px을 더해 안쪽 선택 면을 감싸요. Checkbox의 작은 표시 면은 최대 4px로 제한해요. 기준이 0이면 이 표면들도 모두 각지게 표시돼요.
 
-아바타·spinner·아바타 Skeleton은 원형, FilterChip은 pill 형태를 유지해요. 화면 가장자리에 붙는 Drawer 모서리는 0이고 모바일 하단 Drawer의 위쪽만 theme을 따라요. 간격의 정해진 단계와 그림자의 크기·투명도는 컴포넌트 규칙이며 theme은 그림자 색을 정해요.
+아바타·spinner·아바타 Skeleton과 RadioGroup·Slider의 원형 표시, Switch의 원형 손잡이는 형태를 유지해요. FilterChip·Switch의 트랙·스크롤바 손잡이는 pill이에요. 화면 가장자리에 붙는 Drawer 모서리는 0이고 모바일 하단 Drawer의 위쪽만 theme을 따라요. 간격의 정해진 단계와 그림자의 크기·투명도는 컴포넌트 규칙이며 theme은 그림자 색을 정해요.
 
 <Canvas of={ThemeStories.Custom} />
 

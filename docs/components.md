@@ -46,6 +46,51 @@ theme을 생략하면 공통 기본값 `defaultTheme`을 사용해요. Storybook
 
 `Field`는 하나의 입력을 감싸요. ID를 지정하려면 Field에 `id`를 넘겨요. 설명과 오류 ID는 자동으로 연결해요. Field 밖에서 Input을 사용하면 `Label htmlFor`나 `aria-label`로 이름을 제공해요.
 
+## 폼의 선택과 범위 입력
+
+`Checkbox`와 `Switch`는 `checked`·`defaultChecked`·`onCheckedChange`를 사용해요. Checkbox는 `"indeterminate"`도 표현할 수 있어요. 단독으로 쓸 때는 `label`을 주고, 설명·오류가 필요하면 Field의 label과 연결해요.
+
+```tsx
+<Checkbox name="terms" label="이용 조건에 동의해요" required />
+<Switch name="notifications" label="알림 받기" defaultChecked />
+```
+
+`RadioGroup`과 `Select`의 `options`는 `{ value, label, disabled? }` 배열이에요. `value`·`defaultValue`·`onValueChange`로 선택을 다뤄요. option의 value는 중복되지 않는 비어 있지 않은 문자열로 정해요. Select는 선택 전 문구를 `placeholder`로 받아요.
+
+```tsx
+<Field label="보기 방식" description="목록에 표시할 범위예요.">
+  <RadioGroup
+    name="visibility"
+    defaultValue="all"
+    options={[
+      { value: "all", label: "전체" },
+      { value: "mine", label: "내 항목" },
+    ]}
+  />
+</Field>
+
+<Field label="언어" required>
+  <Select
+    name="language"
+    placeholder="언어를 선택해 주세요…"
+    options={[
+      { value: "ko", label: "한국어" },
+      { value: "en", label: "English" },
+    ]}
+  />
+</Field>
+```
+
+`Slider`는 단일 숫자 값에 사용해요. `min`·`max`·`step`으로 범위를 정하고, `value`·`defaultValue`·`onValueChange`·`onValueCommit`을 사용해요. `onValueCommit`은 조작을 마쳤을 때의 값을 다룰 때 사용해요.
+
+```tsx
+<Field label="음량">
+  <Slider name="volume" min={0} max={100} step={5} defaultValue={30} />
+</Field>
+```
+
+폼에 제출할 컨트롤에는 `name`을 적어요. `defaultChecked`·`defaultValue`는 컴포넌트가 초기 상태를 관리하고, `checked`·`value`를 지정하면 소비 코드가 상태를 관리해요. 제어하는 값은 form의 `onReset`에서도 소비 코드가 초기화해요. 그룹의 이름과 각 옵션의 label은 별도로 제공해요.
+
 ## 표시와 배치
 
 - `Text`는 `body`, `sub`, `caption` 크기와 `default`, `muted`, `primary`, `destructive` 색을 제공해요. `Heading`의 `level`은 문서 구조, `size`는 `display`, `title`, `heading` 외형을 정해요.
@@ -59,6 +104,51 @@ theme을 생략하면 공통 기본값 `defaultTheme`을 사용해요. Storybook
 `SegmentedControl`은 `value`, `options`, `onValueChange`, `ariaLabel`을 받아요. 옵션에는 `value`, `label`, 선택적인 `disabled`가 있어요. 화면을 전환하는 탭이 아닌 단일 조건 선택에 사용해요.
 
 `FilterChip`의 `label`에는 “이번 달 조건 해제”처럼 대상과 행동을 함께 적고 `onClear`로 해제해요. `EmptyState`는 다음 행동을 `action`으로 받아요. `ErrorState`의 `onRetry`는 인자 없이 호출돼요. `LoadingState`는 `role="status"`, `Skeleton`은 `aria-hidden`으로 콘텐츠를 기다려요.
+
+`Toggle`은 `pressed`·`defaultPressed`·`onPressedChange`로 버튼의 눌림 상태를 다뤄요. `ToggleGroup`은 `options`와 `aria-label`을 받으며, 기본 `type="single"`은 문자열 값을, `type="multiple"`은 문자열 배열을 사용해요. 폼의 단일 선택에는 RadioGroup을 사용해요.
+
+```tsx
+<Toggle aria-label="굵게">굵게</Toggle>
+<ToggleGroup
+  type="multiple"
+  aria-label="글자 서식"
+  defaultValue={["bold"]}
+  options={[
+    { value: "bold", label: "굵게" },
+    { value: "italic", label: "기울임" },
+  ]}
+/>
+```
+
+`Progress`는 `label`이 필수이고 `value`와 `max`로 진행량을 표시해요. value를 생략하거나 null로 주면 진행량을 알 수 없는 상태예요. 기본 max는 100이고, 유효한 숫자 값은 0부터 max 사이에 표시돼요.
+
+## 콘텐츠 전환과 펼치기
+
+`Tabs`는 접근 가능한 이름인 `label`과 `{ value, label, content, disabled? }` 항목을 받아요. `value`·`defaultValue`·`onValueChange`로 전환하고, `activationMode`는 `automatic` 또는 `manual`이에요. 각 제목과 콘텐츠의 ARIA 연결은 내부에서 처리해요.
+
+```tsx
+<Tabs
+  label="프로젝트 정보"
+  items={[
+    { value: "overview", label: "개요", content: <Text>기본 정보예요.</Text> },
+    {
+      value: "activity",
+      label: "활동",
+      content: <Text>최근 활동이에요.</Text>,
+    },
+  ]}
+/>
+```
+
+`Accordion`은 `{ value, title, content, disabled? }` 항목을 받아요. 기본 single 모드는 한 항목을 열고 문자열 값으로 관리해요. `type="multiple"`은 여러 항목을 열며 값이 문자열 배열이에요. 두 모드 모두 value·defaultValue·onValueChange를 제공해요.
+
+`Collapsible`은 하나의 영역에 사용해요. `label`이 열기 버튼의 이름이고 children이 펼쳐지는 내용이에요. `open`·`defaultOpen`·`onOpenChange`로 상태를 관리해요. Accordion과 Collapsible은 열림·닫힘과 움직임 줄이기 설정을 지원해요.
+
+## 위치와 페이지 이동
+
+`Breadcrumb`의 items는 `{ label, href? }` 배열이에요. 마지막 항목을 현재 위치로 표시하고, 앞선 항목에 href를 주면 링크로 만들어요. label로 nav 이름을 바꿀 수 있어요.
+
+`Pagination`은 `page`·`pageCount`·`onPageChange`를 받아요. 페이지 번호는 1부터 시작해요. 첫 페이지의 이전 버튼과 마지막 페이지의 다음 버튼은 비활성 상태이고, 많은 페이지는 중간을 생략해 표시해요. `disabled`는 전체 조작을 막아요. 실제 데이터 조회와 URL 변경은 onPageChange에서 소비 코드가 처리해요.
 
 ## 팝업
 
@@ -87,6 +177,42 @@ theme을 생략하면 공통 기본값 `defaultTheme`을 사용해요. Storybook
 
 `DropdownMenu`의 `items`는 `{ id, label, onSelect, disabled?, destructive? }` 배열이에요. `Popover`는 `title`, `trigger`, `children`을 받아요. Portal과 위치·포커스 관리는 내부에서 처리해요.
 
+`Tooltip`은 짧은 문자열인 `content`와 이벤트·ref를 전달하는 `trigger`를 받아요. side는 top·bottom·left·right 중 하나이고 기본은 top이에요. hover와 키보드 focus로 설명을 보여주며 Escape로 닫을 수 있어요. 필수 안내나 클릭할 액션은 Tooltip에만 넣지 않아요.
+
+```tsx
+<Tooltip
+  content="파일은 보관함에서 다시 확인할 수 있어요."
+  trigger={<Button variant="quiet">보관 안내</Button>}
+/>
+```
+
+## 작업 결과 알림
+
+`ToastProvider`를 ThemeProvider 안에 놓고, 그 아래에서 `useToast()`의 `toast`와 `dismiss`를 사용해요. toast는 알림 id를 반환해요. 알림은 title, 선택적인 description, default·destructive tone, action을 받아요. action에는 label·altText·onClick이 필요해요.
+
+```tsx
+function SaveNotice() {
+  const { toast } = useToast();
+  return (
+    <Button
+      onClick={() =>
+        toast({ title: "저장했어요", description: "변경한 설정을 적용했어요." })
+      }
+    >
+      저장
+    </Button>
+  );
+}
+
+<ThemeProvider>
+  <ToastProvider>
+    <SaveNotice />
+  </ToastProvider>
+</ThemeProvider>;
+```
+
+duration은 provider에서 정해요. 알림의 개수와 표시는 각 provider가 관리하므로 서로 다른 화면의 상태와 Theme가 섞이지 않아요. 실제 저장 요청과 오류 판단은 소비 코드가 맡아요.
+
 ## 소비 코드 검사
 
 ```js
@@ -104,3 +230,28 @@ export default [
 `Drawer`는 열고 닫는 보조 화면이며 Dialog와 같은 제목·설명·trigger·footer를 받아요. side 기본값인 responsive는 모바일 아래·데스크탑 오른쪽에서 열리고, left·right는 화면 크기와 관계없이 해당 방향에서 열려요. `Panel`은 title·description·children·footer로 독립 영역을 구성해요. `Sidebar`는 label·items·currentId·footer를 받아요. items는 `{ id, label, href }` 배열이며 현재 항목에 aria-current를 표시해요. Storybook에서는 각각 오른쪽·왼쪽 Drawer와 조합해 열고 닫는 모습을 보여줘요. 내용 컴포넌트는 직접 focus trap을 만들지 않고 Drawer가 담당해요. 실제 경로와 활성 항목은 소비 프로젝트가 관리해요.
 
 `Theme.typography`의 각 역할은 size·lineHeight·weight·letterSpacing을 제공해요. 역할은 display·title·heading·body·sub·caption·input·micro로 제한해요. `Text`에서 weight를 생략하면 해당 역할의 굵기를 쓰고, 지정하면 typography.weights의 regular·semibold·bold를 사용해요. 입력의 글자 크기는 최소 16px이에요.
+
+## 표와 스크롤·미디어 영역
+
+`Table`은 caption이 필수예요. TableHeader·TableBody·TableFooter·TableRow·TableHead·TableCell을 조합하며 실제 table 요소를 사용해요. TableHead의 기본 scope는 col이고 행 제목에는 row를 지정할 수 있어요. 넓은 표는 자신이 가진 영역 안에서 가로 스크롤해요.
+
+```tsx
+<Table caption="문서 목록">
+  <TableHeader>
+    <TableRow>
+      <TableHead>문서</TableHead>
+      <TableHead>상태</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>프로젝트 안내</TableCell>
+      <TableCell>공개</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+```
+
+정렬·검색·행 선택과 서버 데이터 처리는 별도 상태로 조합해요. 단순한 표를 위해 서비스 데이터 타입이나 표 엔진을 패키지에 넣지 않아요.
+
+`ScrollArea`는 접근 가능한 이름인 label과 sm·md·lg의 height를 받아요. 스크롤 영역에 focus한 뒤 키보드로도 이동할 수 있어요. `AspectRatio`의 ratio는 16:9·4:3·1:1 중 하나이고 기본은 16:9예요. 이미지의 alt나 영상의 접근 가능한 이름은 콘텐츠를 넣는 소비 코드가 제공해요.

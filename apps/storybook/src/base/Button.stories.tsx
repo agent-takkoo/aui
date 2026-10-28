@@ -19,7 +19,7 @@ const meta = {
         "quiet",
       ],
       description:
-        "기존 서비스의 버튼 선택지예요. default·solid는 primary로 합쳤어요.",
+        "주요 행동은 primary, 보조 행동은 secondary, 위험한 행동은 destructive를 사용해요.",
     },
     size: {
       control: "inline-radio",
@@ -37,7 +37,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "기존 서비스 ui/button.tsx의 채움·연한 면·보조·outline·ghost·위험·quiet 디자인을 가져왔어요. 링크 이동에는 ButtonLink를, 아이콘 하나에는 label이 필수인 IconButton을 사용해요.",
+          "행동의 중요도에 맞춰 variant와 size를 선택해요. 링크 이동에는 ButtonLink를, 아이콘 하나에는 label이 필수인 IconButton을 사용해요.",
       },
     },
   },

@@ -9,7 +9,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "기존 서비스에서 추출한 간격 기준이에요. none 0px, xs 6px, sm 8px, md 16px, section 24px을 제공해요. 간격을 조작하는 예제는 Layout/Stack과 Layout/Inline에서 확인해요.",
+          "패키지에서 함께 사용하는 간격 기준이에요. none 0px, xs 6px, sm 8px, md 16px, section 24px을 제공해요. Stack과 Inline의 gap에 이 이름을 사용해요.",
       },
     },
   },

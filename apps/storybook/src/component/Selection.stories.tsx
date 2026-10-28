@@ -17,7 +17,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "기존 서비스 segmented-control.tsx의 움직이는 선택 면과 filter-chip.tsx의 해제 버튼을 추출했어요. 세그먼트는 단일 선택을 나타내는 RadioGroup으로 구성해서 방향키·Home·End를 지원해요. 옵션마다 className을 받는 API는 제거했어요.",
+          "SegmentedControl로 조건 하나를 고르고 FilterChip으로 적용한 조건을 해제해요. 세그먼트는 RadioGroup으로 구성해 방향키·Home·End를 지원해요. 연결된 콘텐츠 패널을 전환할 때는 Tabs를 사용해요.",
       },
     },
   },

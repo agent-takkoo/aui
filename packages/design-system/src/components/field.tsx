@@ -12,6 +12,29 @@ type FieldContextValue = {
   required?: boolean;
 };
 const FieldContext = createContext<FieldContextValue | null>(null);
+export function useFieldControl(props: {
+  id?: string;
+  required?: boolean;
+  "aria-describedby"?: string;
+  "aria-labelledby"?: string;
+  "aria-label"?: string;
+  "aria-invalid"?: boolean | "true" | "false" | "grammar" | "spelling";
+}) {
+  const field = useContext(FieldContext);
+  return {
+    id: props.id ?? field?.id,
+    required: props.required ?? field?.required,
+    "aria-label": props["aria-label"],
+    "aria-labelledby":
+      props["aria-labelledby"] ??
+      (!props["aria-label"] && field ? `${field.id}-label` : undefined),
+    "aria-describedby":
+      [field?.describedBy, props["aria-describedby"]]
+        .filter(Boolean)
+        .join(" ") || undefined,
+    "aria-invalid": props["aria-invalid"] ?? (field?.invalid || undefined),
+  };
+}
 export type FieldProps = {
   id?: string;
   label: string;
@@ -40,7 +63,7 @@ export function Field({
       value={{ id: fieldId, describedBy, invalid: Boolean(error), required }}
     >
       <div className="ds-field" data-slot="field">
-        <Label htmlFor={fieldId}>
+        <Label id={`${fieldId}-label`} htmlFor={fieldId}>
           {label}
           {required ? (
             <span className="ds-required" aria-hidden="true">

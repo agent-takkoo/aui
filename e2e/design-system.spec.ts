@@ -283,15 +283,33 @@ test("Drawer·Panel·Sidebar는 들어온 방향으로 닫힌 뒤 포커스를 �
     await trigger.click();
     const dialog = page.getByRole("dialog");
     await expect(dialog).toHaveCSS("transform", "none");
+    // 짧은 퇴장 구간을 순차 polling하지 않고 실제 animationstart를 기록한다.
+    await page.evaluate(() => {
+      const names: string[] = [];
+      document.addEventListener("animationstart", (event) => {
+        if (
+          event.target instanceof HTMLElement &&
+          event.target.getAttribute("data-state") === "closed"
+        ) {
+          names.push(event.animationName);
+          document.documentElement.setAttribute(
+            "data-closed-animations",
+            names.join(" "),
+          );
+        }
+      });
+    });
     if (example.id === "layout-panel--default")
       await page.keyboard.press("Escape");
     else
       await dialog.getByRole("button", { name: "닫기", exact: true }).click();
-    await expect(dialog).toHaveAttribute("data-state", "closed");
-    await expect(dialog).toHaveCSS("animation-name", example.animation);
-    await expect(page.locator('.ds-overlay[data-state="closed"]')).toHaveCSS(
-      "animation-name",
-      "ds-fade-out",
+    await expect(page.locator("html")).toHaveAttribute(
+      "data-closed-animations",
+      new RegExp(example.animation),
+    );
+    await expect(page.locator("html")).toHaveAttribute(
+      "data-closed-animations",
+      /ds-fade-out/,
     );
     await expect(dialog).toHaveCount(0);
     await expect(trigger).toBeFocused();

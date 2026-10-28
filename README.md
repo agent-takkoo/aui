@@ -1,5 +1,5 @@
-기존 서비스에서 다른 서비스에도 재사용할 수 있는 디자인을 추출한 React 디자인 시스템이에요.
-버튼·입력·카드·목록·피드백·팝업의 외형과 크기 기준을 패키지로 제공하고, Storybook과 E2E로 확인해요.
+AUI는 Theme를 주입하고 정해진 props로 조합하는 범용 React 디자인 시스템이에요.
+입력·선택·탐색·데이터 표시·피드백·팝업을 패키지로 제공하고, Storybook과 E2E로 확인해요. shadcn/ui의 컴포넌트 구성과 Radix의 상호작용·접근성 패턴을 참고해요.
 
 ## 시작하기
 
@@ -12,7 +12,7 @@ pnpm storybook
 
 Storybook은 `http://localhost:6006`에서 열려요. 툴바에서 `defaultTheme`·`creamTheme`과 라이트·다크 모드를 바꾸고 Theme 옆의 화면 선택에서 `웹 버전`·`모바일 버전`을 선택할 수 있어요. 기본은 사용 가능한 전체 폭의 웹 버전이고, 모바일 버전은 실제 미리보기 화면을 390×844px로 바꿔요. 선택은 Docs와 Story를 이동해도 유지돼요. Docs 본문은 그대로 두고 예제의 실제 화면 크기를 바꿔요.
 
-카탈로그와 소스 폴더는 `Global`·`Base`·`Component`·`Layout`으로 나눠요. `Global`은 Theme·Typography·Spacing, `Base`는 Button·Input·Badge 같은 작은 UI, `Component`는 폼·카드·피드백처럼 조합해서 쓰는 UI, `Layout`은 Drawer·Panel·Sidebar 예제를 다뤄요.
+카탈로그와 소스 폴더는 `Global`·`Base`·`Component`·`Layout`으로 나눠요. `Global`은 Theme·Typography·Spacing, `Base`는 Button·Input·Checkbox 같은 작은 UI, `Component`는 폼·카드·Tabs·Table처럼 조합해서 쓰는 UI, `Layout`은 Drawer·Panel·Sidebar와 ScrollArea·AspectRatio 예제를 다뤄요.
 
 `Global/Theme`의 MDX 문서에는 Theme 객체의 필드, 모든 색상 token의 역할과 라이트·다크 기본값, 전체 `defaultTheme` 객체와 주입 예제가 있어요. 표와 전체 객체는 패키지가 export하는 실제 값을 읽어서 보여줘요.
 
@@ -23,11 +23,11 @@ packages/design-system  @ai-system/design-system — ESM, 타입, CSS, theme, ES
 apps/storybook          컴포넌트 카탈로그, 사용 예제, 조작 가능한 props
 e2e                     Storybook을 대상으로 하는 Playwright 테스트
 tests                   theme과 소비 코드용 ESLint 규칙 테스트
-docs                    원본과의 대응, API 사용법, 모바일 검증 범위
+docs                    컴포넌트 설계 기준, API 사용법, 초기 추출 기록, 모바일 검증 범위
 ```
 
-기존 서비스에서 가져온 범위와 일반화한 부분은 [추출 기록](docs/extraction.md)에 정리했어요.
-금액·지갑·거래 달력·API·로그인·크루 상태는 소비 프로젝트가 관리해요.
+컴포넌트의 역할과 확장 기준은 [컴포넌트 설계 기준](docs/extension.md)에, 초기 디자인을 가져와 일반화한 부분은 [추출 기록](docs/extraction.md)에 정리했어요.
+API 호출, 라우팅, 업무 규칙과 서비스 상태는 소비 프로젝트가 관리해요.
 
 ## 패키지 사용하기
 
