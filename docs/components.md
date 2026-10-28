@@ -227,7 +227,7 @@ export default [
 
 ## 화면 구조
 
-`Drawer`는 열고 닫는 보조 화면이며 Dialog와 같은 제목·설명·trigger·footer를 받아요. side 기본값인 responsive는 모바일 아래·데스크탑 오른쪽에서 열리고, left·right는 화면 크기와 관계없이 해당 방향에서 열려요. `Panel`은 title·description·children·footer로 독립 영역을 구성해요. `Sidebar`는 label·items·currentId·footer를 받아요. items는 `{ id, label, href }` 배열이며 현재 항목에 aria-current를 표시해요. Storybook에서는 각각 오른쪽·왼쪽 Drawer와 조합해 열고 닫는 모습을 보여줘요. 내용 컴포넌트는 직접 focus trap을 만들지 않고 Drawer가 담당해요. 실제 경로와 활성 항목은 소비 프로젝트가 관리해요.
+`Drawer`는 열고 닫는 보조 화면이며 Dialog와 같은 제목·설명·trigger·footer를 받아요. side 기본값인 responsive는 모바일 아래·데스크탑 오른쪽에서 열리고, left·right는 화면 크기와 관계없이 해당 방향에서 열려요. `header`에 검색창이나 필터를 두면 제목 아래에 고정되고 본문만 스크롤돼요. `size`는 `auto`(내용만큼)·`half`·`tall`·`full`이고, 항목을 고르는 검색형 Drawer는 `tall`로 열면 목록이 처음부터 보여요. `Panel`은 title·description·children·footer로 독립 영역을 구성해요. `Sidebar`는 label·items·currentId·footer를 받아요. items는 `{ id, label, href }` 배열이며 현재 항목에 aria-current를 표시해요. Storybook에서는 각각 오른쪽·왼쪽 Drawer와 조합해 열고 닫는 모습을 보여줘요. 내용 컴포넌트는 직접 focus trap을 만들지 않고 Drawer가 담당해요. 실제 경로와 활성 항목은 소비 프로젝트가 관리해요.
 
 `Theme.typography`의 각 역할은 size·lineHeight·weight·letterSpacing을 제공해요. 역할은 display·title·heading·body·sub·caption·input·micro로 제한해요. `Text`에서 weight를 생략하면 해당 역할의 굵기를 쓰고, 지정하면 typography.weights의 regular·semibold·bold를 사용해요. 입력의 글자 크기는 최소 16px이에요.
 

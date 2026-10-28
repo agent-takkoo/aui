@@ -519,6 +519,33 @@ test("시트는 모바일에서 아래에, 데스크탑에서 오른쪽에 열�
   });
 });
 
+test("Drawer의 header는 본문이 스크롤돼도 제자리에 있고 tall은 처음부터 높게 연다", async ({
+  page,
+}) => {
+  await openStory(page, "layout-drawer--search");
+  await page.getByRole("button", { name: "정류장 찾기" }).click();
+  const dialog = page.getByRole("dialog", { name: "내릴 정류장" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveCSS("transform", "none");
+  const viewport = page.viewportSize()!;
+  const box = (await dialog.boundingBox())!;
+  if (viewport.width < 1024) {
+    expect(box.height).toBeGreaterThanOrEqual(viewport.height * 0.8);
+  }
+  const search = dialog.getByRole("searchbox", { name: "정류장 이름" });
+  const before = (await search.boundingBox())!;
+  await dialog
+    .locator(".ds-dialog-body")
+    .evaluate((body) => body.scrollTo(0, body.scrollHeight));
+  await page.waitForTimeout(100);
+  const after = (await search.boundingBox())!;
+  expect(Math.round(after.y)).toBe(Math.round(before.y));
+  await expect(dialog.getByRole("link", { name: "정류장 20" })).toBeInViewport();
+  await search.fill("사당");
+  await expect(dialog.getByRole("link", { name: "사당역" })).toBeVisible();
+  await expect(dialog.getByRole("link", { name: "이수역" })).toHaveCount(0);
+});
+
 test("입력 방식에 맞는 버튼·입력 크기와 터치 실행", async ({ page }) => {
   const touch = await page.evaluate(
     () => window.matchMedia("(pointer: coarse)").matches,

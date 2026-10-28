@@ -3,10 +3,12 @@ import {
   Drawer,
   Field,
   Input,
+  LinkRow,
   Stack,
   Text,
 } from "@ai-system/design-system";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 
 const meta = {
   id: "layout-drawer",
@@ -47,3 +49,57 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = { name: "모바일 시트와 데스크탑 옆판" };
+
+const stops = [
+  "이수역",
+  "이수역5번출구",
+  "이수역9번출구",
+  "이수역10번출구",
+  "이수역(중)",
+  "이수역4번출구",
+  "이수역2번출구",
+  "이수시너스.이수역7번출구",
+  "총신대입구역",
+  "사당역",
+  "남태령역",
+  "경문고등학교",
+];
+function SearchDrawer() {
+  const [query, setQuery] = useState("");
+  const hits = stops.filter((stop) => stop.includes(query.trim()));
+  return (
+    <Drawer
+      title="내릴 정류장"
+      trigger={<Button>정류장 찾기</Button>}
+      size="tall"
+      header={
+        <Input
+          inputSize="sm"
+          type="search"
+          aria-label="정류장 이름"
+          placeholder="정류장 이름"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+        />
+      }
+    >
+      <Stack gap="none">
+        {hits.map((stop) => (
+          <LinkRow key={stop} variant="plain" title={stop} href={`#${stop}`} />
+        ))}
+        {Array.from({ length: 20 }, (_, index) => (
+          <LinkRow
+            key={index}
+            variant="plain"
+            title={`정류장 ${index + 1}`}
+            href={`#stop-${index}`}
+          />
+        ))}
+      </Stack>
+    </Drawer>
+  );
+}
+export const Search: Story = {
+  name: "검색창 고정과 긴 목록",
+  render: () => <SearchDrawer />,
+};
