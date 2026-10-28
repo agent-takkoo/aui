@@ -14,9 +14,9 @@ import { Button, IconButton } from "./button.js";
 import { Icon } from "./icon.js";
 export type ToastOptions = {
   title: string;
-  description?: string;
-  tone?: "default" | "destructive";
-  action?: { label: string; altText: string; onClick: () => void };
+  description?: string | undefined;
+  tone?: "default" | "destructive" | undefined;
+  action?: { label: string; altText: string; onClick: () => void } | undefined;
 };
 export type ToastProviderProps = { children: ReactNode; duration?: number };
 type ToastApi = {

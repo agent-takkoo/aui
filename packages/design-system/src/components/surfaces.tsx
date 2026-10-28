@@ -56,7 +56,7 @@ export function CardFooter(props: DesignProps<"div">) {
 }
 
 export type BadgeProps = DesignProps<"span"> & {
-  variant?: "primary" | "secondary" | "outline" | "destructive";
+  variant?: "primary" | "secondary" | "outline" | "destructive" | undefined;
 };
 export function Badge({ variant = "primary", ...props }: BadgeProps) {
   return (
@@ -70,8 +70,8 @@ export function Badge({ variant = "primary", ...props }: BadgeProps) {
 
 export type CalloutProps = Omit<DesignProps<"section">, "title"> & {
   title: string;
-  tone?: "action" | "danger";
-  action?: ReactNode;
+  tone?: "action" | "danger" | undefined;
+  action?: ReactNode | undefined;
 };
 export function Callout({
   title,
@@ -99,8 +99,8 @@ export function Callout({
 export type LinkRowProps = Omit<DesignProps<"a">, "title"> & {
   href: string;
   title: string;
-  description?: string;
-  variant?: "card" | "plain";
+  description?: string | undefined;
+  variant?: "card" | "plain" | undefined;
 };
 export function LinkRow({
   title,

@@ -5,23 +5,23 @@ export type AccordionItem = {
   value: string;
   title: string;
   content: ReactNode;
-  disabled?: boolean;
+  disabled?: boolean | undefined;
 };
 export type AccordionProps = {
   items: readonly AccordionItem[];
-  disabled?: boolean;
+  disabled?: boolean | undefined;
 } & (
   | {
-      type?: "single";
-      value?: string;
-      defaultValue?: string;
-      onValueChange?: (value: string) => void;
+      type?: "single" | undefined;
+      value?: string | undefined;
+      defaultValue?: string | undefined;
+      onValueChange?: ((value: string) => void) | undefined;
     }
   | {
       type: "multiple";
-      value?: string[];
-      defaultValue?: string[];
-      onValueChange?: (value: string[]) => void;
+      value?: string[] | undefined;
+      defaultValue?: string[] | undefined;
+      onValueChange?: ((value: string[]) => void) | undefined;
     }
 );
 export function Accordion({ items, ...props }: AccordionProps) {

@@ -5,7 +5,7 @@ import { Button } from "./button.js";
 export type BreadcrumbItem = { label: string; href?: string };
 export type BreadcrumbProps = {
   items: readonly BreadcrumbItem[];
-  label?: string;
+  label?: string | undefined;
 };
 export function Breadcrumb({ items, label = "현재 위치" }: BreadcrumbProps) {
   return (
@@ -35,8 +35,8 @@ export type PaginationProps = {
   page: number;
   pageCount: number;
   onPageChange: (page: number) => void;
-  label?: string;
-  disabled?: boolean;
+  label?: string | undefined;
+  disabled?: boolean | undefined;
 };
 export function Pagination({
   page,

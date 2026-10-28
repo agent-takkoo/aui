@@ -17,8 +17,8 @@ import type { ColorMode, Theme } from "./tokens.js";
 
 export type ThemeProviderProps = {
   children: ReactNode;
-  theme?: Theme;
-  mode?: ColorMode | "system";
+  theme?: Theme | undefined;
+  mode?: ColorMode | "system" | undefined;
 };
 
 const ThemeContext = createContext<{

@@ -5,7 +5,7 @@ import { usePortalHost } from "../theme/provider.js";
 export type TooltipProps = {
   content: string;
   trigger: ReactElement;
-  side?: "top" | "bottom" | "left" | "right";
+  side?: "top" | "bottom" | "left" | "right" | undefined;
 };
 export function Tooltip({ content, trigger, side = "top" }: TooltipProps) {
   const host = usePortalHost();

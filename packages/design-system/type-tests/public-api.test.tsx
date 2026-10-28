@@ -48,6 +48,9 @@ export const valid = (
         onChange={(event) => event.currentTarget.select()}
       />
       <IconButton label="추가" icon={<Icon name="plus" />} />
+      <Drawer title="조건부 설명" description={undefined} open={undefined}>
+        <Input aria-label="exactOptionalPropertyTypes에서도 undefined를 넘길 수 있다" />
+      </Drawer>
     </Stack>
   </ThemeProvider>
 );
