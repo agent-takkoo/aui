@@ -3,8 +3,8 @@ import { Button } from "./button.js";
 
 export type EmptyStateProps = {
   title: string;
-  description?: string;
-  action?: ReactNode;
+  description?: string | undefined;
+  action?: ReactNode | undefined;
 };
 export function EmptyState({ title, description, action }: EmptyStateProps) {
   return (
@@ -20,9 +20,9 @@ export function EmptyState({ title, description, action }: EmptyStateProps) {
 
 export type ErrorStateProps = {
   title: string;
-  description?: string;
-  onRetry?: () => void;
-  retryLabel?: string;
+  description?: string | undefined;
+  onRetry?: (() => void) | undefined;
+  retryLabel?: string | undefined;
 };
 export function ErrorState({
   title,
@@ -50,7 +50,7 @@ export function ErrorState({
 export function LoadingState({
   label = "불러오는 중이에요…",
 }: {
-  label?: string;
+  label?: string | undefined;
 }) {
   return (
     <div className="ds-loading-state" data-slot="loading-state" role="status">
@@ -62,7 +62,7 @@ export function LoadingState({
 export function Skeleton({
   variant = "line",
 }: {
-  variant?: "line" | "title" | "avatar" | "card";
+  variant?: "line" | "title" | "avatar" | "card" | undefined;
 }) {
   return (
     <div

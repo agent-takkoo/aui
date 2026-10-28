@@ -7,7 +7,7 @@ export type PopoverProps = {
   title: string;
   trigger: ReactElement;
   children: ReactNode;
-  align?: "start" | "end";
+  align?: "start" | "end" | undefined;
 };
 export function Popover({
   title,

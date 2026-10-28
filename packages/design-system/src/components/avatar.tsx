@@ -6,9 +6,9 @@ import type { DesignProps } from "../internal/props.js";
 
 export type AvatarProps = DesignProps<"span"> & {
   name: string;
-  toneIndex?: number;
-  size?: "xs" | "sm" | "md";
-  avatarUrl?: string | null;
+  toneIndex?: number | undefined;
+  size?: "xs" | "sm" | "md" | undefined;
+  avatarUrl?: string | null | undefined;
 };
 export function Avatar({
   name,

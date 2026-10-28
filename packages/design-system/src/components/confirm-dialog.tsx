@@ -9,12 +9,12 @@ export type ConfirmDialogProps = {
   onOpenChange: (open: boolean) => void;
   title: string;
   description: string;
-  confirmLabel?: string;
-  cancelLabel?: string;
-  tone?: "primary" | "destructive";
-  busy?: boolean;
+  confirmLabel?: string | undefined;
+  cancelLabel?: string | undefined;
+  tone?: "primary" | "destructive" | undefined;
+  busy?: boolean | undefined;
   onConfirm: () => void;
-  trigger?: ReactElement;
+  trigger?: ReactElement | undefined;
 };
 
 export function ConfirmDialog({

@@ -8,9 +8,9 @@ export function Stack({ gap = "md", ...props }: StackProps) {
 }
 
 export type InlineProps = StackProps & {
-  align?: "start" | "center" | "end";
-  justify?: "start" | "between" | "end";
-  wrap?: boolean;
+  align?: "start" | "center" | "end" | undefined;
+  justify?: "start" | "between" | "end" | undefined;
+  wrap?: boolean | undefined;
 };
 export function Inline({
   gap = "sm",
@@ -28,7 +28,7 @@ export function Inline({
 }
 
 export type ContainerProps = DesignProps<"div"> & {
-  width?: "form" | "content" | "wide";
+  width?: "form" | "content" | "wide" | undefined;
 };
 export function Container({ width = "content", ...props }: ContainerProps) {
   return (

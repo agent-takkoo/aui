@@ -7,15 +7,15 @@ import { Icon } from "./icon.js";
 export type SegmentedControlOption<T extends string> = {
   value: T;
   label: string;
-  disabled?: boolean;
+  disabled?: boolean | undefined;
 };
 export type SegmentedControlProps<T extends string> = {
   value: T;
   options: readonly SegmentedControlOption<T>[];
   onValueChange: (value: T) => void;
   ariaLabel: string;
-  disabled?: boolean;
-  name?: string;
+  disabled?: boolean | undefined;
+  name?: string | undefined;
 };
 
 export function SegmentedControl<T extends string>({
@@ -64,7 +64,7 @@ export type FilterChipProps = {
   label: string;
   onClear: () => void;
   children: ReactNode;
-  disabled?: boolean;
+  disabled?: boolean | undefined;
 };
 export function FilterChip({
   label,

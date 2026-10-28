@@ -7,13 +7,13 @@ import { IconButton } from "./button.js";
 import { Icon } from "./icon.js";
 export type DialogProps = {
   title: string;
-  description?: string;
-  trigger?: ReactElement;
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
+  description?: string | undefined;
+  trigger?: ReactElement | undefined;
+  open?: boolean | undefined;
+  onOpenChange?: ((open: boolean) => void) | undefined;
   children: ReactNode;
-  footer?: ReactNode;
-  size?: "sm" | "md";
+  footer?: ReactNode | undefined;
+  size?: "sm" | "md" | undefined;
 };
 
 export function Dialog(props: DialogProps) {
@@ -34,8 +34,8 @@ export function DialogFrame({
   drawerSize = "auto",
 }: DialogProps & {
   presentation: "dialog" | "drawer" | "drawer-left" | "drawer-right";
-  header?: ReactNode;
-  drawerSize?: "auto" | "half" | "tall" | "full";
+  header?: ReactNode | undefined;
+  drawerSize?: "auto" | "half" | "tall" | "full" | undefined;
 }) {
   const portalHost = usePortalHost();
   const viewportStyle = useViewportStyle();
