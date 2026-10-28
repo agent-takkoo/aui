@@ -3,6 +3,7 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useState,
   useSyncExternalStore,
 } from "react";
@@ -19,6 +20,11 @@ export type ThemeProviderProps = {
   children: ReactNode;
   theme?: Theme;
   mode?: ColorMode | "system";
+  /**
+   * 문서(`<html>`)의 배경색과 color-scheme도 Theme에 맞춘다.
+   * 모바일 웹뷰처럼 `.ds-root` 바깥(overscroll 영역, 키보드 뒤)이 그대로 보이는 환경에서 켠다.
+   */
+  applyToDocument?: boolean;
 };
 
 const ThemeContext = createContext<{
@@ -38,6 +44,7 @@ export function ThemeProvider({
   children,
   theme = defaultTheme,
   mode = "light",
+  applyToDocument = false,
 }: ThemeProviderProps) {
   const systemMode = useSyncExternalStore(
     subscribeScheme,
@@ -46,6 +53,23 @@ export function ThemeProvider({
   );
   const resolvedMode = mode === "system" ? systemMode : mode;
   const [portalHost, setPortalHost] = useState<HTMLDivElement | null>(null);
+  const documentBackground = theme[resolvedMode].background;
+  useEffect(() => {
+    if (!applyToDocument) return;
+    const root = document.documentElement;
+    const previous = {
+      background: root.style.backgroundColor,
+      scheme: root.style.colorScheme,
+    };
+    root.style.backgroundColor = documentBackground;
+    root.style.colorScheme = resolvedMode;
+    root.dataset.dsDocumentMode = resolvedMode;
+    return () => {
+      root.style.backgroundColor = previous.background;
+      root.style.colorScheme = previous.scheme;
+      delete root.dataset.dsDocumentMode;
+    };
+  }, [applyToDocument, documentBackground, resolvedMode]);
   const variables: Record<string, string> = {
     "--ds-radius": theme.radius,
     "--ds-font-sans": theme.fontFamily,
