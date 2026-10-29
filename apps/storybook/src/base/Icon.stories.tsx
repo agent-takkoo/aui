@@ -11,6 +11,16 @@ const names = [
   "menu",
   "trash",
   "more",
+  "chevron-right",
+  "chevron-down",
+  "star",
+  "star-filled",
+  "share",
+  "settings",
+  "clock",
+  "location",
+  "warning",
+  "info",
 ] satisfies IconName[];
 const meta = {
   id: "base-icon",
@@ -35,6 +45,19 @@ export const Default: Story = {
     <Inline>
       <Icon {...args} />
       <Text>{args.name}</Text>
+    </Inline>
+  ),
+};
+export const All: Story = {
+  name: "전체 목록",
+  render: () => (
+    <Inline gap="md">
+      {names.map((name) => (
+        <Inline key={name} gap="xs" wrap={false}>
+          <Icon name={name} />
+          <Text size="sub">{name}</Text>
+        </Inline>
+      ))}
     </Inline>
   ),
 };
