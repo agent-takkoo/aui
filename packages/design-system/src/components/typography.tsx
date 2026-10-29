@@ -3,10 +3,10 @@ import { domProps } from "../internal/props.js";
 import type { DesignProps } from "../internal/props.js";
 
 export type TextProps = DesignProps<"p"> & {
-  as?: "p" | "span";
-  size?: "body" | "sub" | "caption";
-  tone?: "default" | "muted" | "primary" | "destructive";
-  weight?: "regular" | "semibold" | "bold";
+  as?: "p" | "span" | undefined;
+  size?: "body" | "sub" | "caption" | undefined;
+  tone?: "default" | "muted" | "primary" | "destructive" | undefined;
+  weight?: "regular" | "semibold" | "bold" | undefined;
 };
 export function Text({
   as: Component = "p",
@@ -25,9 +25,9 @@ export function Text({
 
 export type HeadingProps = {
   children: ReactNode;
-  level?: 1 | 2 | 3 | 4;
-  size?: "display" | "title" | "heading";
-  id?: string;
+  level?: 1 | 2 | 3 | 4 | undefined;
+  size?: "display" | "title" | "heading" | undefined;
+  id?: string | undefined;
 };
 export function Heading({
   level = 2,

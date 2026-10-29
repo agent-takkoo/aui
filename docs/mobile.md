@@ -9,7 +9,7 @@
 - 본문 스크롤과 고정 footer를 나누고 화면 키보드가 차지한 영역만큼 footer의 안전 영역 여백을 보정해요.
 - 키보드 포커스, Escape, 팝업을 닫은 뒤의 포커스 복귀와 `prefers-reduced-motion`을 지원해요.
 
-소비 앱의 viewport에는 `width=device-width, initial-scale=1, viewport-fit=cover`를 설정해요. 확대를 막는 `maximum-scale=1`은 사용하지 않아요.
+소비 앱의 viewport에는 `width=device-width, initial-scale=1, viewport-fit=cover`를 설정해요. 확대를 막는 `maximum-scale=1`은 사용하지 않아요. 가장 바깥 `ThemeProvider`에 `applyToDocument`를 켜면 overscroll 영역과 키보드 뒤도 Theme 배경색이 돼요.
 
 ## 테스트 범위
 

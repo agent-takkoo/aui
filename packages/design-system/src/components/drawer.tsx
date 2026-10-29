@@ -1,7 +1,7 @@
 import { DialogFrame } from "./dialog.js";
 import type { DialogProps } from "./dialog.js";
 export type DrawerProps = Omit<DialogProps, "size"> & {
-  side?: "responsive" | "left" | "right";
+  side?: "responsive" | "left" | "right" | undefined;
 };
 export function Drawer({ side = "responsive", ...props }: DrawerProps) {
   return (

@@ -22,7 +22,9 @@ const projectTheme = defineTheme({
 </ThemeProvider>;
 ```
 
-`light`·`dark`의 공통 색을 모두 정의하고 배경·전경을 짝으로 유지해요. `mode`는 `light`, `dark`, `system`이에요. 중첩 provider와 Portal도 가까운 theme을 사용해요. `ThemeProvider`는 문서 전체의 class나 색을 바꾸지 않아요.
+`light`·`dark`의 공통 색을 모두 정의하고 배경·전경을 짝으로 유지해요. `mode`는 `light`, `dark`, `system`이에요. 중첩 provider와 Portal도 가까운 theme을 사용해요. `ThemeProvider`는 기본으로 문서 전체의 class나 색을 바꾸지 않아요.
+
+모바일 웹뷰처럼 `.ds-root` 바깥이 보이는 환경(위아래로 당길 때, 키보드가 올라올 때)에서는 가장 바깥 provider에 `applyToDocument`를 켜요. `<html>`의 배경색과 `color-scheme`을 현재 모드의 Theme 값으로 맞추고, provider가 사라지면 되돌려요. 중첩 provider에는 켜지 않아요.
 
 theme을 생략하면 공통 기본값 `defaultTheme`을 사용해요. Storybook의 `Global/Theme` 문서에서 여섯 필드와 모든 색상 token의 실제 기본값을 확인할 수 있어요.
 

@@ -107,3 +107,14 @@ export const Scope: Story = {
     </div>
   ),
 };
+
+export const Document: Story = {
+  name: "문서 배경 적용",
+  render: () => (
+    <ThemeProvider theme={defaultTheme} mode="system" applyToDocument>
+      <div className="docs-theme-preview">
+        <Text>applyToDocument를 켜면 html의 배경색과 color-scheme도 따라와요.</Text>
+      </div>
+    </ThemeProvider>
+  ),
+};
