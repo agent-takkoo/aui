@@ -548,6 +548,22 @@ test("시스템 모드가 실행 중 바뀌어도 반영된다", async ({ page }
   await expect(scope).toHaveAttribute("data-ds-mode", "light");
 });
 
+test("applyToDocument는 html 배경과 color-scheme을 Theme에 맞추고 모드를 따라간다", async ({
+  page,
+}) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await openStory(page, "testing-theme--document");
+  const html = page.locator("html");
+  await expect(html).toHaveAttribute("data-ds-document-mode", "dark");
+  await expect(html).toHaveCSS("color-scheme", "dark");
+  await expect(html).toHaveCSS("background-color", "rgb(22, 24, 29)");
+  await page.emulateMedia({ colorScheme: "light" });
+  await expect(html).toHaveAttribute("data-ds-document-mode", "light");
+  await expect(html).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await openStory(page, "testing-theme--system");
+  await expect(html).not.toHaveAttribute("data-ds-document-mode", /./);
+});
+
 test("모바일부터 넓은 화면까지 가로로 넘치지 않는다", async ({
   page,
 }, testInfo) => {
