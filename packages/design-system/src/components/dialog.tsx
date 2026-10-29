@@ -7,13 +7,13 @@ import { IconButton } from "./button.js";
 import { Icon } from "./icon.js";
 export type DialogProps = {
   title: string;
-  description?: string;
-  trigger?: ReactElement;
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
+  description?: string | undefined;
+  trigger?: ReactElement | undefined;
+  open?: boolean | undefined;
+  onOpenChange?: ((open: boolean) => void) | undefined;
   children: ReactNode;
-  footer?: ReactNode;
-  size?: "sm" | "md";
+  footer?: ReactNode | undefined;
+  size?: "sm" | "md" | undefined;
 };
 
 export function Dialog(props: DialogProps) {
@@ -30,8 +30,12 @@ export function DialogFrame({
   footer,
   size = "md",
   presentation,
+  header,
+  drawerSize = "auto",
 }: DialogProps & {
   presentation: "dialog" | "drawer" | "drawer-left" | "drawer-right";
+  header?: ReactNode | undefined;
+  drawerSize?: "auto" | "half" | "tall" | "full" | undefined;
 }) {
   const portalHost = usePortalHost();
   const viewportStyle = useViewportStyle();
@@ -47,7 +51,7 @@ export function DialogFrame({
             style={viewportStyle}
           >
             <DialogPrimitive.Content
-              className={`ds-dialog ds-dialog-${size} ds-presentation-${presentation}`}
+              className={`ds-dialog ds-dialog-${size} ds-presentation-${presentation} ds-drawer-size-${drawerSize}`}
               data-slot={presentation}
               {...(!description ? { "aria-describedby": undefined } : {})}
             >
@@ -66,6 +70,11 @@ export function DialogFrame({
                   <IconButton icon={<Icon name="close" />} label="닫기" />
                 </DialogPrimitive.Close>
               </header>
+              {header ? (
+                <div className="ds-dialog-toolbar" data-slot="dialog-toolbar">
+                  {header}
+                </div>
+              ) : null}
               <div className="ds-dialog-body">{children}</div>
               {footer ? (
                 <footer className="ds-dialog-footer">{footer}</footer>

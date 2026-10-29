@@ -15,9 +15,9 @@ export type ButtonVariant =
   | "quiet";
 export type ButtonSize = "sm" | "md" | "lg";
 type ButtonDesign = {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  fullWidth?: boolean;
+  variant?: ButtonVariant | undefined;
+  size?: ButtonSize | undefined;
+  fullWidth?: boolean | undefined;
 };
 export type ButtonProps = DesignProps<"button"> &
   ButtonDesign & { children: ReactNode; loading?: boolean };

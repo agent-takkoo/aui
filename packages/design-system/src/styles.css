@@ -908,6 +908,22 @@
   border-end-end-radius: 0;
   animation: ds-drawer-in 220ms cubic-bezier(0.32, 0.72, 0, 1);
 }
+.ds-dialog-toolbar {
+  flex-shrink: 0;
+  padding: 0 var(--ds-card-padding) 0.75rem;
+}
+.ds-presentation-drawer.ds-drawer-size-half {
+  block-size: min(50dvh, var(--ds-viewport-height, 50dvh));
+}
+.ds-presentation-drawer.ds-drawer-size-tall {
+  block-size: min(85dvh, var(--ds-viewport-height, 85dvh));
+}
+.ds-presentation-drawer.ds-drawer-size-full {
+  block-size: min(100dvh, var(--ds-viewport-height, 100dvh));
+  max-block-size: min(100dvh, var(--ds-viewport-height, 100dvh));
+  border-radius: 0;
+  padding-block-start: env(safe-area-inset-top, 0px);
+}
 .ds-presentation-drawer .ds-dialog-body {
   padding-block-end: max(
     var(--ds-card-padding),

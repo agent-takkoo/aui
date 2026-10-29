@@ -6,14 +6,14 @@ export type MenuItem = {
   id: string;
   label: string;
   onSelect: () => void;
-  disabled?: boolean;
-  destructive?: boolean;
+  disabled?: boolean | undefined;
+  destructive?: boolean | undefined;
 };
 export type DropdownMenuProps = {
   trigger: ReactElement;
   items: readonly MenuItem[];
   label: string;
-  align?: "start" | "end";
+  align?: "start" | "end" | undefined;
 };
 
 export function DropdownMenu({
