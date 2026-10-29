@@ -54,6 +54,18 @@ export type {
   CalloutProps,
   LinkRowProps,
 } from "./components/surfaces.js";
+export { ListItem, PickerRow } from "./components/list-item.js";
+export type { ListItemProps, PickerRowProps } from "./components/list-item.js";
+export { ChipGroup, ChipInput } from "./components/chip-group.js";
+export type {
+  ChipGroupProps,
+  ChipOption,
+  ChipInputProps,
+} from "./components/chip-group.js";
+export { BottomBar, BottomBarSpace } from "./components/bottom-bar.js";
+export type { BottomBarProps } from "./components/bottom-bar.js";
+export { Stat, StatGrid } from "./components/stat.js";
+export type { StatProps, StatGridProps } from "./components/stat.js";
 export { Avatar } from "./components/avatar.js";
 export type { AvatarProps } from "./components/avatar.js";
 export { SegmentedControl, FilterChip } from "./components/selection.js";

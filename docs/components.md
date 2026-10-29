@@ -122,6 +122,52 @@ theme을 생략하면 공통 기본값 `defaultTheme`을 사용해요. Storybook
 
 `Progress`는 `label`이 필수이고 `value`와 `max`로 진행량을 표시해요. value를 생략하거나 null로 주면 진행량을 알 수 없는 상태예요. 기본 max는 100이고, 유효한 숫자 값은 0부터 max 사이에 표시돼요.
 
+## 목록 행과 선택 행
+
+`ListItem`은 누르면 동작하는 목록 행이에요. `title`과 선택적인 `description`, 왼쪽 `leading`(번호·아이콘), 오른쪽 `trailing`(배지·보조 글자)을 받고 버튼으로 렌더링해요. `trailing`이 없으면 이동 표시 화살표가 붙고, `chevron={false}`로 뺄 수 있어요. `selected`는 `aria-current`로 표시해요. 링크 이동에는 `LinkRow`를 사용해요.
+
+```tsx
+<Stack gap="none">
+  {stops.map((stop, index) => (
+    <ListItem
+      key={stop.id}
+      leading={index + 1}
+      title={stop.name}
+      description={`${stop.region} · 버스 ${stop.count}개`}
+      selected={picked === stop.id}
+      onClick={() => setPicked(stop.id)}
+    />
+  ))}
+</Stack>
+```
+
+`PickerRow`는 라벨과 고른 값을 가로로 놓고 선택 화면을 여는 행이에요. `label`, `placeholder`는 필수이고 `value`가 있으면 채워진 모습으로 바뀌어요. `onClear`를 주면 값이 있을 때 지우기 버튼이 붙어요. 여러 행을 `Stack gap="none"`에 넣으면 한 묶음으로 모서리가 이어져요.
+
+## 칩 단일 선택
+
+`ChipGroup`은 줄바꿈되는 칩 중 하나를 고르는 단일 선택이에요. `SegmentedControl`에 안 들어가는 넷 이상의 선택지에 사용해요. `value`, `options`, `onValueChange`, `ariaLabel`을 받고 RadioGroup으로 구성해 방향키로 옮겨요. `value`가 `null`이면 아무것도 고르지 않은 상태예요. `trailing`에 `ChipInput`을 넣으면 직접 입력 값을 같은 줄에서 받아요.
+
+```tsx
+<ChipGroup
+  ariaLabel="몇 미터 전"
+  options={[
+    { value: "300", label: "300m" },
+    { value: "500", label: "500m" },
+  ]}
+  value={meters}
+  onValueChange={setMeters}
+  trailing={<ChipInput label="직접" unit="m" value={custom} onChange={setCustom} onCommit={commit} />}
+/>
+```
+
+`ChipInput`은 `label`, `value`, `onChange`를 받고 `onCommit`은 포커스가 나가거나 Enter를 눌렀을 때 불려요. 값의 검증은 소비 코드가 해요.
+
+## 하단 행동 바와 수치 타일
+
+`BottomBar`는 화면 아래에 고정되는 주 행동 자리예요. 안전 영역만큼 여백을 두고 위쪽은 배경색으로 흐려져요. `width`는 `Container`와 같은 `form`·`content`·`wide`이고 `full`은 폭 제한이 없어요. 본문 끝에 `BottomBarSpace`를 두어 마지막 내용이 바에 가려지지 않게 해요.
+
+`Stat`은 `label`과 `value`, 선택적인 `hint`를 담는 작은 면이에요. `tone="primary"`는 값을 주 색으로 찍어요. `StatGrid`는 2열(기본)이나 3열로 놓아요. 값이 길면 말줄임해요.
+
 ## 콘텐츠 전환과 펼치기
 
 `Tabs`는 접근 가능한 이름인 `label`과 `{ value, label, content, disabled? }` 항목을 받아요. `value`·`defaultValue`·`onValueChange`로 전환하고, `activationMode`는 `automatic` 또는 `manual`이에요. 각 제목과 콘텐츠의 ARIA 연결은 내부에서 처리해요.
