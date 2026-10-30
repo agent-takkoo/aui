@@ -34,22 +34,16 @@ API 호출, 라우팅, 업무 규칙과 서비스 상태는 소비 프로젝트�
 
 ## 패키지 사용하기
 
-공개 npm 패키지를 설치해요. React 19와 React DOM 19가 필요해요.
-
-```sh
-npm install @heogeon0/aui
-```
-
-로컬 변경을 배포 전에 확인하려면 tarball을 만들어 설치해요.
+React 19와 React DOM 19가 필요해요. 저장소의 현재 버전은 `0.1.0`이며 아직 npm에는 반영하지 않았어요. 현재 API를 사용하려면 tarball을 만들어 설치해요.
 
 ```sh
 pnpm pack:package
 ```
 
-`artifacts/heogeon0-aui-0.0.1.tgz`를 소비 프로젝트에 설치해요.
+`artifacts/heogeon0-aui-0.1.0.tgz`를 소비 프로젝트에 설치해요.
 
 ```sh
-pnpm add /path/to/ai-system/artifacts/heogeon0-aui-0.0.1.tgz
+pnpm add /path/to/ai-system/artifacts/heogeon0-aui-0.1.0.tgz
 ```
 
 앱의 진입점에서 CSS를 한 번 불러오고 theme을 주입해요. Tailwind 설정은 필요하지 않아요.

@@ -1,6 +1,6 @@
 {
   "name": "@heogeon0/aui",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Theme 주입과 제한된 props를 제공하는 범용 React 디자인 시스템",
   "license": "MIT",
   "repository": {

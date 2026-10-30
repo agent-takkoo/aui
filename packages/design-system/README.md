@@ -4,8 +4,10 @@ React 19와 React DOM 19를 peer dependency로 사용해요.
 ## 설치
 
 ```sh
-npm install @heogeon0/aui@0.0.1 react@^19 react-dom@^19
+npm install @heogeon0/aui@0.1.0 react@^19 react-dom@^19
 ```
+
+`0.1.0` 배포 전에는 저장소에서 `pnpm pack:package`로 만든 `artifacts/heogeon0-aui-0.1.0.tgz`를 설치해 주세요.
 
 ESM 패키지이며 TypeScript 타입과 CSS를 함께 제공해요. Tailwind 설정은 필요하지 않아요.
 
@@ -55,4 +57,4 @@ export const projectTheme = defineTheme({
 
 ## AI 문서
 
-다음 배포부터 `ai/llms.txt`에 컴포넌트 문서를 포함해요. `@heogeon0/aui/llms.txt`와 `@heogeon0/aui/llms/Button.md`로도 경로를 찾을 수 있어요. props·기본값·예제는 코드에서 생성해요. 이미 배포한 0.0.1에는 포함되지 않아요.
+`0.1.0`부터 `ai/llms.txt`에 컴포넌트 문서를 포함해요. `@heogeon0/aui/llms.txt`와 `@heogeon0/aui/llms/Button.md`로도 경로를 찾을 수 있어요. props·기본값·예제는 코드에서 생성해요. 이미 배포한 0.0.1에는 포함되지 않아요.

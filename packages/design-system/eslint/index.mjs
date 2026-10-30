@@ -203,7 +203,7 @@ const noStylesheetImports = {
 };
 
 const plugin = {
-  meta: { name: "@heogeon0/aui", version: "0.0.1" },
+  meta: { name: "@heogeon0/aui", version: "0.1.0" },
   rules: {
     "no-style-overrides": noStyleOverrides,
     "no-raw-styling": noRawStyling,
