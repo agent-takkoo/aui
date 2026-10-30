@@ -6,6 +6,7 @@ import {
   creamTheme,
   resolveScale,
   themeStylesheet,
+  themeKey,
   colorScaleNames,
   radiusNames,
 } from "../packages/design-system/dist/theme/index.js";
@@ -19,7 +20,10 @@ test("두 preset은 라이트·다크 12단계 스케일과 역할 변수를 제
       assert.ok([9, 10, 11].includes(brand.solidStep));
     }
     const css = themeStylesheet(theme);
-    assert.match(css, new RegExp(`\\[data-ds-theme="${theme.name}"\\]\\{`));
+    assert.match(
+      css,
+      new RegExp(`\\[data-ds-theme-key="${themeKey(theme)}"\\]\\{`),
+    );
     assert.match(css, /\[data-ds-mode="dark"\]\{[^}]*--ds-primary:/);
     assert.match(css, /--ds-radius-factor:/);
     assert.match(css, /--ds-scaling:/);
@@ -28,6 +32,17 @@ test("두 preset은 라이트·다크 12단계 스케일과 역할 변수를 제
     resolveScale(defaultTheme.brand, "light").solid[0],
     resolveScale(defaultTheme.brand, "dark").solid[0],
   );
+});
+
+test("같은 이름으로 설정만 바꾼 theme은 다른 키와 stylesheet를 갖는다", () => {
+  const indigo = defineTheme({ ...defaultTheme, name: "swap" });
+  const ruby = defineTheme({ ...defaultTheme, name: "swap", brand: "ruby" });
+  assert.notEqual(themeKey(indigo), themeKey(ruby));
+  assert.equal(
+    themeKey(indigo),
+    themeKey(defineTheme({ ...defaultTheme, name: "swap" })),
+  );
+  assert.notEqual(themeStylesheet(indigo), themeStylesheet(ruby));
 });
 
 test("채운 배경은 글자와 4.5:1을 만족하는 단계를 고른다", () => {

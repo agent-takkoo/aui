@@ -5,7 +5,13 @@
 
 ```tsx
 import { ThemeProvider, defineTheme, defaultTheme } from "@heogeon0/aui";
+import type { LinkProps } from "@heogeon0/aui";
 import { Link } from "react-router";
+
+// 라우터 Link는 to를 받으므로 href를 to로 넘기는 adapter를 linkComponent에 지정한다.
+function RouterLink({ href, ...props }: LinkProps) {
+  return <Link to={href} {...props} />;
+}
 
 const projectTheme = defineTheme({
   name: "my-service",
@@ -16,14 +22,14 @@ const projectTheme = defineTheme({
   fontFamily: defaultTheme.fontFamily,
 });
 
-<ThemeProvider theme={projectTheme} mode="system" linkComponent={Link}>
+<ThemeProvider theme={projectTheme} mode="system" linkComponent={RouterLink}>
   <App />
 </ThemeProvider>;
 ```
 
 theme은 색 하나하나가 아니라 `brand`·`neutral` 스케일 이름, `radius` 단계, `scaling` 밀도, `fontFamily`로 정해요. `brand`는 Radix 색 이름(`indigo`, `teal`, `ruby` 등) 또는 `{ light, dark }` 12단계 배열이고 `neutral`은 `gray`, `mauve`, `slate`, `sage`, `olive`, `sand`예요. 컴포넌트는 brand·neutral·danger·success·warning·info 스케일의 단계를 역할에 맞게 쓰므로 브랜드가 바뀌어도 위계가 같아요. 채운 배경의 글자는 4.5:1을 만족하는 단계를 자동으로 골라요.
 
-`mode`는 `light`, `dark`, `system`이에요. `linkComponent`를 넘기면 `ButtonLink`·`LinkRow`·`Sidebar`·`Breadcrumb`가 라우터 Link로 렌더링돼요. 중첩 provider와 Portal도 가까운 theme을 사용하고 theme 이름은 서로 달라야 해요. `ThemeProvider`는 문서 전체의 class나 색을 바꾸지 않아요.
+`mode`는 `light`, `dark`, `system`이에요. `linkComponent`를 넘기면 `ButtonLink`·`LinkRow`·`Sidebar`·`Breadcrumb`가 그 컴포넌트로 렌더링돼요. `LinkComponent`는 `href`를 받으므로 React Router처럼 `to`를 쓰는 Link에는 위 `RouterLink` 같은 adapter를 넘겨요. 같은 name으로 설정만 바꾼 theme 객체를 다시 넘겨도 stylesheet가 새로 등록돼요. 중첩 provider와 Portal도 가까운 theme을 사용하고 theme 이름은 서로 달라야 해요. `ThemeProvider`는 문서 전체의 class나 색을 바꾸지 않아요.
 
 theme을 생략하면 `defaultTheme`(indigo·slate·medium)을 사용해요. Storybook의 `Global/Theme` 문서에서 필드, 스케일 단계, 역할 변수의 실제 값을 확인할 수 있어요.
 

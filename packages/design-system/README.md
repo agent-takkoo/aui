@@ -49,7 +49,7 @@ export const projectTheme = defineTheme({
 });
 ```
 
-`<ThemeProvider theme={projectTheme} mode="system" linkComponent={Link}>`로 적용해요. 색은 Radix 12단계 스케일 이름으로 고르고 라이트·다크는 스케일이 알아서 바뀌어요. 브랜드 색이 목록에 없으면 `{ light, dark }` 12단계 배열을 넘겨요. radius·scaling·typography도 Theme에서 설정해요.
+`<ThemeProvider theme={projectTheme} mode="system" linkComponent={RouterLink}>`로 적용해요. `RouterLink`는 `href`를 라우터 Link의 `to`로 넘기는 adapter예요. 색은 Radix 12단계 스케일 이름으로 고르고 라이트·다크는 스케일이 알아서 바뀌어요. 브랜드 색이 목록에 없으면 `{ light, dark }` 12단계 배열을 넘겨요. radius·scaling·typography도 Theme에서 설정해요.
 
 이 패키지는 [MIT 라이선스](LICENSE)로 제공해요. 저작권·허가 고지를 유지하면 상업적 사용·수정·재배포가 가능해요. 외부 dependency는 각 라이선스를 따라요.
 

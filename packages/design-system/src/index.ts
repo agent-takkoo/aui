@@ -5,6 +5,7 @@ export {
   creamTheme,
   resolveScale,
   themeStylesheet,
+  themeKey,
   defaultTypography,
   colorScaleNames,
   neutralScaleNames,

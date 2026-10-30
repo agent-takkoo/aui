@@ -9,7 +9,7 @@ import {
 } from "react";
 import type { AnchorHTMLAttributes, ComponentType, ReactNode } from "react";
 import { defaultTheme } from "./presets.js";
-import { themeStylesheet } from "./tokens.js";
+import { themeKey, themeStylesheet } from "./tokens.js";
 import type { ColorMode, Theme } from "./tokens.js";
 
 export type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -55,6 +55,7 @@ export function ThemeProvider({
   const parent = useContext(ThemeContext);
   const [portalHost, setPortalHost] = useState<HTMLDivElement | null>(null);
   const stylesheet = useMemo(() => themeStylesheet(theme), [theme]);
+  const key = useMemo(() => themeKey(theme), [theme]);
   const value = useMemo(
     () => ({
       portalHost,
@@ -65,12 +66,13 @@ export function ThemeProvider({
 
   return (
     <ThemeContext.Provider value={value}>
-      <style href={`ds-theme-${theme.name}`} precedence="ds-theme">
+      <style href={`ds-theme-${key}`} precedence="ds-theme">
         {stylesheet}
       </style>
       <div
         className="ds-root"
         data-ds-theme={theme.name}
+        data-ds-theme-key={key}
         data-ds-mode={resolvedMode}
       >
         {children}

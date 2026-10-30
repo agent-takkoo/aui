@@ -77,5 +77,5 @@ export function App() {
 - value·checked를 제어하면 변경 콜백과 form reset도 함께 처리한다.
 - trigger에는 ref와 이벤트를 DOM에 전달하는 요소 하나를 넣는다.
 - 팝업·Toast는 ThemeProvider 안에서만 열리고, 서버 렌더링 첫 화면에서는 열린 상태로 그릴 수 없다.
-- 라우터 Link를 쓰려면 ThemeProvider에 linkComponent를 넘긴다. ButtonLink·LinkRow·Sidebar·Breadcrumb가 그 Link를 쓴다.
+- 라우터 Link를 쓰려면 ThemeProvider에 linkComponent를 넘긴다. LinkComponent는 href를 받으므로 React Router처럼 to를 쓰는 Link에는 `({ href, ...props }) => <Link to={href} {...props} />` adapter를 넘긴다. ButtonLink·LinkRow·Sidebar·Breadcrumb가 그 컴포넌트를 쓴다.
 - 일반 DOM props는 대표 항목만 표시한다. 전체 허용 범위는 패키지의 `.d.ts`를 따른다.

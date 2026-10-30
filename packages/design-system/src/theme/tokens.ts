@@ -529,8 +529,25 @@ const toDeclarations = (variables: Record<string, string>) =>
     )
     .join("");
 
+// 같은 이름으로 설정만 바꾼 theme도 서로 다른 선택자와 stylesheet를 갖게 내용 해시를 키에 붙인다.
+function hashText(text: string): string {
+  let hash = 5381;
+  for (let index = 0; index < text.length; index++)
+    hash = ((hash << 5) + hash + text.charCodeAt(index)) >>> 0;
+  return hash.toString(36);
+}
+export function themeKey(theme: Theme): string {
+  return `${theme.name}-${hashText(
+    JSON.stringify([
+      themeBaseVariables(theme),
+      themeModeVariables(theme, "light"),
+      themeModeVariables(theme, "dark"),
+    ]),
+  )}`;
+}
+
 export function themeStylesheet(theme: Theme): string {
-  const scope = `[data-ds-theme="${theme.name}"]`;
+  const scope = `[data-ds-theme-key="${themeKey(theme)}"]`;
   return [
     `${scope}{${toDeclarations(themeBaseVariables(theme))}}`,
     `${scope}[data-ds-mode="light"]{${toDeclarations(themeModeVariables(theme, "light"))}}`,

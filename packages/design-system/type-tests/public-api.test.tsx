@@ -31,6 +31,8 @@ import {
   ScrollArea,
   AspectRatio,
 } from "../src/index.js";
+import type { LinkProps } from "../src/index.js";
+import type React from "react";
 
 export const valid = (
   <ThemeProvider>
@@ -114,6 +116,25 @@ export const invalidRadius = defineTheme({
   // @ts-expect-error radius는 정해진 단계에서 고른다.
   radius: "0.75rem",
 });
+type ToLinkProps = {
+  to: string;
+  children?: React.ReactNode;
+  className?: string;
+};
+declare function ToLink(props: ToLinkProps): React.ReactElement;
+export const routerAdapter = (
+  <ThemeProvider
+    linkComponent={({ href, ...props }: LinkProps) => (
+      <ToLink to={href} {...props} />
+    )}
+  >
+    <Button>이동</Button>
+  </ThemeProvider>
+);
+export const invalidLink = (
+  // @ts-expect-error to를 받는 Link는 adapter 없이 linkComponent에 넣을 수 없다.
+  <ThemeProvider linkComponent={ToLink}>이동</ThemeProvider>
+);
 // @ts-expect-error 없앤 variant는 사용할 수 없다.
 export const invalidVariant = <Button variant="outline">저장</Button>;
 // @ts-expect-error Icon은 name 또는 source 중 하나를 받는다.

@@ -9,6 +9,7 @@ export {
   defineTheme,
   resolveScale,
   themeStylesheet,
+  themeKey,
   defaultTypography,
   colorScaleNames,
   neutralScaleNames,

@@ -11,6 +11,7 @@ export const catalog = [
       resolveScale:
         "스케일 이름이나 custom 배열을 모드별 12단계 색으로 바꾼다.",
       themeStylesheet: "Theme 하나의 CSS 변수 선언 문자열을 만든다.",
+      themeKey: "theme 이름과 설정 해시를 합친 stylesheet 키다.",
       defaultTypography: "역할별 글자 크기·줄 높이·굵기·자간 기본값이다.",
       colorScaleNames: "brand에 쓸 수 있는 Radix 색 스케일 이름이다.",
       neutralScaleNames: "neutral에 쓸 수 있는 중립 스케일 이름이다.",
@@ -21,9 +22,9 @@ export const catalog = [
     stories: ["Global/Theme"],
     example: "ThemeExample",
     rules: [
-      'theme 생략 시 defaultTheme, mode 생략 시 light이다. 시스템 설정을 따르려면 mode="system"을 지정한다. 라우터 Link를 쓰려면 linkComponent를 넘긴다.',
+      'theme 생략 시 defaultTheme, mode 생략 시 light이다. 시스템 설정을 따르려면 mode="system"을 지정한다. 라우터 Link를 쓰려면 href를 to로 넘기는 adapter(({ href, ...props }) => <Link to={href} {...props} />)를 linkComponent에 넘긴다.',
       "Theme 입력은 name·brand·neutral·radius·scaling·fontFamily·typography(선택)다. brand는 스케일 이름(blue·indigo·ruby 등) 또는 { light, dark } 12단계 배열이고 neutral은 gray·mauve·slate·sage·olive·sand다.",
-      "radius는 none·small·medium·large·full, scaling은 90%·95%·100%·105%·110%다. 색 하나하나를 적지 않는다. 컴포넌트가 brand·neutral·danger·success·warning·info 스케일의 단계를 역할에 맞게 쓴다.",
+      "radius는 none·small·medium·large·full, scaling은 90%·95%·100%·105%·110%다. 터치 영역은 어느 scaling에서도 44px 이상이다. 색 하나하나를 적지 않는다. 컴포넌트가 brand·neutral·danger·success·warning·info 스케일의 단계를 역할에 맞게 쓴다.",
       "채운 배경(primary 버튼·solid 배지)은 글자와 4.5:1을 만족하는 단계를 자동으로 고른다. 중첩 ThemeProvider와 Portal은 가까운 Theme 범위를 따르고 Theme 이름은 서로 달라야 한다.",
     ],
   },
