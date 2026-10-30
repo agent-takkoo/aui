@@ -18,7 +18,7 @@ import {
   Separator,
   Stack,
   Text,
-} from "@ai-system/design-system";
+} from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
@@ -59,14 +59,11 @@ export const Default: Story = {
           <p className="docs-origin">Button · variant와 size</p>
           <Stack>
             <Inline>
-              <Button>
-                <Icon name="plus" />
-                새로 만들기
-              </Button>
+              <Button leadingIcon={<Icon name="plus" />}>새로 만들기</Button>
               <Button variant="secondary">돌아가기</Button>
             </Inline>
             <Inline>
-              <Button variant="soft" size="sm">
+              <Button variant="secondary" size="sm">
                 함께 보기
               </Button>
               <Button variant="ghost" size="sm">
@@ -95,7 +92,7 @@ export const Default: Story = {
             <CardHeader>
               <Inline justify="between">
                 <CardTitle>함께 쓰는 공간</CardTitle>
-                <Badge variant="secondary">공유 중</Badge>
+                <Badge tone="brand">공유 중</Badge>
               </Inline>
               <CardDescription>
                 본문과 제목의 굵기로 정보를 구분해요.

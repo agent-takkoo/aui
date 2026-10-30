@@ -1,17 +1,29 @@
 import {
+  Breadcrumb,
   Button,
+  ButtonLink,
+  Checkbox,
   Dialog,
   Heading,
+  Icon,
+  IconButton,
+  Inline,
+  LinkRow,
+  Sidebar,
   Stack,
+  Switch,
   Text,
   ThemeProvider,
   creamTheme,
   defaultTheme,
   defineTheme,
   Input,
-} from "@ai-system/design-system";
+} from "@heogeon0/aui";
+import type { LinkProps } from "@heogeon0/aui";
 import type { StoryObj } from "@storybook/react-vite";
 import type { CSSProperties } from "react";
+import { useState } from "react";
+import { Link, MemoryRouter, Route, Routes, useLocation } from "react-router";
 
 const meta = {
   id: "testing-theme",
@@ -105,5 +117,109 @@ export const Scope: Story = {
         </div>
       </ThemeProvider>
     </div>
+  ),
+};
+
+function SwapDemo() {
+  const [brand, setBrand] = useState<"indigo" | "ruby">("indigo");
+  const theme = defineTheme({
+    name: "swap-test",
+    brand,
+    neutral: "slate",
+    radius: "medium",
+    fontFamily: defaultTheme.fontFamily,
+  });
+  return (
+    <ThemeProvider theme={theme}>
+      <Stack>
+        <Text role="status">현재 브랜드: {brand}</Text>
+        <Button
+          onClick={() => setBrand(brand === "indigo" ? "ruby" : "indigo")}
+        >
+          브랜드 바꾸기
+        </Button>
+      </Stack>
+    </ThemeProvider>
+  );
+}
+export const Swap: Story = {
+  name: "같은 이름의 theme 교체",
+  render: () => <SwapDemo />,
+};
+
+export const Dense: Story = {
+  name: "축소 밀도",
+  render: () => (
+    <ThemeProvider
+      theme={defineTheme({
+        name: "dense-test",
+        brand: "indigo",
+        neutral: "slate",
+        radius: "medium",
+        scaling: "90%",
+        fontFamily: defaultTheme.fontFamily,
+      })}
+    >
+      <Stack>
+        <Inline>
+          <Button size="sm">작은 버튼</Button>
+          <Button>기본 버튼</Button>
+          <IconButton label="추가" icon={<Icon name="plus" />} />
+        </Inline>
+        <Checkbox label="동의" />
+        <Switch label="알림" />
+        <Input aria-label="이름" inputSize="sm" />
+      </Stack>
+    </ThemeProvider>
+  ),
+};
+
+function RouterLink({ href, ...props }: LinkProps) {
+  return <Link to={href} {...props} />;
+}
+function RouterDemo() {
+  const location = useLocation();
+  return (
+    <Stack>
+      <Text role="status">현재 경로: {location.pathname}</Text>
+      <Routes>
+        <Route path="/start" element={<Text>시작 화면</Text>} />
+        <Route path="/destination" element={<Text>도착 화면</Text>} />
+        <Route path="/settings" element={<Text>설정 화면</Text>} />
+        <Route path="/docs" element={<Text>문서 화면</Text>} />
+      </Routes>
+      <Inline>
+        <ButtonLink href="/destination">도착으로 이동</ButtonLink>
+        <ButtonLink href="/start" variant="secondary">
+          시작으로 이동
+        </ButtonLink>
+      </Inline>
+      <LinkRow
+        href="/settings"
+        title="설정"
+        description="LinkRow로 이동해요."
+      />
+      <Breadcrumb
+        items={[{ label: "문서", href: "/docs" }, { label: "현재 페이지" }]}
+      />
+      <Sidebar
+        label="메뉴"
+        currentId={location.pathname.slice(1)}
+        items={[
+          { id: "start", label: "시작", href: "/start" },
+          { id: "docs", label: "문서", href: "/docs" },
+        ]}
+      />
+    </Stack>
+  );
+}
+export const Router: Story = {
+  name: "라우터 Link 연결",
+  render: () => (
+    <MemoryRouter initialEntries={["/start"]}>
+      <ThemeProvider linkComponent={RouterLink}>
+        <RouterDemo />
+      </ThemeProvider>
+    </MemoryRouter>
   ),
 };

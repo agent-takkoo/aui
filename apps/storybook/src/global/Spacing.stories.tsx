@@ -1,5 +1,5 @@
-import type { Space } from "@ai-system/design-system";
-import { Card, CardTitle, Stack, Text } from "@ai-system/design-system";
+import type { Space } from "@heogeon0/aui";
+import { Card, CardTitle, Stack, Text } from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {

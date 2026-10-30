@@ -30,15 +30,24 @@ export function ToastProvider({
 }: ToastProviderProps) {
   const host = usePortalHost();
   const nextId = useRef(0);
-  const [items, setItems] = useState<(ToastOptions & { id: number })[]>([]);
+  const [items, setItems] = useState<
+    (ToastOptions & { id: number; open: boolean })[]
+  >([]);
   const toast = useCallback((options: ToastOptions) => {
     const id = ++nextId.current;
-    setItems((current) => [...current.slice(-2), { ...options, id }]);
+    setItems((current) => [
+      ...current.filter((item) => item.open).slice(-2),
+      { ...options, id, open: true },
+    ]);
     return id;
   }, []);
   const dismiss = useCallback(
     (id: number) =>
-      setItems((current) => current.filter((item) => item.id !== id)),
+      setItems((current) =>
+        current.map((item) =>
+          item.id === id ? { ...item, open: false } : item,
+        ),
+      ),
     [],
   );
   return (
@@ -60,9 +69,15 @@ export function ToastProvider({
                     key={item.id}
                     className="ds-toast"
                     data-tone={item.tone ?? "default"}
-                    open
+                    open={item.open}
                     onOpenChange={(open) => {
                       if (!open) dismiss(item.id);
+                    }}
+                    onAnimationEnd={(event) => {
+                      if (event.target === event.currentTarget && !item.open)
+                        setItems((current) =>
+                          current.filter((entry) => entry.id !== item.id),
+                        );
                     }}
                   >
                     <div className="ds-toast-copy">
@@ -74,18 +89,20 @@ export function ToastProvider({
                           {item.description}
                         </Primitive.Description>
                       ) : null}
-                      {item.action ? (
+                    </div>
+                    {item.action ? (
+                      <div className="ds-toast-action">
                         <Primitive.Action asChild altText={item.action.altText}>
                           <Button
                             size="sm"
-                            variant="secondary"
+                            variant="ghost"
                             onClick={item.action.onClick}
                           >
                             {item.action.label}
                           </Button>
                         </Primitive.Action>
-                      ) : null}
-                    </div>
+                      </div>
+                    ) : null}
                     <Primitive.Close asChild>
                       <IconButton
                         label="알림 닫기"

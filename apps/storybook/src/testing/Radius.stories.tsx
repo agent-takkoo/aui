@@ -23,16 +23,25 @@ import {
   ThemeProvider,
   defaultTheme,
   defineTheme,
-} from "@ai-system/design-system";
+  radiusNames,
+} from "@heogeon0/aui";
+import type { ThemeRadius } from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
   title: "Testing/Radius",
   tags: ["!dev", "!autodocs", "!manifest"],
-  args: { radius: "0px" },
+  args: { radius: "none" },
+  argTypes: { radius: { control: "select", options: radiusNames } },
   render: ({ radius }) => (
     <ThemeProvider
-      theme={defineTheme({ ...defaultTheme, name: "radius-test", radius })}
+      theme={defineTheme({
+        name: `radius-test-${radius}`,
+        brand: "indigo",
+        neutral: "slate",
+        radius,
+        fontFamily: defaultTheme.fontFamily,
+      })}
     >
       <Stack>
         <Button>기본 버튼</Button>
@@ -87,6 +96,6 @@ const meta = {
       </Stack>
     </ThemeProvider>
   ),
-} satisfies Meta<{ radius: string }>;
+} satisfies Meta<{ radius: ThemeRadius }>;
 export default meta;
 export const Default: StoryObj<typeof meta> = {};

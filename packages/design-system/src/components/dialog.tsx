@@ -30,8 +30,14 @@ export function DialogFrame({
   footer,
   size = "md",
   presentation,
+  onOpenAutoFocus,
+  header,
+  drawerSize = "auto",
 }: DialogProps & {
   presentation: "dialog" | "drawer" | "drawer-left" | "drawer-right";
+  onOpenAutoFocus?: (event: Event) => void;
+  header?: ReactNode;
+  drawerSize?: "auto" | "half" | "tall" | "full" | undefined;
 }) {
   const portalHost = usePortalHost();
   const viewportStyle = useViewportStyle();
@@ -49,6 +55,10 @@ export function DialogFrame({
             <DialogPrimitive.Content
               className={`ds-dialog ds-dialog-${size} ds-presentation-${presentation}`}
               data-slot={presentation}
+              data-drawer-size={
+                presentation === "dialog" ? undefined : drawerSize
+              }
+              onOpenAutoFocus={onOpenAutoFocus}
               {...(!description ? { "aria-describedby": undefined } : {})}
             >
               <header className="ds-dialog-header">
@@ -66,6 +76,11 @@ export function DialogFrame({
                   <IconButton icon={<Icon name="close" />} label="닫기" />
                 </DialogPrimitive.Close>
               </header>
+              {header ? (
+                <div className="ds-dialog-toolbar" data-slot="drawer-header">
+                  {header}
+                </div>
+              ) : null}
               <div className="ds-dialog-body">{children}</div>
               {footer ? (
                 <footer className="ds-dialog-footer">{footer}</footer>

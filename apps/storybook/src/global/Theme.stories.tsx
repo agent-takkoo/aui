@@ -1,17 +1,29 @@
 import {
   Button,
+  Badge,
+  Callout,
+  Checkbox,
   Card,
   CardDescription,
   CardTitle,
   Field,
-  Input,
+  Inline,
+  Select,
   Stack,
+  Switch,
+  Tabs,
+  Text,
+  ToggleGroup,
   ThemeProvider,
   defaultTheme,
   defineTheme,
-} from "@ai-system/design-system";
+  colorScaleNames,
+  radiusNames,
+} from "@heogeon0/aui";
+import type { ColorScaleName, ThemeRadius } from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
+import { Example, ExampleGrid } from "../examples";
 
 const meta = {
   id: "global-theme",
@@ -30,25 +42,43 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 function CustomThemeDemo() {
-  const [primary, setPrimary] = useState("#135a45");
+  const [brand, setBrand] = useState<ColorScaleName>("teal");
+  const [radius, setRadius] = useState<ThemeRadius>("large");
   const theme = defineTheme({
-    ...defaultTheme,
-    name: "custom",
-    light: { ...defaultTheme.light, primary, ring: primary },
-    radius: "0.75rem",
+    name: `custom-${brand}-${radius}`,
+    brand,
+    neutral: "sage",
+    radius,
+    scaling: "100%",
+    fontFamily: defaultTheme.fontFamily,
   });
   return (
     <Stack gap="section">
-      <Field
-        label="프로젝트의 primary 색상"
-        description="이 입력은 theme 편집 예제예요. 화면별로 색을 지정하는 props는 제공하지 않아요."
-      >
-        <Input
-          type="color"
-          value={primary}
-          onChange={(event) => setPrimary(event.target.value)}
-        />
-      </Field>
+      <Inline align="start" gap="md">
+        <Field
+          label="브랜드 스케일"
+          description="색 하나가 아니라 12단계 스케일 이름을 골라요."
+        >
+          <Select
+            value={brand}
+            onValueChange={(value) => setBrand(value as ColorScaleName)}
+            options={colorScaleNames.map((name) => ({
+              value: name,
+              label: name,
+            }))}
+          />
+        </Field>
+        <Field
+          label="radius"
+          description="버튼·입력·카드·팝업이 함께 바뀌어요."
+        >
+          <Select
+            value={radius}
+            onValueChange={(value) => setRadius(value as ThemeRadius)}
+            options={radiusNames.map((name) => ({ value: name, label: name }))}
+          />
+        </Field>
+      </Inline>
       <ThemeProvider theme={theme}>
         <div className="docs-theme-preview">
           <Card tone="muted">
@@ -66,4 +96,56 @@ function CustomThemeDemo() {
 export const Custom: Story = {
   name: "프로젝트 theme 주입",
   render: () => <CustomThemeDemo />,
+};
+export const StateColors: Story = {
+  name: "역할별 색 배치",
+  parameters: { docs: { story: { height: "760px" } } },
+  render: () => (
+    <ExampleGrid>
+      <Example title="주요 행동 · primary">
+        <Button>변경 사항 저장</Button>
+        <Badge>주요 상태</Badge>
+      </Example>
+      <Example title="보조 행동 · secondary">
+        <Button variant="secondary">취소</Button>
+        <Badge tone="neutral">일반 상태</Badge>
+      </Example>
+      <Example title="지속되는 선택 · secondary">
+        <ToggleGroup
+          type="multiple"
+          aria-label="서식"
+          defaultValue={["bold"]}
+          options={[
+            { value: "bold", label: "굵게" },
+            { value: "italic", label: "기울임" },
+          ]}
+        />
+        <Tabs
+          label="설정"
+          items={[
+            {
+              value: "general",
+              label: "일반",
+              content: <Text>일반 설정</Text>,
+            },
+            {
+              value: "privacy",
+              label: "공개 범위",
+              content: <Text>공개 범위 설정</Text>,
+            },
+          ]}
+        />
+      </Example>
+      <Example title="켜짐 상태 · primary">
+        <Checkbox label="알림 받기" defaultChecked />
+        <Switch label="자동 저장" defaultChecked />
+      </Example>
+      <Example title="오류와 위험 · destructive">
+        <Button variant="destructive">항목 삭제</Button>
+        <Callout tone="danger" title="저장하지 못했어요.">
+          <Text size="sub">입력한 내용은 유지돼요.</Text>
+        </Callout>
+      </Example>
+    </ExampleGrid>
+  ),
 };

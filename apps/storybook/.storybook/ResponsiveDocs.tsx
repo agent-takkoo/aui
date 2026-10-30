@@ -9,6 +9,7 @@ import {
 } from "storybook/internal/core-events";
 import { deepDiff, DEEPLY_EQUAL } from "storybook/internal/router";
 import { DOCS_ARGS, DOCS_READY } from "./DocsPreview";
+import { LLMActions } from "./LLMActions";
 
 type ViewportGlobal = string | { value?: string } | undefined;
 type Values = Record<string, unknown>;
@@ -120,6 +121,7 @@ export function ResponsiveDocs({
   return (
     <div ref={root} data-docs-viewport={mobile ? "mobile" : "web"}>
       <DocsContainer context={context} {...props}>
+        <LLMActions title={context.componentStories()[0]?.title ?? ""} />
         {children}
       </DocsContainer>
     </div>

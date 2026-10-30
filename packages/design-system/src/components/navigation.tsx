@@ -2,12 +2,14 @@
 
 import type { ReactNode } from "react";
 import { Button } from "./button.js";
+import { useLinkComponent } from "../theme/provider.js";
 export type BreadcrumbItem = { label: string; href?: string };
 export type BreadcrumbProps = {
   items: readonly BreadcrumbItem[];
   label?: string;
 };
 export function Breadcrumb({ items, label = "현재 위치" }: BreadcrumbProps) {
+  const Link = useLinkComponent() ?? "a";
   return (
     <nav aria-label={label} data-slot="breadcrumb">
       <ol className="ds-breadcrumb">
@@ -21,7 +23,7 @@ export function Breadcrumb({ items, label = "현재 위치" }: BreadcrumbProps) 
             {index === items.length - 1 ? (
               <span aria-current="page">{item.label}</span>
             ) : item.href ? (
-              <a href={item.href}>{item.label}</a>
+              <Link href={item.href}>{item.label}</Link>
             ) : (
               <span>{item.label}</span>
             )}
@@ -66,7 +68,7 @@ export function Pagination({
       <li key={value}>
         <Button
           disabled={disabled}
-          variant={value === current ? "primary" : "ghost"}
+          variant={value === current ? "secondary" : "ghost"}
           aria-label={`${value}페이지`}
           aria-current={value === current ? "page" : undefined}
           onClick={() => {

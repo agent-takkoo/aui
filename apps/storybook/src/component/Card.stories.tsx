@@ -10,8 +10,9 @@ import {
   CardTitle,
   Inline,
   Text,
-} from "@ai-system/design-system";
+} from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Example, ExampleGrid } from "../examples";
 
 const meta = {
   id: "components-card",
@@ -44,7 +45,7 @@ export const Default: Story = {
         <Inline>
           <Avatar name="지수" />
           <Text>지수가 초대했어요.</Text>
-          <Badge variant="secondary">새 소식</Badge>
+          <Badge tone="brand">새 소식</Badge>
         </Inline>
       </CardContent>
       <CardFooter>
@@ -54,5 +55,31 @@ export const Default: Story = {
         </Button>
       </CardFooter>
     </Card>
+  ),
+};
+
+export const Tones: Story = {
+  name: "표면 비교",
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <ExampleGrid>
+      {(["plain", "muted"] as const).map((tone) => (
+        <Example title={tone} key={tone}>
+          <Card tone={tone}>
+            <CardHeader>
+              <CardTitle>프로젝트 안내</CardTitle>
+              <CardDescription>
+                제목·설명·본문의 위계를 비교해요.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Text>
+                같은 내용이 서로 다른 배경에 어떻게 보이는지 확인하세요.
+              </Text>
+            </CardContent>
+          </Card>
+        </Example>
+      ))}
+    </ExampleGrid>
   ),
 };

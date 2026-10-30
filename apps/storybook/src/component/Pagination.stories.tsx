@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pagination, Stack, Text } from "@ai-system/design-system";
+import { Pagination, Stack, Text } from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 const meta = {
   title: "Component/Pagination",

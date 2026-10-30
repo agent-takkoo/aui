@@ -1,4 +1,4 @@
-import { Tabs, Text } from "@ai-system/design-system";
+import { Tabs, Text } from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 const meta = {
   title: "Component/Tabs",

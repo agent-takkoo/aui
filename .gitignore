@@ -4,6 +4,7 @@ storybook-static/
 test-results/
 playwright-report/
 artifacts/
+packages/design-system/ai/
 *.tsbuildinfo
 *.tgz
 .DS_Store

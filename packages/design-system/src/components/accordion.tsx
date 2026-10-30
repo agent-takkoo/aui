@@ -1,6 +1,7 @@
 "use client";
 import * as Primitive from "@radix-ui/react-accordion";
 import type { ReactNode } from "react";
+import { Icon } from "./icon.js";
 export type AccordionItem = {
   value: string;
   title: string;
@@ -35,7 +36,9 @@ export function Accordion({ items, ...props }: AccordionProps) {
       <Primitive.Header className="ds-accordion-header">
         <Primitive.Trigger className="ds-accordion-trigger">
           {item.title}
-          <span aria-hidden="true">⌄</span>
+          <span aria-hidden="true">
+            <Icon name="chevron-down" />
+          </span>
         </Primitive.Trigger>
       </Primitive.Header>
       <Primitive.Content className="ds-accordion-content">

@@ -1,4 +1,4 @@
-import { Button, DropdownMenu, Stack, Text } from "@ai-system/design-system";
+import { Button, DropdownMenu, Stack, Text } from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 

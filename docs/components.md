@@ -4,33 +4,41 @@
 ## Theme
 
 ```tsx
-import {
-  ThemeProvider,
-  defineTheme,
-  defaultTheme,
-} from "@ai-system/design-system";
+import { ThemeProvider, defineTheme, defaultTheme } from "@heogeon0/aui";
+import type { LinkProps } from "@heogeon0/aui";
+import { Link } from "react-router";
+
+// 라우터 Link는 to를 받으므로 href를 to로 넘기는 adapter를 linkComponent에 지정한다.
+function RouterLink({ href, ...props }: LinkProps) {
+  return <Link to={href} {...props} />;
+}
 
 const projectTheme = defineTheme({
-  ...defaultTheme,
   name: "my-service",
-  radius: "0.75rem",
-  light: { ...defaultTheme.light, primary: "#135a45", ring: "#135a45" },
+  brand: "teal",
+  neutral: "sage",
+  radius: "large",
+  scaling: "100%",
+  fontFamily: defaultTheme.fontFamily,
 });
 
-<ThemeProvider theme={projectTheme} mode="system">
+<ThemeProvider theme={projectTheme} mode="system" linkComponent={RouterLink}>
   <App />
 </ThemeProvider>;
 ```
 
-`light`·`dark`의 공통 색을 모두 정의하고 배경·전경을 짝으로 유지해요. `mode`는 `light`, `dark`, `system`이에요. 중첩 provider와 Portal도 가까운 theme을 사용해요. `ThemeProvider`는 문서 전체의 class나 색을 바꾸지 않아요.
+theme은 색 하나하나가 아니라 `brand`·`neutral` 스케일 이름, `radius` 단계, `scaling` 밀도, `fontFamily`로 정해요. `brand`는 Radix 색 이름(`indigo`, `teal`, `ruby` 등) 또는 `{ light, dark }` 12단계 배열이고 `neutral`은 `gray`, `mauve`, `slate`, `sage`, `olive`, `sand`예요. 컴포넌트는 brand·neutral·danger·success·warning·info 스케일의 단계를 역할에 맞게 쓰므로 브랜드가 바뀌어도 위계가 같아요. 채운 배경의 글자는 4.5:1을 만족하는 단계를 자동으로 골라요.
 
-theme을 생략하면 공통 기본값 `defaultTheme`을 사용해요. Storybook의 `Global/Theme` 문서에서 여섯 필드와 모든 색상 token의 실제 기본값을 확인할 수 있어요.
+`mode`는 `light`, `dark`, `system`이에요. `linkComponent`를 넘기면 `ButtonLink`·`LinkRow`·`Sidebar`·`Breadcrumb`가 그 컴포넌트로 렌더링돼요. `LinkComponent`는 `href`를 받으므로 React Router처럼 `to`를 쓰는 Link에는 위 `RouterLink` 같은 adapter를 넘겨요. 같은 name으로 설정만 바꾼 theme 객체를 다시 넘겨도 stylesheet가 새로 등록돼요. 중첩 provider와 Portal도 가까운 theme을 사용하고 theme 이름은 서로 달라야 해요. `ThemeProvider`는 문서 전체의 class나 색을 바꾸지 않아요.
+
+theme을 생략하면 `defaultTheme`(indigo·slate·medium)을 사용해요. Storybook의 `Global/Theme` 문서에서 필드, 스케일 단계, 역할 변수의 실제 값을 확인할 수 있어요.
 
 ## 행동과 입력
 
-- `Button`의 variant는 `primary`, `secondary`, `soft`, `outline`, `ghost`, `destructive`, `quiet`예요. size는 `sm`, `md`, `lg`이고 기본은 `primary`·`md`예요.
-- `Button`은 기본 `type="button"`이에요. form 제출에는 `type="submit"`을 적어요. `loading`이면 라벨을 유지하고 실행을 막아요. `fullWidth`로 전체 폭을 선택해요.
-- `IconButton`은 `icon`과 `label`이 필수예요. `ButtonLink`와 `LinkRow`는 `href`가 필수예요. 라우터 전용 이동 연결은 소비 프로젝트가 맡아요.
+- `Button`의 variant는 `primary`, `secondary`, `ghost`, `destructive` 네 가지예요. 화면의 주요 행동 하나만 primary이고 보조 행동은 secondary, 낮은 강조는 ghost예요. size는 `sm`, `md`, `lg`이고 기본은 `primary`·`md`예요.
+- `Button`은 기본 `type="button"`이에요. form 제출에는 `type="submit"`을 적어요. `loading`이면 라벨을 유지하고 실행을 막아요. `fullWidth`로 전체 폭을 선택하고 아이콘은 `leadingIcon`·`trailingIcon`에 `Icon`을 넣어요.
+- `IconButton`은 `icon`과 `label`이 필수예요. `ButtonLink`와 `LinkRow`는 `href`가 필수예요. `ThemeProvider`의 `linkComponent`가 있으면 그 Link로 렌더링돼요.
+- `Icon`은 `name`을 `iconNames` 목록에서 고르고, 목록에 없는 아이콘은 `lucide-react`에서 import해 `source`로 넘겨요. SVG를 직접 그리지 않아요.
 - `Input`의 `inputSize`는 `md` 56px와 `sm` 44px예요. `Textarea`는 네 줄이 기본이에요. `name`, `type`, `inputMode`, `autoComplete`, ref, 기본 이벤트와 ARIA 속성을 유지해요.
 
 ```tsx
@@ -55,7 +63,9 @@ theme을 생략하면 공통 기본값 `defaultTheme`을 사용해요. Storybook
 <Switch name="notifications" label="알림 받기" defaultChecked />
 ```
 
-`RadioGroup`과 `Select`의 `options`는 `{ value, label, disabled? }` 배열이에요. `value`·`defaultValue`·`onValueChange`로 선택을 다뤄요. option의 value는 중복되지 않는 비어 있지 않은 문자열로 정해요. Select는 선택 전 문구를 `placeholder`로 받아요.
+`RadioGroup`과 `Select`의 `options`는 `{ value, label, disabled? }` 배열이에요. `value`·`defaultValue`·`onValueChange`로 선택을 다뤄요. option의 value는 중복되지 않는 비어 있지 않은 문자열로 정해요. Select는 선택 전 문구를 `placeholder`로 받아요. `inputSize`는 Input과 같은 `md`(기본 56px)·`sm`(44px)이고 긴 선택지는 줄바꿈해 높이가 늘어나요. Field의 오류는 설명과 컨트롤 경계에 함께 표시해요.
+
+Select는 768px 미만에서 하단 Drawer로 열리고, 넓은 화면에서는 드롭다운으로 열려요. 모바일에서 항목을 고르면 바로 값을 반영하고 닫으며 트리거로 포커스가 돌아와요. 닫기·Escape는 값을 바꾸지 않아요. Drawer 제목은 `Field`의 label, `aria-label`, “항목 선택” 순서로 정하고 `selectionTitle`로 지정할 수도 있어요. 화면 크기가 바뀌면 열린 목록을 닫고 선택한 값은 유지해요. 두 표시 방식 모두 form 제출·reset·required·disabled를 지원해요.
 
 ```tsx
 <Field label="보기 방식" description="목록에 표시할 범위예요.">
@@ -94,18 +104,27 @@ theme을 생략하면 공통 기본값 `defaultTheme`을 사용해요. Storybook
 ## 표시와 배치
 
 - `Text`는 `body`, `sub`, `caption` 크기와 `default`, `muted`, `primary`, `destructive` 색을 제공해요. `Heading`의 `level`은 문서 구조, `size`는 `display`, `title`, `heading` 외형을 정해요.
-- `Stack`과 `Inline`의 gap은 `none`, `xs`, `sm`, `md`, `section`이에요. `Inline`은 기본으로 줄바꿈해요. `Container`는 `form`, `content`, `wide` 폭을 제공해요.
-- `Card`는 `plain`과 `muted`를 제공해요. Header·Title·Description·Content·Footer를 조합해요. 정적인 카드에 그림자나 클릭 동작을 추가하지 않아요.
-- `Badge`는 `primary`, `secondary`, `outline`, `destructive`를 제공해요. `Avatar`는 `name`, `toneIndex`, `size`, `avatarUrl`을 받아요. size는 `xs`, `sm`, `md`예요.
-- `Callout`은 `title`과 선택적인 `action`, `children`을 받아요. tone은 `action`, `danger`예요.
+- `Text`의 default는 부모 표면의 글자색을 물려받아요. Card에서는 cardForeground, Popover에서는 popoverForeground, primary 버튼 안에서는 primaryForeground를 유지해요.
+- `Stack`과 `Inline`의 gap은 `none`, `xs`, `sm`, `md`, `section`이에요. `Stack`의 align은 `stretch`, `start`, `center`, `end`이고 `Inline`의 justify는 `start`, `center`, `between`, `end`예요. `Inline`은 기본으로 줄바꿈해요. `Container`는 `form`, `content`, `wide` 폭을 제공해요.
+- `PageHeader`는 화면마다 하나만 두는 제목 영역이에요. `title`은 h1이고 `description`, `breadcrumb`, `actions`를 받아요. `ActionBar`는 하단에 고정되는 저장·취소 바이고 `justify`는 `end`, `start`, `between`, `stretch`예요. `AppShell`은 `header`, `sidebar`, 본문 틀이고 사이드바는 1024px 이상에서만 보여요.
+- `Grid`는 같은 폭의 열로 나눠요. `columns`는 `1`, `2`, `3`, `4`, `auto`이고 기본 2예요. `collapseBelow`는 `none`, `sm`, `md`, `lg`이며 기본 `md`라 768px 미만에서 한 열로 쌓여요. 열 폭이 서로 다른 배치에는 쓰지 않아요.
+- `Card`는 `plain`과 `muted`를 제공해요. plain은 1px 경계로 배경과 구분되고 muted는 연한 면이에요. Header·Title·Description·Content·Footer를 조합하고 `CardTitle`의 `level`은 2·3·4예요. 정적인 카드에 클릭 동작을 추가하지 않아요.
+- `Badge`의 tone은 `neutral`(기본), `brand`, `success`, `warning`, `danger`, `info`이고 variant는 `soft`(기본), `solid`, `outline`, size는 `sm`, `md`, `lg`예요. 완료는 success, 진행 중·주의는 warning, 실패는 danger로 표시해요. 클릭하는 컨트롤이 아니에요. `Avatar`는 `name`, `size`, `avatarUrl`을 받고 배경색은 이름으로 정해져요. `toneIndex`를 주면 그 값으로 골라요.
+- `Callout`은 `title`과 선택적인 `action`, `children`을 받아요. tone은 `info`(기본), `success`, `warning`, `danger`예요.
 
 ## 선택과 피드백
+
+`ListItem`은 행 전체를 누르는 버튼이에요. `title`은 필수이고 `description`·`leading`·`trailing`을 추가할 수 있어요. 기본 `sm`은 제목·설명을 가로 한 줄에 놓는 44px 행이며 긴 문구를 말줄임해요. `lg`는 제목 아래에 설명을 두고, 최소 64px에서 긴 내용에 맞춰 늘어나요. 기본 type은 button이고 ref·이벤트·ARIA·disabled를 유지해요. 페이지 이동에는 LinkRow를 사용해요.
+
+trailing이 없으면 오른쪽 화살표를 표시하고 `chevron`으로 표시 여부를 바꿔요. 앞뒤 슬롯에는 아이콘·텍스트·Badge처럼 표시할 내용을 넣고, 버튼·링크·입력을 중첩하지 않아요. 별도의 selected prop은 제공하지 않아요.
 
 `SegmentedControl`은 `value`, `options`, `onValueChange`, `ariaLabel`을 받아요. 옵션에는 `value`, `label`, 선택적인 `disabled`가 있어요. 화면을 전환하는 탭이 아닌 단일 조건 선택에 사용해요.
 
 `FilterChip`의 `label`에는 “이번 달 조건 해제”처럼 대상과 행동을 함께 적고 `onClear`로 해제해요. `EmptyState`는 다음 행동을 `action`으로 받아요. `ErrorState`의 `onRetry`는 인자 없이 호출돼요. `LoadingState`는 `role="status"`, `Skeleton`은 `aria-hidden`으로 콘텐츠를 기다려요.
 
 `Toggle`은 `pressed`·`defaultPressed`·`onPressedChange`로 버튼의 눌림 상태를 다뤄요. `ToggleGroup`은 `options`와 `aria-label`을 받으며, 기본 `type="single"`은 문자열 값을, `type="multiple"`은 문자열 배열을 사용해요. 폼의 단일 선택에는 RadioGroup을 사용해요.
+
+Toggle·ToggleGroup·Tabs·Select·Sidebar·Pagination의 선택·현재 위치는 secondary 계열을 사용해요. Toggle과 Tabs의 경계는 input 색으로 구분하고, Checkbox·RadioGroup·Switch의 켜짐은 primary를 사용해요. `Global/Theme/역할별 색 배치`에서 같은 Theme를 적용해 비교할 수 있어요.
 
 ```tsx
 <Toggle aria-label="굵게">굵게</Toggle>
@@ -182,7 +201,7 @@ theme을 생략하면 공통 기본값 `defaultTheme`을 사용해요. Storybook
 ```tsx
 <Tooltip
   content="파일은 보관함에서 다시 확인할 수 있어요."
-  trigger={<Button variant="quiet">보관 안내</Button>}
+  trigger={<Button variant="ghost">보관 안내</Button>}
 />
 ```
 
@@ -216,7 +235,7 @@ duration은 provider에서 정해요. 알림의 개수와 표시는 각 provider
 ## 소비 코드 검사
 
 ```js
-import designSystem from "@ai-system/design-system/eslint";
+import designSystem from "@heogeon0/aui/eslint";
 
 export default [
   { files: ["src/**/*.{ts,tsx}"], ...designSystem.configs.recommended },
@@ -229,11 +248,15 @@ export default [
 
 `Drawer`는 열고 닫는 보조 화면이며 Dialog와 같은 제목·설명·trigger·footer를 받아요. side 기본값인 responsive는 모바일 아래·데스크탑 오른쪽에서 열리고, left·right는 화면 크기와 관계없이 해당 방향에서 열려요. `Panel`은 title·description·children·footer로 독립 영역을 구성해요. `Sidebar`는 label·items·currentId·footer를 받아요. items는 `{ id, label, href }` 배열이며 현재 항목에 aria-current를 표시해요. Storybook에서는 각각 오른쪽·왼쪽 Drawer와 조합해 열고 닫는 모습을 보여줘요. 내용 컴포넌트는 직접 focus trap을 만들지 않고 Drawer가 담당해요. 실제 경로와 활성 항목은 소비 프로젝트가 관리해요.
 
+Drawer의 `header`에 검색창·필터를 두면 제목 아래에 고정되고, header·footer 사이의 본문만 스크롤돼요. `size`는 `auto`(기본·내용만큼), `half`(50%), `tall`(85%), `full`(전체 높이)이에요. 하단에서 열릴 때만 적용하고 옆에서 열리면 화면 높이를 채워요. `full`은 상단 safe area 여백을 포함해요. 높이를 정하면 검색 결과가 줄어도 높이와 footer 위치를 유지하고, 고정 영역과 목록 한 줄이 들어갈 최소 높이는 확보해요.
+
 `Theme.typography`의 각 역할은 size·lineHeight·weight·letterSpacing을 제공해요. 역할은 display·title·heading·body·sub·caption·input·micro로 제한해요. `Text`에서 weight를 생략하면 해당 역할의 굵기를 쓰고, 지정하면 typography.weights의 regular·semibold·bold를 사용해요. 입력의 글자 크기는 최소 16px이에요.
 
 ## 표와 스크롤·미디어 영역
 
-`Table`은 caption이 필수예요. TableHeader·TableBody·TableFooter·TableRow·TableHead·TableCell을 조합하며 실제 table 요소를 사용해요. TableHead의 기본 scope는 col이고 행 제목에는 row를 지정할 수 있어요. 넓은 표는 자신이 가진 영역 안에서 가로 스크롤해요.
+Table의 바깥 모서리는 Theme radius의 3단계를 따라요. radius가 none이면 각진 모양을 유지해요.
+
+`Table`의 caption은 스크린리더용 표 이름이며 화면에는 숨겨요. TableHeader·TableBody·TableFooter·TableRow·TableHead·TableCell을 조합하며 실제 table 요소를 사용해요. TableHead의 기본 scope는 col이고 행 제목에는 row를 지정할 수 있어요. 넓은 표는 자신이 가진 영역 안에서 가로 스크롤해요.
 
 ```tsx
 <Table caption="문서 목록">
@@ -255,3 +278,9 @@ export default [
 정렬·검색·행 선택과 서버 데이터 처리는 별도 상태로 조합해요. 단순한 표를 위해 서비스 데이터 타입이나 표 엔진을 패키지에 넣지 않아요.
 
 `ScrollArea`는 접근 가능한 이름인 label과 sm·md·lg의 height를 받아요. 스크롤 영역에 focus한 뒤 키보드로도 이동할 수 있어요. `AspectRatio`의 ratio는 16:9·4:3·1:1 중 하나이고 기본은 16:9예요. 이미지의 alt나 영상의 접근 가능한 이름은 콘텐츠를 넣는 소비 코드가 제공해요.
+
+## 스크롤과 AI 문서
+
+스크롤바는 투명한 track과 3px thumb를 사용해요. hover·drag 때 4px로 넓어지고, 색은 Theme의 `scrollbarThumb`·`scrollbarThumbHover`·`scrollbarThumbActive`를 따라요. ScrollArea와 ThemeProvider 안의 네이티브 스크롤에 적용해요.
+
+컴포넌트별 props·기본값·예제는 [AI 문서](ai.md)에서도 확인할 수 있어요.

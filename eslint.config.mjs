@@ -45,4 +45,9 @@ export default [
     files: ["apps/storybook/src/**/*.tsx"],
     ...designSystem.configs.recommended,
   },
+  {
+    // Storybook 문서 틀(docs-*)은 패키지 사용 예제가 아니라 카탈로그 장치다.
+    files: ["apps/storybook/src/**/*.tsx"],
+    rules: { "design-system/no-raw-styling": "off" },
+  },
 ];

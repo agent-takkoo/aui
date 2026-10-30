@@ -4,72 +4,129 @@ import {
   defineTheme,
   defaultTheme,
   creamTheme,
-  colorTokenNames,
+  resolveScale,
+  themeStylesheet,
+  themeKey,
+  colorScaleNames,
+  radiusNames,
 } from "../packages/design-system/dist/theme/index.js";
 
-test("두 theme은 light와 dark에서 같은 공통 token을 제공한다", () => {
+test("두 preset은 라이트·다크 12단계 스케일과 역할 변수를 제공한다", () => {
   for (const theme of [defaultTheme, creamTheme]) {
-    assert.equal(Object.keys(theme.light).length, colorTokenNames.length);
-    assert.equal(Object.keys(theme.dark).length, colorTokenNames.length);
-    assert.notEqual(theme.light.primary, theme.dark.primary);
+    for (const mode of ["light", "dark"]) {
+      const brand = resolveScale(theme.brand, mode);
+      assert.equal(brand.solid.length, 12);
+      assert.equal(brand.alpha.length, 12);
+      assert.ok([9, 10, 11].includes(brand.solidStep));
+    }
+    const css = themeStylesheet(theme);
+    assert.match(
+      css,
+      new RegExp(`\\[data-ds-theme-key="${themeKey(theme)}"\\]\\{`),
+    );
+    assert.match(css, /\[data-ds-mode="dark"\]\{[^}]*--ds-primary:/);
+    assert.match(css, /--ds-radius-factor:/);
+    assert.match(css, /--ds-scaling:/);
   }
+  assert.notEqual(
+    resolveScale(defaultTheme.brand, "light").solid[0],
+    resolveScale(defaultTheme.brand, "dark").solid[0],
+  );
 });
 
-test("빠진 token과 공백 값은 런타임에서도 거부한다", () => {
+test("같은 이름으로 설정만 바꾼 theme은 다른 키와 stylesheet를 갖는다", () => {
+  const indigo = defineTheme({ ...defaultTheme, name: "swap" });
+  const ruby = defineTheme({ ...defaultTheme, name: "swap", brand: "ruby" });
+  assert.notEqual(themeKey(indigo), themeKey(ruby));
+  assert.equal(
+    themeKey(indigo),
+    themeKey(defineTheme({ ...defaultTheme, name: "swap" })),
+  );
+  assert.notEqual(themeStylesheet(indigo), themeStylesheet(ruby));
+});
+
+test("채운 배경은 글자와 4.5:1을 만족하는 단계를 고른다", () => {
+  const blue = resolveScale("blue", "light");
+  assert.equal(blue.solidStep, 11);
+  assert.equal(blue.solidForeground, "#ffffff");
+  assert.equal(resolveScale("blue", "dark").solidForeground, "#1c2024");
+  const indigo = resolveScale("indigo", "light");
+  assert.equal(indigo.solidStep, 9);
+  assert.equal(indigo.solidForeground, "#ffffff");
+  const amber = resolveScale("amber", "light");
+  assert.equal(amber.solidForeground, "#1c2024");
+});
+
+test("없는 스케일 이름과 잘못된 단계는 거부한다", () => {
   assert.throws(
-    () =>
-      defineTheme({
-        ...defaultTheme,
-        light: { ...defaultTheme.light, primary: "" },
-      }),
-    /light.primary/,
+    () => defineTheme({ ...defaultTheme, brand: "rainbow" }),
+    /brand/,
   );
   assert.throws(
-    () => defineTheme({ ...defaultTheme, dark: undefined }),
-    /dark.background/,
+    () => defineTheme({ ...defaultTheme, neutral: "blue" }),
+    /neutral/,
+  );
+  assert.throws(
+    () => defineTheme({ ...defaultTheme, radius: "0.75rem" }),
+    /radius/,
+  );
+  assert.throws(
+    () => defineTheme({ ...defaultTheme, scaling: "120%" }),
+    /scaling/,
   );
   assert.throws(
     () => defineTheme({ ...defaultTheme, name: "Invalid name" }),
     /Theme 이름/,
   );
+  assert.throws(
+    () =>
+      defineTheme({
+        ...defaultTheme,
+        brand: { light: ["#000"], dark: ["#fff"] },
+      }),
+    /12단계/,
+  );
+  assert.ok(colorScaleNames.includes("indigo"));
+  assert.deepEqual(radiusNames, ["none", "small", "medium", "large", "full"]);
 });
 
-test("정의한 theme은 호출자가 나중에 바꿀 수 없다", () => {
-  const light = { ...defaultTheme.light };
-  const theme = defineTheme({ ...defaultTheme, light });
-  light.primary = "#ff0000";
-  assert.equal(theme.light.primary, defaultTheme.light.primary);
-  assert.throws(() => {
-    theme.dark.primary = "#000";
-  }, TypeError);
-});
-
-test("typography는 역할별 필수값을 검사하고 깊이 복사해 고정한다", () => {
-  const body = { ...defaultTheme.typography.body };
+test("custom 스케일은 그대로 쓰고 정의한 theme은 고정된다", () => {
+  const steps = Array.from(
+    { length: 12 },
+    (_, i) => `#${String(i).padStart(2, "0")}0000`,
+  );
+  const light = [...steps];
   const theme = defineTheme({
     ...defaultTheme,
-    typography: { ...defaultTheme.typography, body },
+    name: "custom",
+    brand: { light, dark: steps, contrast: "dark" },
   });
-  body.size = "4rem";
-  assert.equal(theme.typography.body.size, defaultTheme.typography.body.size);
+  light[8] = "#ffffff";
+  assert.equal(resolveScale(theme.brand, "light").solid[8], "#080000");
+  assert.throws(() => {
+    theme.radius = "none";
+  }, TypeError);
   assert.throws(() => {
     theme.typography.body.size = "4rem";
   }, TypeError);
-  assert.throws(() => {
-    theme.typography.weights.bold = 900;
-  }, TypeError);
-  assert.throws(
-    () => defineTheme({ ...defaultTheme, typography: undefined }),
-    /typography.display.size/,
+});
+
+test("typography는 바꿀 역할만 적고 필수값을 검사한다", () => {
+  const theme = defineTheme({
+    ...defaultTheme,
+    name: "typo",
+    typography: { body: { size: "1rem" } },
+  });
+  assert.equal(theme.typography.body.size, "1rem");
+  assert.equal(
+    theme.typography.body.lineHeight,
+    defaultTheme.typography.body.lineHeight,
   );
   assert.throws(
     () =>
       defineTheme({
         ...defaultTheme,
-        typography: {
-          ...defaultTheme.typography,
-          body: { ...body, lineHeight: "" },
-        },
+        typography: { body: { lineHeight: "" } },
       }),
     /typography.body.lineHeight/,
   );
@@ -77,11 +134,35 @@ test("typography는 역할별 필수값을 검사하고 깊이 복사해 고정�
     () =>
       defineTheme({
         ...defaultTheme,
-        typography: {
-          ...defaultTheme.typography,
-          weights: { ...defaultTheme.typography.weights, bold: NaN },
-        },
+        typography: { weights: { bold: NaN } },
       }),
     /weights.bold/,
   );
+});
+
+test("모든 브랜드 스케일의 hover 배경은 라이트·다크에서 글자와 4.5:1을 유지한다", () => {
+  const luminance = (hex) =>
+    [1, 3, 5]
+      .map((offset) => Number.parseInt(hex.slice(offset, offset + 2), 16) / 255)
+      .map((v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4))
+      .reduce((sum, v, index) => sum + v * [0.2126, 0.7152, 0.0722][index], 0);
+  const contrast = (a, b) => {
+    const [x, y] = [luminance(a), luminance(b)];
+    return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+  };
+  for (const name of colorScaleNames)
+    for (const mode of ["light", "dark"]) {
+      const scale = resolveScale(name, mode);
+      const solid = scale.solid[scale.solidStep - 1];
+      assert.match(scale.solidHover, /^#[0-9a-f]{6}$/, `${name} ${mode}`);
+      assert.ok(
+        contrast(scale.solidHover, scale.solidForeground) >=
+          Math.min(4.5, contrast(solid, scale.solidForeground)),
+        `${name} ${mode} hover ${contrast(scale.solidHover, scale.solidForeground)}`,
+      );
+      assert.ok(
+        contrast(scale.solidHover, scale.solidForeground) >= 4.5,
+        `${name} ${mode} hover < 4.5`,
+      );
+    }
 });

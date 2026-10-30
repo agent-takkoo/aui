@@ -2,6 +2,10 @@ import type { ReactNode } from "react";
 import { domProps } from "../internal/props.js";
 import type { DesignProps } from "../internal/props.js";
 import { Icon } from "./icon.js";
+import { useLinkComponent } from "../theme/provider.js";
+
+export type Tone =
+  "brand" | "neutral" | "success" | "warning" | "danger" | "info";
 
 export type CardProps = DesignProps<"div"> & { tone?: "plain" | "muted" };
 export function Card({ tone = "plain", ...props }: CardProps) {
@@ -22,9 +26,15 @@ export function CardHeader(props: DesignProps<"div">) {
     />
   );
 }
-export function CardTitle(props: DesignProps<"h3">) {
+export type CardTitleProps = DesignProps<"h3"> & { level?: 2 | 3 | 4 };
+export function CardTitle({ level = 3, ...props }: CardTitleProps) {
+  const Component = `h${level}` as "h3";
   return (
-    <h3 {...domProps(props)} className="ds-card-title" data-slot="card-title" />
+    <Component
+      {...domProps(props)}
+      className="ds-card-title"
+      data-slot="card-title"
+    />
   );
 }
 export function CardDescription(props: DesignProps<"p">) {
@@ -56,26 +66,34 @@ export function CardFooter(props: DesignProps<"div">) {
 }
 
 export type BadgeProps = DesignProps<"span"> & {
-  variant?: "primary" | "secondary" | "outline" | "destructive";
+  size?: "sm" | "md" | "lg";
+  tone?: Tone;
+  variant?: "soft" | "solid" | "outline";
 };
-export function Badge({ variant = "primary", ...props }: BadgeProps) {
+export function Badge({
+  tone = "neutral",
+  variant = "soft",
+  size = "md",
+  ...props
+}: BadgeProps) {
   return (
     <span
       {...domProps(props)}
-      className={`ds-badge ds-badge-${variant}`}
+      className={`ds-badge ds-badge-${variant} ds-badge-${tone} ds-badge-${size}`}
       data-slot="badge"
+      data-tone={tone}
     />
   );
 }
 
 export type CalloutProps = Omit<DesignProps<"section">, "title"> & {
   title: string;
-  tone?: "action" | "danger";
+  tone?: "info" | "success" | "warning" | "danger";
   action?: ReactNode;
 };
 export function Callout({
   title,
-  tone = "action",
+  tone = "info",
   action,
   children,
   ...props
@@ -85,7 +103,10 @@ export function Callout({
       {...domProps(props)}
       className={`ds-callout ds-callout-${tone}`}
       data-slot="callout"
-      role={tone === "danger" ? "alert" : undefined}
+      data-tone={tone}
+      role={
+        tone === "danger" ? "alert" : tone === "warning" ? "status" : undefined
+      }
     >
       <div className="ds-callout-header">
         <p className="ds-callout-title">{title}</p>
@@ -108,8 +129,9 @@ export function LinkRow({
   variant = "card",
   ...props
 }: LinkRowProps) {
+  const Link = useLinkComponent() ?? "a";
   return (
-    <a
+    <Link
       {...domProps(props)}
       className={`ds-link-row ds-link-row-${variant}`}
       data-slot="link-row"
@@ -119,8 +141,8 @@ export function LinkRow({
         {description ? <span>{description}</span> : null}
       </span>
       <span className="ds-chevron">
-        <Icon name="back" />
+        <Icon name="chevron-right" />
       </span>
-    </a>
+    </Link>
   );
 }

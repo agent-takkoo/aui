@@ -1,47 +1,232 @@
-import type { ReactNode } from "react";
+import {
+  Archive,
+  ArrowLeft,
+  ArrowRight,
+  Award,
+  Bell,
+  BookOpen,
+  Bookmark,
+  Briefcase,
+  Bug,
+  Building2,
+  Calendar,
+  Camera,
+  ChartBar,
+  ChartLine,
+  Check,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  CircleAlert,
+  CircleCheck,
+  CircleHelp,
+  CircleX,
+  Clock,
+  Code,
+  Columns3,
+  Copy,
+  CreditCard,
+  Database,
+  Download,
+  Ellipsis,
+  EllipsisVertical,
+  ExternalLink,
+  Eye,
+  EyeOff,
+  File,
+  Flag,
+  Folder,
+  Funnel,
+  Globe,
+  GripVertical,
+  Heart,
+  House,
+  Image,
+  Inbox,
+  Info,
+  Key,
+  LayoutGrid,
+  Link,
+  List,
+  LoaderCircle,
+  Lock,
+  LogOut,
+  Mail,
+  MapPin,
+  Menu,
+  MessageSquare,
+  Mic,
+  Minus,
+  Monitor,
+  Moon,
+  Package,
+  PanelLeft,
+  Paperclip,
+  Pause,
+  Pencil,
+  Phone,
+  Play,
+  Plus,
+  Printer,
+  Redo2,
+  RotateCw,
+  Save,
+  Search,
+  Send,
+  Settings,
+  Share2,
+  Shield,
+  ShoppingCart,
+  Smartphone,
+  Sparkles,
+  Star,
+  Sun,
+  Table,
+  Tag,
+  Terminal,
+  ThumbsUp,
+  Trash2,
+  TrendingDown,
+  TrendingUp,
+  TriangleAlert,
+  Undo2,
+  Upload,
+  User,
+  UserPlus,
+  Users,
+  Video,
+  Wallet,
+  Wrench,
+  X,
+  Zap,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
-export type IconName =
-  "plus" | "close" | "back" | "search" | "check" | "menu" | "trash" | "more";
-const paths: Record<IconName, ReactNode> = {
-  plus: <path d="M12 5v14M5 12h14" />,
-  close: <path d="m6 6 12 12M18 6 6 18" />,
-  back: <path d="m15 5-7 7 7 7" />,
-  search: (
-    <>
-      <circle cx="11" cy="11" r="7" />
-      <path d="m20 20-4-4" />
-    </>
-  ),
-  check: <path d="m4.5 12.5 5 5 10-11" />,
-  menu: <path d="M4 6h16M4 12h16M4 18h16" />,
-  trash: (
-    <>
-      <path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7" />
-    </>
-  ),
-  more: (
-    <>
-      <circle cx="5" cy="12" r="1" />
-      <circle cx="12" cy="12" r="1" />
-      <circle cx="19" cy="12" r="1" />
-    </>
-  ),
-};
+const icons = {
+  plus: Plus,
+  minus: Minus,
+  close: X,
+  check: Check,
+  "chevron-down": ChevronDown,
+  "chevron-up": ChevronUp,
+  "chevron-left": ChevronLeft,
+  "chevron-right": ChevronRight,
+  "arrow-left": ArrowLeft,
+  "arrow-right": ArrowRight,
+  search: Search,
+  menu: Menu,
+  "more-horizontal": Ellipsis,
+  "more-vertical": EllipsisVertical,
+  trash: Trash2,
+  edit: Pencil,
+  settings: Settings,
+  user: User,
+  "user-plus": UserPlus,
+  users: Users,
+  calendar: Calendar,
+  clock: Clock,
+  info: Info,
+  "alert-circle": CircleAlert,
+  "alert-triangle": TriangleAlert,
+  "check-circle": CircleCheck,
+  "x-circle": CircleX,
+  help: CircleHelp,
+  loader: LoaderCircle,
+  bell: Bell,
+  mail: Mail,
+  message: MessageSquare,
+  send: Send,
+  phone: Phone,
+  home: House,
+  file: File,
+  folder: Folder,
+  archive: Archive,
+  inbox: Inbox,
+  download: Download,
+  upload: Upload,
+  save: Save,
+  copy: Copy,
+  link: Link,
+  "external-link": ExternalLink,
+  share: Share2,
+  printer: Printer,
+  paperclip: Paperclip,
+  filter: Funnel,
+  refresh: RotateCw,
+  undo: Undo2,
+  redo: Redo2,
+  eye: Eye,
+  "eye-off": EyeOff,
+  lock: Lock,
+  key: Key,
+  shield: Shield,
+  "log-out": LogOut,
+  star: Star,
+  heart: Heart,
+  bookmark: Bookmark,
+  "thumbs-up": ThumbsUp,
+  flag: Flag,
+  tag: Tag,
+  award: Award,
+  sparkles: Sparkles,
+  zap: Zap,
+  sun: Sun,
+  moon: Moon,
+  image: Image,
+  camera: Camera,
+  mic: Mic,
+  video: Video,
+  play: Play,
+  pause: Pause,
+  globe: Globe,
+  "map-pin": MapPin,
+  building: Building2,
+  briefcase: Briefcase,
+  book: BookOpen,
+  package: Package,
+  "shopping-cart": ShoppingCart,
+  "credit-card": CreditCard,
+  wallet: Wallet,
+  "chart-bar": ChartBar,
+  "chart-line": ChartLine,
+  "trending-up": TrendingUp,
+  "trending-down": TrendingDown,
+  "layout-grid": LayoutGrid,
+  list: List,
+  table: Table,
+  columns: Columns3,
+  "panel-left": PanelLeft,
+  grip: GripVertical,
+  smartphone: Smartphone,
+  monitor: Monitor,
+  database: Database,
+  code: Code,
+  terminal: Terminal,
+  wrench: Wrench,
+  bug: Bug,
+} satisfies Record<string, LucideIcon>;
 
-export function Icon({ name }: { name: IconName }) {
+export type IconName = keyof typeof icons;
+export const iconNames = Object.freeze(
+  Object.keys(icons) as IconName[],
+) as readonly IconName[];
+export type IconSource = LucideIcon;
+export type IconProps = {
+  size?: "sm" | "md";
+} & (
+  | { name: IconName; source?: undefined }
+  | { source: IconSource; name?: undefined }
+);
+
+export function Icon({ name, source, size = "md" }: IconProps) {
+  const Component = source ?? icons[name as IconName];
   return (
-    <svg
-      className="ds-icon"
+    <Component
+      className={`ds-icon ds-icon-${size}`}
       aria-hidden="true"
       focusable="false"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      {paths[name]}
-    </svg>
+      strokeWidth={1.75}
+    />
   );
 }

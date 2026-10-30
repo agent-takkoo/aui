@@ -1,4 +1,4 @@
-import { Avatar } from "@ai-system/design-system";
+import { Avatar, Inline, Stack, Text } from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
@@ -22,3 +22,20 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 export const Default: Story = { name: "기본" };
+
+export const Sizes: Story = {
+  name: "크기와 이름 표시",
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <Inline align="end" gap="section">
+      {(["xs", "sm", "md"] as const).map((size, index) => (
+        <Stack gap="xs" key={size}>
+          <Avatar name="지수" size={size} toneIndex={index} />
+          <Text size="caption" tone="muted">
+            {size}
+          </Text>
+        </Stack>
+      ))}
+    </Inline>
+  ),
+};
