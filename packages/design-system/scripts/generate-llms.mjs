@@ -130,9 +130,13 @@ function example(name) {
         for (const declaration of symbol?.declarations ?? []) {
           if (ts.isImportSpecifier(declaration)) {
             const statement = declaration.parent.parent.parent;
-            const from = statement.moduleSpecifier.text;
+            const typeOnly =
+              declaration.isTypeOnly || statement.importClause.isTypeOnly;
+            const from = `${typeOnly ? "type:" : ""}${statement.moduleSpecifier.text}`;
             if (!imports.has(from)) imports.set(from, new Set());
-            imports.get(from).add(declaration.getText(exampleFile));
+            imports
+              .get(from)
+              .add(declaration.getText(exampleFile).replace(/^type\s+/, ""));
           } else if (
             ts.isFunctionDeclaration(declaration) &&
             declaration.getSourceFile() === exampleFile
@@ -146,17 +150,75 @@ function example(name) {
     ts.forEachChild(node, visit);
   }
   visitFunction(name);
-  const lines = [...imports].map(
-    ([from, names]) =>
-      `import { ${[...names].sort().join(", ")} } from "${from}";`,
-  );
-  return [
+  const lines = [...imports]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([from, names]) => {
+      const typeOnly = from.startsWith("type:");
+      return `import ${typeOnly ? "type " : ""}{ ${[...names].sort().join(", ")} } from "${typeOnly ? from.slice(5) : from}";`;
+    });
+  const code = [
     ...lines,
     "",
     ...[...included]
       .reverse()
       .map((item) => exampleFunctions.get(item).getText(exampleFile)),
   ].join("\n");
+  generatedExamples.set(name, code);
+  return code;
+}
+const generatedExamples = new Map();
+
+// 생성한 예제도 저장소와 같은 설정(verbatimModuleSyntax 포함)으로 타입 검사한다.
+function checkGeneratedExamples() {
+  const virtualDir = join(root, "docs/.generated/");
+  const virtualFiles = new Map(
+    [...generatedExamples].map(([name, code]) => [
+      join(virtualDir, `${name}.tsx`),
+      code,
+    ]),
+  );
+  const options = {
+    ...parsed.options,
+    paths: { "@heogeon0/aui": [join(root, "src/index.ts")] },
+    noEmit: true,
+  };
+  const host = ts.createCompilerHost(options);
+  const original = {
+    getSourceFile: host.getSourceFile,
+    fileExists: host.fileExists,
+    readFile: host.readFile,
+  };
+  host.fileExists = (file) =>
+    virtualFiles.has(file) || original.fileExists.call(host, file);
+  host.readFile = (file) =>
+    virtualFiles.get(file) ?? original.readFile.call(host, file);
+  host.getSourceFile = (file, language, onError, shouldCreate) =>
+    virtualFiles.has(file)
+      ? ts.createSourceFile(file, virtualFiles.get(file), language, true)
+      : original.getSourceFile.call(
+          host,
+          file,
+          language,
+          onError,
+          shouldCreate,
+        );
+  const checkProgram = ts.createProgram(
+    [...virtualFiles.keys()],
+    options,
+    host,
+  );
+  const problems = ts.getPreEmitDiagnostics(checkProgram);
+  if (problems.length)
+    throw new Error(
+      `생성한 예제가 타입 검사를 통과하지 못했어요.\n${ts.formatDiagnosticsWithColorAndContext(
+        problems,
+        {
+          getCanonicalFileName: (name) => name,
+          getCurrentDirectory: () => root,
+          getNewLine: () => "\n",
+        },
+      )}`,
+    );
 }
 
 function defaultsFor(node) {
@@ -322,6 +384,7 @@ for (const recipe of recipes) {
     ),
   );
 }
+checkGeneratedExamples();
 files.set("agents.md", await readFile(join(root, "docs/agents.md"), "utf8"));
 files.set(
   "skill/SKILL.md",

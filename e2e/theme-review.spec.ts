@@ -86,3 +86,49 @@ test("linkComponent adapter를 거친 링크는 실제 라우터 안에서 목�
   await expect(status).toHaveText("현재 경로: /start");
   await expect(page.getByText("시작 화면", { exact: true })).toBeVisible();
 });
+
+test("primary 버튼의 hover 배경도 글자와 4.5:1을 유지한다", async ({
+  page,
+}, testInfo) => {
+  test.skip(
+    testInfo.project.name !== "desktop-chromium",
+    "hover는 마우스 환경에서 검사한다.",
+  );
+  for (const brand of ["default", "cream"])
+    for (const mode of ["light", "dark"]) {
+      await page.goto(
+        `/iframe.html?id=global-theme--state-colors&viewMode=story&globals=brand:${brand};mode:${mode};a11y.manual:!true`,
+      );
+      const button = page.getByRole("button", { name: "변경 사항 저장" });
+      const ratio = () =>
+        button.evaluate((node) => {
+          const style = getComputedStyle(node);
+          const context = document.createElement("canvas").getContext("2d")!;
+          const luminance = (color: string) => {
+            context.fillStyle = color;
+            context.fillRect(0, 0, 1, 1);
+            return [...context.getImageData(0, 0, 1, 1).data]
+              .slice(0, 3)
+              .map((value) => {
+                const v = value / 255;
+                return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+              })
+              .reduce(
+                (sum, value, index) =>
+                  sum + value * [0.2126, 0.7152, 0.0722][index]!,
+                0,
+              );
+          };
+          const x = luminance(style.backgroundColor);
+          const y = luminance(style.color);
+          return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+        });
+      const rest = await ratio();
+      expect(rest, `${brand} ${mode} rest`).toBeGreaterThanOrEqual(4.5);
+      await button.hover();
+      await expect
+        .poll(ratio, { message: `${brand} ${mode} hover` })
+        .toBeGreaterThanOrEqual(4.5);
+      await page.mouse.move(0, 0);
+    }
+});

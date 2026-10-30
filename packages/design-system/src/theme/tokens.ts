@@ -211,6 +211,7 @@ export type ResolvedScale = Readonly<{
   contrast: string;
   solidStep: 9 | 10 | 11;
   solidForeground: string;
+  solidHover: string;
 }>;
 
 const DARK_TEXT = "#1c2024";
@@ -249,6 +250,19 @@ export function contrastRatio(a: string, b: string): number | null {
   if (!x || !y) return null;
   const [lx, ly] = [luminance(x), luminance(y)];
   return (Math.max(lx, ly) + 0.05) / (Math.min(lx, ly) + 0.05);
+}
+
+// hover는 글자색의 반대 방향(흰 글자면 어둡게, 어두운 글자면 밝게)으로 섞어 대비가 떨어지지 않게 한다.
+function pickHover(solid: string, foreground: string): string {
+  const base = parseColor(solid);
+  const toward: [number, number, number] =
+    foreground === DARK_TEXT ? [255, 255, 255] : [0, 0, 0];
+  if (!base)
+    return `color-mix(in oklab, ${solid} 88%, ${foreground === DARK_TEXT ? "#ffffff" : "#000000"})`;
+  const mixed = base.map((channel, index) =>
+    Math.round(channel + (toward[index]! - channel) * 0.12),
+  );
+  return `#${mixed.map((channel) => channel.toString(16).padStart(2, "0")).join("")}`;
 }
 
 // 채운 배경(버튼·solid 배지)은 글자와 4.5:1을 만족하는 첫 단계를 고른다.
@@ -301,6 +315,7 @@ export function resolveScale(
     contrast,
     solidStep: picked.step,
     solidForeground: picked.foreground,
+    solidHover: pickHover(solid[picked.step - 1]!, picked.foreground),
   };
 }
 
@@ -458,8 +473,7 @@ export function themeModeVariables(
       });
     variables[`--ds-${name}-contrast`] = scale.contrast;
     variables[`--ds-${name}-solid`] = `var(--ds-${name}-${scale.solidStep})`;
-    variables[`--ds-${name}-solid-hover`] =
-      `color-mix(in oklab, var(--ds-${name}-${scale.solidStep}) 88%, var(--ds-neutral-12))`;
+    variables[`--ds-${name}-solid-hover`] = scale.solidHover;
     variables[`--ds-${name}-solid-foreground`] = scale.solidForeground;
   };
   emit("brand", brand, true);

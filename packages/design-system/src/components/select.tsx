@@ -76,6 +76,11 @@ export function Select({
     },
     [value, onValueChange],
   );
+  // 부모가 다시 렌더링되어 콜백 참조가 바뀌어도 예약된 reset이 취소되지 않게 최신 값을 ref로 읽는다.
+  const latest = useRef({ changeValue, value });
+  useEffect(() => {
+    latest.current = { changeValue, value };
+  });
   useEffect(() => {
     const associatedForm = form
       ? document.getElementById(form)
@@ -83,11 +88,13 @@ export function Select({
     if (!(associatedForm instanceof HTMLFormElement)) return;
     let resetTimer: ReturnType<typeof setTimeout> | undefined;
     const reset = () => {
+      clearTimeout(resetTimer);
       resetTimer = setTimeout(() => {
-        changeValue(initialValue.current);
+        latest.current.changeValue(initialValue.current);
         // native reset의 기본 동작이 끝난 뒤 화면 값과 실제 제출 값을 맞춘다.
         if (nativeRef.current)
-          nativeRef.current.value = value ?? initialValue.current;
+          nativeRef.current.value =
+            latest.current.value ?? initialValue.current;
       }, 0);
     };
     associatedForm.addEventListener("reset", reset);
@@ -95,7 +102,7 @@ export function Select({
       associatedForm.removeEventListener("reset", reset);
       clearTimeout(resetTimer);
     };
-  }, [mobile, form, changeValue, value]);
+  }, [mobile, form]);
 
   if (mobile)
     return (
@@ -200,7 +207,18 @@ export function Select({
           onChange={(event) => changeValue(event.target.value)}
           onInvalid={(event) => {
             event.preventDefault();
-            setOpen(true);
+            // 빈 필수 입력이 여럿이면 첫 번째 것만 열어 Drawer가 겹치지 않게 한다.
+            const controls = [...(event.currentTarget.form?.elements ?? [])];
+            const firstInvalid = controls.find(
+              (element) =>
+                (element instanceof HTMLInputElement ||
+                  element instanceof HTMLSelectElement ||
+                  element instanceof HTMLTextAreaElement) &&
+                element.willValidate &&
+                !element.validity.valid,
+            );
+            if (!firstInvalid || firstInvalid === event.currentTarget)
+              setOpen(true);
           }}
         >
           <option value="">{placeholder}</option>

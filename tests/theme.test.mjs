@@ -139,3 +139,30 @@ test("typography는 바꿀 역할만 적고 필수값을 검사한다", () => {
     /weights.bold/,
   );
 });
+
+test("모든 브랜드 스케일의 hover 배경은 라이트·다크에서 글자와 4.5:1을 유지한다", () => {
+  const luminance = (hex) =>
+    [1, 3, 5]
+      .map((offset) => Number.parseInt(hex.slice(offset, offset + 2), 16) / 255)
+      .map((v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4))
+      .reduce((sum, v, index) => sum + v * [0.2126, 0.7152, 0.0722][index], 0);
+  const contrast = (a, b) => {
+    const [x, y] = [luminance(a), luminance(b)];
+    return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+  };
+  for (const name of colorScaleNames)
+    for (const mode of ["light", "dark"]) {
+      const scale = resolveScale(name, mode);
+      const solid = scale.solid[scale.solidStep - 1];
+      assert.match(scale.solidHover, /^#[0-9a-f]{6}$/, `${name} ${mode}`);
+      assert.ok(
+        contrast(scale.solidHover, scale.solidForeground) >=
+          Math.min(4.5, contrast(solid, scale.solidForeground)),
+        `${name} ${mode} hover ${contrast(scale.solidHover, scale.solidForeground)}`,
+      );
+      assert.ok(
+        contrast(scale.solidHover, scale.solidForeground) >= 4.5,
+        `${name} ${mode} hover < 4.5`,
+      );
+    }
+});
