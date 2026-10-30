@@ -1,0 +1,11 @@
+import { Meta, Markdown } from "@storybook/addon-docs/blocks";
+import principles from "../../../../docs/design-principles.md?raw";
+
+<Meta title="Global/Principles" />
+
+<Markdown>
+  {principles.replace(
+    /\[수집한 UI\/UX 스킬과 공식 가이드\]\(design-review-references\.md\)/g,
+    "수집한 UI/UX 스킬과 공식 가이드",
+  )}
+</Markdown>

@@ -1,6 +1,7 @@
 "use client";
 import * as Primitive from "@radix-ui/react-collapsible";
 import type { ReactNode } from "react";
+import { Icon } from "./icon.js";
 export type CollapsibleProps = {
   label: string;
   children: ReactNode;
@@ -28,7 +29,9 @@ export function Collapsible({
     >
       <Primitive.Trigger className="ds-accordion-trigger">
         {label}
-        <span aria-hidden="true">⌄</span>
+        <span aria-hidden="true">
+          <Icon name="chevron-down" />
+        </span>
       </Primitive.Trigger>
       <Primitive.Content className="ds-collapsible-content">
         <div className="ds-disclosure-body">{children}</div>

@@ -1,4 +1,4 @@
-import { Tooltip, IconButton, Icon } from "@ai-system/design-system";
+import { Tooltip, IconButton, Icon } from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 const meta = {
   title: "Component/Tooltip",

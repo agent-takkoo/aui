@@ -1,4 +1,4 @@
-import { Heading, Stack, Text } from "@ai-system/design-system";
+import { Heading, Stack, Text } from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {

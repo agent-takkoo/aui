@@ -2,9 +2,23 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import type { Page } from "@playwright/test";
 import {
+  creamTheme,
   defaultTheme,
-  colorTokenNames,
+  resolveScale,
 } from "../packages/design-system/dist/theme/index.js";
+import type {
+  ColorMode,
+  Theme,
+} from "../packages/design-system/dist/theme/index.js";
+
+const hexToRgb = (hex: string) => {
+  const value = Number.parseInt(hex.slice(1), 16);
+  return `rgb(${(value >> 16) & 255}, ${(value >> 8) & 255}, ${value & 255})`;
+};
+const primarySolid = (theme: Theme, mode: ColorMode) => {
+  const scale = resolveScale(theme.brand, mode);
+  return scale.solid[scale.solidStep - 1]!;
+};
 
 async function openStory(page: Page, id: string, globals = "") {
   await page.goto(
@@ -112,51 +126,59 @@ test("typography 주입은 실제 본문에 적용되고 입력 최소 크기는
   await expect(page.getByRole("textbox")).toHaveCSS("font-size", "16px");
 });
 
-test("Theme radius는 작은 표면과 Portal까지 적용되고 원형·pill·화면 가장자리는 유지된다", async ({
+test("Theme radius 단계는 역할별 표면과 Portal까지 적용되고 원형·pill·화면 가장자리는 유지된다", async ({
   page,
 }) => {
-  for (const radius of [0, 2, 32]) {
+  const factors = { none: 0, small: 0.75, medium: 1, large: 1.5, full: 1.5 };
+  for (const radius of ["none", "small", "large", "full"] as const) {
     await page.goto(
-      `/iframe.html?id=testing-radius--default&viewMode=story&args=radius:${radius}px`,
+      `/iframe.html?id=testing-radius--default&viewMode=story&args=radius:${radius}`,
     );
-    const scope = page.locator('[data-ds-theme="radius-test"]');
+    const scope = page.locator(`[data-ds-theme="radius-test-${radius}"]`);
+    const factor = factors[radius];
+    const step = (base: number) => `${base * factor}px`;
+    const pill = radius === "full";
     await expect(
       scope.getByRole("button", { name: "기본 버튼", exact: true }),
-    ).toHaveCSS("border-top-left-radius", `${radius}px`);
+    ).toHaveCSS("border-top-left-radius", pill ? "9999px" : step(6));
+    await expect(scope.locator(".ds-button-sm")).toHaveCSS(
+      "border-top-left-radius",
+      pill ? "9999px" : step(4),
+    );
+    await expect(scope.locator(".ds-input").first()).toHaveCSS(
+      "border-top-left-radius",
+      step(6),
+    );
     for (const selector of [
-      ".ds-input",
       ".ds-card",
       ".ds-callout",
       ".ds-link-row",
       ".ds-panel",
       ".ds-sidebar",
-      ".ds-sidebar-link",
-      ".ds-segment-indicator",
-      ".ds-segment-item",
       ".ds-empty-state",
       ".ds-error-state",
       ".ds-loading-state",
     ]) {
       await expect(scope.locator(selector).first()).toHaveCSS(
         "border-top-left-radius",
-        `${radius}px`,
+        step(8),
       );
     }
-    await expect(scope.locator(".ds-button-sm")).toHaveCSS(
+    await expect(scope.locator(".ds-sidebar-link")).toHaveCSS(
       "border-top-left-radius",
-      `${Math.max(0, radius - 2)}px`,
+      step(4),
     );
     await expect(scope.locator(".ds-skeleton-line")).toHaveCSS(
       "border-top-left-radius",
-      `${Math.max(0, radius - 2)}px`,
+      step(4),
     );
     await expect(scope.locator(".ds-badge")).toHaveCSS(
       "border-top-left-radius",
-      `${Math.max(0, radius - 4)}px`,
+      pill ? "9999px" : step(3),
     );
     await expect(scope.locator(".ds-segmented-control")).toHaveCSS(
       "border-top-left-radius",
-      `${radius + Math.min(radius, 4)}px`,
+      step(6),
     );
     for (const selector of [".ds-avatar", ".ds-skeleton-avatar", ".ds-spinner"])
       await expect(scope.locator(selector)).toHaveCSS(
@@ -165,22 +187,22 @@ test("Theme radius는 작은 표면과 Portal까지 적용되고 원형·pill·�
       );
     await expect(scope.locator(".ds-filter-chip")).toHaveCSS(
       "border-top-left-radius",
-      "999px",
+      "9999px",
     );
-    for (const [trigger, selector] of [
-      ["모달 열기", ".ds-dialog"],
-      ["팝오버 열기", ".ds-popover"],
-      ["메뉴 열기", ".ds-dropdown-menu"],
-    ]) {
+    for (const [trigger, selector, expected] of [
+      ["모달 열기", ".ds-dialog", step(12)],
+      ["팝오버 열기", ".ds-popover", step(8)],
+      ["메뉴 열기", ".ds-dropdown-menu", step(8)],
+    ] as const) {
       await scope.getByRole("button", { name: trigger, exact: true }).click();
       await expect(scope.locator(selector)).toHaveCSS(
         "border-top-left-radius",
-        `${radius}px`,
+        expected,
       );
       if (selector === ".ds-dropdown-menu")
         await expect(scope.locator(".ds-dropdown-item")).toHaveCSS(
           "border-top-left-radius",
-          `${Math.max(0, radius - 4)}px`,
+          step(4),
         );
       await page.keyboard.press("Escape");
       await expect(scope.locator(selector)).toHaveCount(0);
@@ -192,7 +214,7 @@ test("Theme radius는 작은 표면과 Portal까지 적용되고 원형·pill·�
     await expect(drawer).toHaveCSS("border-bottom-left-radius", "0px");
     await expect(drawer).toHaveCSS(
       "border-top-left-radius",
-      page.viewportSize()!.width >= 1024 ? "0px" : `${radius}px`,
+      page.viewportSize()!.width >= 1024 ? "0px" : step(12),
     );
   }
 });
@@ -324,7 +346,10 @@ test("JavaScript로 전달한 임의 스타일은 DOM에 전달하지 않는다"
   await expect(button).not.toHaveAttribute("style");
   await expect(button).not.toHaveAttribute("color");
   await expect(button).not.toHaveClass(/rogue-class/);
-  await expect(button).toHaveCSS("background-color", "rgb(36, 107, 214)");
+  await expect(button).toHaveCSS(
+    "background-color",
+    hexToRgb(primarySolid(defaultTheme, "light")),
+  );
   await button.click();
   await expect(page.getByRole("status")).toHaveText("실행 횟수: 1");
 });
@@ -488,7 +513,7 @@ test("중첩 theme의 팝업은 자기 범위의 색을 유지한다", async ({ 
   ).toBe("light");
   await expect(dialog.getByRole("button", { name: "확인" })).toHaveCSS(
     "background-color",
-    "rgb(154, 0, 2)",
+    hexToRgb(primarySolid(creamTheme, "light")),
   );
 });
 
@@ -622,7 +647,7 @@ for (const brand of ["default", "cream"]) {
   }
 }
 
-test("Theme 문서는 실제 defaultTheme의 모든 값을 보여준다", async ({
+test("Theme 문서는 실제 defaultTheme의 필드와 스케일을 보여준다", async ({
   page,
 }) => {
   await page.goto("/iframe.html?id=global-theme--docs&viewMode=docs");
@@ -632,29 +657,31 @@ test("Theme 문서는 실제 defaultTheme의 모든 값을 보여준다", async 
   const fields = page.getByRole("table", { name: "Theme 객체의 필드" });
   for (const field of [
     "name",
-    "light",
-    "dark",
+    "brand",
+    "neutral",
     "radius",
+    "scaling",
     "fontFamily",
     "typography",
-  ]) {
+  ] as const) {
     await expect(
       fields.getByRole("rowheader", { name: field, exact: true }),
     ).toBeVisible();
+    if (field !== "typography")
+      await expect(fields.locator(`[data-field="${field}"]`)).toHaveText(
+        String(defaultTheme[field]),
+      );
   }
-  const colors = page.getByRole("table", { name: "defaultTheme 색상 token" });
-  await expect(colors.getByRole("row")).toHaveCount(colorTokenNames.length + 1);
-  for (const token of colorTokenNames) {
-    const row = colors.getByRole("row").filter({
-      has: page.getByRole("rowheader", { name: token, exact: true }),
-    });
-    await expect(row.locator('[data-mode="light"]')).toHaveText(
-      defaultTheme.light[token],
-    );
-    await expect(row.locator('[data-mode="dark"]')).toHaveText(
-      defaultTheme.dark[token],
-    );
+  const scales = page.getByRole("table", { name: "defaultTheme 색 스케일" });
+  for (const mode of ["light", "dark"] as const) {
+    const brand = resolveScale(defaultTheme.brand, mode);
+    const row = scales.locator(`[data-scale="brand"][data-mode="${mode}"]`);
+    await expect(row.locator("[data-step]")).toHaveCount(12);
+    await expect(row.locator('[data-step="9"]')).toHaveText(brand.solid[8]!);
   }
+  await expect(
+    page.getByRole("table", { name: "역할 변수와 스케일 단계" }),
+  ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: /프로젝트에 주입하기$/ }),
   ).toBeVisible();

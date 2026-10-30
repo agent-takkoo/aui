@@ -1,12 +1,16 @@
 import {
   Button,
+  Checkbox,
   Container,
   Field,
+  Inline,
   Input,
+  RadioGroup,
+  Select,
   Stack,
   Text,
   Textarea,
-} from "@ai-system/design-system";
+} from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { FormEvent } from "react";
 import { useRef, useState } from "react";
@@ -94,4 +98,70 @@ function FormDemo() {
 export const Validation: Story = {
   name: "검증과 저장",
   render: () => <FormDemo />,
+};
+
+function PreferencesForm() {
+  const [result, setResult] = useState("");
+  return (
+    <Container width="form">
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          const data = new FormData(event.currentTarget);
+          setResult(
+            `${data.get("workspace")} · ${data.get("language") === "ko" ? "한국어" : "English"} · ${data.get("visibility") === "team" ? "팀에 공개" : "나만 보기"} · 이메일 ${data.has("email") ? "받기" : "받지 않기"}로 저장했어요.`,
+          );
+        }}
+        onReset={() =>
+          setResult("기본 설정으로 되돌렸어요. 저장을 누르면 적용해요.")
+        }
+      >
+        <Stack gap="section">
+          <Field label="공간 이름" required>
+            <Input name="workspace" defaultValue="작업 공간" />
+          </Field>
+          <Field label="표시 언어" required>
+            <Select
+              name="language"
+              defaultValue="ko"
+              options={[
+                { value: "ko", label: "한국어" },
+                { value: "en", label: "English" },
+              ]}
+            />
+          </Field>
+          <Field
+            label="공유 범위"
+            description="새로 만드는 문서의 기본 공개 범위예요."
+          >
+            <RadioGroup
+              name="visibility"
+              defaultValue="self"
+              options={[
+                { value: "self", label: "나만 보기" },
+                { value: "team", label: "팀에 공개" },
+              ]}
+            />
+          </Field>
+          <Checkbox
+            name="email"
+            label="활동 요약을 이메일로 받기"
+            defaultChecked
+          />
+          <Inline>
+            <Button type="submit">설정 저장</Button>
+            <Button type="reset" variant="secondary">
+              기본값으로 되돌리기
+            </Button>
+          </Inline>
+          {result && <Text role="status">{result}</Text>}
+        </Stack>
+      </form>
+    </Container>
+  );
+}
+export const Preferences: Story = {
+  name: "여러 입력을 쓰는 설정 폼",
+  parameters: { docs: { story: { height: "720px" } } },
+  render: () => <PreferencesForm />,
 };

@@ -2,14 +2,23 @@ import type { DesignProps } from "../internal/props.js";
 import { domProps } from "../internal/props.js";
 
 export type Space = "none" | "xs" | "sm" | "md" | "section";
-export type StackProps = DesignProps<"div"> & { gap?: Space };
-export function Stack({ gap = "md", ...props }: StackProps) {
-  return <div {...domProps(props)} className={`ds-stack ds-gap-${gap}`} />;
+export type StackProps = DesignProps<"div"> & {
+  gap?: Space;
+  align?: "stretch" | "start" | "center" | "end";
+};
+export function Stack({ gap = "md", align = "stretch", ...props }: StackProps) {
+  return (
+    <div
+      {...domProps(props)}
+      className={`ds-stack ds-gap-${gap} ds-align-${align}`}
+    />
+  );
 }
 
-export type InlineProps = StackProps & {
+export type InlineProps = DesignProps<"div"> & {
+  gap?: Space;
   align?: "start" | "center" | "end";
-  justify?: "start" | "between" | "end";
+  justify?: "start" | "center" | "between" | "end";
   wrap?: boolean;
 };
 export function Inline({
@@ -41,4 +50,27 @@ export function Container({ width = "content", ...props }: ContainerProps) {
 
 export function Separator() {
   return <hr className="ds-separator" data-slot="separator" />;
+}
+
+export type GridColumns = 1 | 2 | 3 | 4 | "auto";
+export type GridCollapse = "none" | "sm" | "md" | "lg";
+export type GridProps = DesignProps<"div"> & {
+  columns?: GridColumns;
+  gap?: Space;
+  collapseBelow?: GridCollapse;
+};
+export function Grid({
+  columns = 2,
+  gap = "md",
+  collapseBelow = "md",
+  ...props
+}: GridProps) {
+  return (
+    <div
+      {...domProps(props)}
+      className={`ds-grid ds-grid-${columns} ds-gap-${gap}${collapseBelow === "none" ? "" : ` ds-grid-collapse-${collapseBelow}`}`}
+      data-slot="grid"
+      data-columns={columns}
+    />
+  );
 }

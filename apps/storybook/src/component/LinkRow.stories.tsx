@@ -1,4 +1,4 @@
-import { LinkRow, Stack } from "@ai-system/design-system";
+import { LinkRow, Stack } from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {

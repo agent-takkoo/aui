@@ -7,11 +7,15 @@ import type { DesignProps } from "../internal/props.js";
 
 type FieldContextValue = {
   id: string;
+  label: string;
   describedBy?: string;
   invalid: boolean;
   required?: boolean;
 };
 const FieldContext = createContext<FieldContextValue | null>(null);
+export function useFieldLabel() {
+  return useContext(FieldContext)?.label;
+}
 export function useFieldControl(props: {
   id?: string;
   required?: boolean;
@@ -60,7 +64,13 @@ export function Field({
       .join(" ") || undefined;
   return (
     <FieldContext.Provider
-      value={{ id: fieldId, describedBy, invalid: Boolean(error), required }}
+      value={{
+        id: fieldId,
+        label,
+        describedBy,
+        invalid: Boolean(error),
+        required,
+      }}
     >
       <div className="ds-field" data-slot="field">
         <Label id={`${fieldId}-label`} htmlFor={fieldId}>

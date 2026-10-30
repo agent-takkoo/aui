@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import type { Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { chooseSelectOption, selectPopup } from "./select-helpers";
 async function open(page: Page, id: string, suffix = "") {
   await page.goto(`/iframe.html?id=${id}&viewMode=story${suffix}`);
   await expect(
@@ -37,15 +38,14 @@ test("새 폼 컨트롤은 키보드·Field 연결·제출·native reset을 지�
   await expect(select).toHaveAttribute("aria-invalid", "true");
   await select.focus();
   await page.keyboard.press("Space");
-  await expect(page.getByRole("listbox")).toBeVisible();
+  await expect(selectPopup(page)).toBeVisible();
   expect(
-    await page
-      .getByRole("listbox")
-      .evaluate((node) =>
-        node.closest("[data-ds-theme]")?.getAttribute("data-ds-theme"),
-      ),
+    await selectPopup(page).evaluate((node) =>
+      node.closest("[data-ds-theme]")?.getAttribute("data-ds-theme"),
+    ),
   ).toBe("cream");
-  await page.getByRole("option", { name: "English", exact: true }).click();
+  await chooseSelectOption(page, "English");
+  await expect(selectPopup(page)).toHaveCount(0);
   await expect(select).toBeFocused();
   const slider = page.getByRole("slider", { name: "음량" });
   await expect(slider).toHaveAccessibleDescription("0부터 100까지 조절해요.");

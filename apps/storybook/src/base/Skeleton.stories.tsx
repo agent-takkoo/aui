@@ -1,4 +1,4 @@
-import { Skeleton } from "@ai-system/design-system";
+import { Skeleton } from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {

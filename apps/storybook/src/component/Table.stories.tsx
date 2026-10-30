@@ -6,12 +6,17 @@ import {
   TableRow,
   TableHead,
   TableCell,
-} from "@ai-system/design-system";
+} from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 const meta = {
   title: "Component/Table",
   component: Table,
   args: { caption: "문서 현황" },
+  argTypes: {
+    caption: {
+      description: "스크린리더용 표 이름이에요. 화면에는 표시하지 않아요.",
+    },
+  },
 } satisfies Meta<typeof Table>;
 export default meta;
 export const Default: StoryObj<typeof meta> = {

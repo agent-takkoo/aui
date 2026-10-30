@@ -6,7 +6,7 @@ import {
   SegmentedControl,
   Stack,
   Text,
-} from "@ai-system/design-system";
+} from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 

@@ -1,14 +1,11 @@
 import type { Preview } from "@storybook/react-vite";
-import {
-  ThemeProvider,
-  defaultTheme,
-  creamTheme,
-} from "@ai-system/design-system";
-import "@ai-system/design-system/styles.css";
+import { ThemeProvider, defaultTheme, creamTheme } from "@heogeon0/aui";
+import "@heogeon0/aui/styles.css";
 import "pretendard/dist/web/variable/pretendardvariable.css";
 import "../src/docs.css";
 import { ResponsiveDocs } from "./ResponsiveDocs";
 import { DocsPreview } from "./DocsPreview";
+import { ComponentDocs } from "./ComponentDocs";
 
 const preview: Preview = {
   decorators: [
@@ -87,6 +84,7 @@ const preview: Preview = {
   tags: ["autodocs"],
   parameters: {
     docs: {
+      page: ComponentDocs,
       container: ResponsiveDocs,
       story: { inline: false, height: "420px" },
     },
@@ -111,7 +109,7 @@ const preview: Preview = {
       storySort: {
         order: [
           "Global",
-          ["Theme", "Typography", "Spacing"],
+          ["Principles", "Theme", "Typography", "Spacing"],
           "Base",
           [
             "Button",
@@ -138,6 +136,7 @@ const preview: Preview = {
             "Card",
             "Callout",
             "LinkRow",
+            "ListItem",
             "Selection",
             "Tabs",
             "Accordion",
@@ -154,7 +153,17 @@ const preview: Preview = {
             "Toast",
           ],
           "Layout",
-          ["Drawer", "Panel", "Sidebar", "ScrollArea", "AspectRatio"],
+          [
+            "AppShell",
+            "PageHeader",
+            "ActionBar",
+            "Grid",
+            "Drawer",
+            "Panel",
+            "Sidebar",
+            "ScrollArea",
+            "AspectRatio",
+          ],
         ],
       },
     },

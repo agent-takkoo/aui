@@ -38,7 +38,7 @@ export function ErrorState({
       ) : null}
       {onRetry ? (
         <div className="ds-state-action">
-          <Button variant="outline" size="sm" onClick={() => onRetry()}>
+          <Button variant="secondary" size="sm" onClick={() => onRetry()}>
             {retryLabel}
           </Button>
         </div>

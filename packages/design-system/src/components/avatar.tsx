@@ -10,16 +10,21 @@ export type AvatarProps = DesignProps<"span"> & {
   size?: "xs" | "sm" | "md";
   avatarUrl?: string | null;
 };
+
+const hashName = (name: string) =>
+  [...name].reduce((hash, char) => (hash * 31 + char.codePointAt(0)!) >>> 0, 7);
+
 export function Avatar({
   name,
-  toneIndex = 0,
+  toneIndex,
   size = "sm",
   avatarUrl,
   ...props
 }: AvatarProps) {
   const [failedUrl, setFailedUrl] = useState<string | null>(null);
   const showPhoto = Boolean(avatarUrl) && avatarUrl !== failedUrl;
-  const tone = (((Math.trunc(toneIndex) % 4) + 4) % 4) + 1;
+  const index = toneIndex ?? hashName(name);
+  const tone = (((Math.trunc(index) % 4) + 4) % 4) + 1;
   return (
     <span
       {...domProps(props)}

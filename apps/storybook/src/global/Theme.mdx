@@ -1,97 +1,88 @@
 import { Canvas, Meta, Source } from "@storybook/addon-docs/blocks";
-import { defaultTheme } from "@ai-system/design-system";
+import { defaultTheme } from "@heogeon0/aui";
 import * as ThemeStories from "./Theme.stories";
-import { ThemeShapeTable, ThemeColorTable } from "./ThemeReference";
+import {
+  ThemeShapeTable,
+  ThemeScaleTable,
+  ThemeRoleTable,
+} from "./ThemeReference";
 import providerSource from "../../../../packages/design-system/src/theme/provider.tsx?raw";
 
 <Meta of={ThemeStories} />
 
 # Theme
 
-프로젝트는 `defaultTheme`을 기준으로 색상·radius·글꼴·typography를 정하고 `ThemeProvider`에 주입해요. 이 페이지의 표와 전체 객체는 패키지에서 실제로 export하는 값을 읽어서 보여줘요.
+프로젝트는 색 하나하나가 아니라 브랜드 스케일·중립 스케일·radius·scaling·글꼴을 고르고 `ThemeProvider`에 주입해요. 컴포넌트는 그 스케일의 단계를 역할에 맞게 사용하므로 브랜드가 바뀌어도 위계가 같게 유지돼요. 이 페이지의 표는 패키지가 실제로 export하는 값을 읽어서 보여줘요.
 
 ## Theme에 들어가는 값
 
-`Theme` 객체는 여섯 필드로 구성돼요. `light`와 `dark`는 같은 색상 token을 모두 제공해야 해요.
-
 <ThemeShapeTable />
 
-## 색상 token과 기본값
+## 색 스케일
 
-배경과 그 위에 올라가는 글자·아이콘 색은 함께 정해요. 예를 들어 `primary`를 바꾸면 `primaryForeground`가 그 위에서 읽히는지도 확인해요.
+색 하나는 12단계로 펼쳐져요. 1·2는 배경, 3·4·5는 컴포넌트 배경(기본·hover·pressed), 6·7·8은 경계, 9·10은 채운 배경, 11·12는 글자예요. 같은 번호는 라이트와 다크에서 같은 역할이라 컴포넌트 CSS는 번호만 봐요. `brand`·`neutral` 외에 `danger`(red)·`success`(green)·`warning`(amber)·`info`(blue) 스케일을 항상 함께 제공해요.
 
-<ThemeColorTable />
+<ThemeScaleTable />
+
+## 역할 변수
+
+컴포넌트는 스케일을 바로 쓰기도 하고 아래 역할 변수를 거치기도 해요. 채운 배경의 글자는 4.5:1을 만족하도록 9·10·11 중 첫 단계를 자동으로 골라요. 예를 들어 `blue`는 9단계와 흰 글자가 3.3:1이라 11단계를 쓰고, `indigo`는 9단계를 그대로 써요.
+
+<ThemeRoleTable />
 
 ## 전체 기본 객체
 
-아래 JSON은 별도 예시 값이 아니라 현재 `defaultTheme`이에요.
+아래 JSON은 현재 `defaultTheme`이에요.
 
 <Source code={JSON.stringify(defaultTheme, null, 2)} language="json" />
 
 ## 프로젝트에 주입하기
 
-기존 기본값을 펼친 다음 프로젝트에서 바꿀 역할색을 지정해요. 아래 예제는 주요 행동의 배경·글자·포커스를 라이트와 다크에 각각 정해요.
-
 ```tsx
-import "@ai-system/design-system/styles.css";
-import {
-  ThemeProvider,
-  defaultTheme,
-  defineTheme,
-} from "@ai-system/design-system";
+import "@heogeon0/aui/styles.css";
+import { ThemeProvider, defaultTheme, defineTheme } from "@heogeon0/aui";
+import { Link } from "react-router";
 
 const projectTheme = defineTheme({
-  ...defaultTheme,
   name: "my-service",
-  radius: "0.75rem",
-  typography: {
-    ...defaultTheme.typography,
-    body: {
-      ...defaultTheme.typography.body,
-      size: "1rem",
-      lineHeight: "1.5rem",
-    },
-  },
-  light: {
-    ...defaultTheme.light,
-    primary: "#135a45",
-    primaryForeground: "#ffffff",
-    ring: "#135a45",
-  },
-  dark: {
-    ...defaultTheme.dark,
-    primary: "#8de0bb",
-    primaryForeground: "#102b21",
-    ring: "#8de0bb",
-  },
+  brand: "teal",
+  neutral: "sage",
+  radius: "large",
+  scaling: "100%",
+  fontFamily: defaultTheme.fontFamily,
+  typography: { body: { size: "1rem", lineHeight: "1.5rem" } },
 });
 
 export function Root() {
   return (
-    <ThemeProvider theme={projectTheme} mode="system">
+    <ThemeProvider theme={projectTheme} mode="system" linkComponent={Link}>
       <App />
     </ThemeProvider>
   );
 }
 ```
 
-`defineTheme()`은 필수값을 검사하고 객체를 고정해요. `ThemeProvider`의 theme을 생략하면 `defaultTheme`을 사용해요. mode는 별도 prop이며 `light`가 기본이고, `dark`나 기기 설정을 따르는 `system`을 선택할 수 있어요.
+`defineTheme()`은 스케일 이름·radius·scaling을 검사하고 객체를 고정해요. `mode`는 `light`가 기본이고 `dark`나 기기 설정을 따르는 `system`을 선택해요. `linkComponent`를 넘기면 `ButtonLink`·`LinkRow`·`Sidebar`·`Breadcrumb`가 그 Link로 렌더링돼요.
+
+브랜드 색이 Radix 스케일에 없으면 `{ light: [...12], dark: [...12] }` 배열을 직접 넘겨요. 투명도 단계(`lightAlpha`·`darkAlpha`)를 생략하면 같은 색을 써요.
 
 ## 적용되는 범위
 
-Provider는 현재 모드의 값을 `--ds-primary` 같은 CSS 변수로 변환해 자기 범위에 적용해요. 중첩한 Provider와 팝업은 가까운 theme을 사용해요.
+Provider는 theme 하나당 `<style>` 하나를 만들고 `[data-ds-theme][data-ds-mode]` 선택자에 CSS 변수를 선언해요. 중첩한 Provider와 Portal은 가까운 theme을 사용해요. document 전체의 class나 색은 바꾸지 않아요.
 
-색상·radius·글꼴과 역할별 typography는 theme에서 바꿀 수 있어요. `typography`에는 display·title·heading·body·sub·caption·input·micro 역할의 size·lineHeight·weight·letterSpacing과 강조용 weights가 있어요. 제목과 본문은 역할값을 따르고 버튼·라벨 등의 강조 굵기는 weights를 사용해요. 입력은 자동 확대를 막기 위해 최소 16px을 유지해요. overlay는 모달 뒤 가림막, shadow는 그림자의 기준색이에요.
+## radius와 scaling
 
-배치 간격과 버튼·입력의 최소 높이는 패키지가 관리해요. 각각 Global/Spacing·Base의 컴포넌트에서 확인해요. 투명도·currentColor·움직임과 표면별 그림자 크기는 컴포넌트 규칙이에요.
+`radius`는 배율이에요. 배지는 1단계, 메뉴 항목·작은 버튼은 2단계, 버튼·입력은 3단계, 카드는 4단계, 모달은 5단계를 쓰고 모두 배율에 비례해요. `full`은 버튼·배지·입력이 pill이 되고 카드·모달은 `large`와 같아요. 원형 아바타·thumb와 화면 가장자리에 붙는 Drawer는 형태상 예외예요.
 
-## 직접 바꿔보기
-
-`radius`는 일반 버튼·입력·카드·Panel·Sidebar·모달·메뉴·팝오버와 Select·Accordion·Toast·Table 등의 기준이에요. 작은 버튼과 Skeleton은 기준에서 2px, 배지와 메뉴 항목은 4px을 빼되 0보다 작아지지 않아요. SegmentedControl 바깥은 기준에 최대 4px을 더해 안쪽 선택 면을 감싸요. Checkbox의 작은 표시 면은 최대 4px로 제한해요. 기준이 0이면 이 표면들도 모두 각지게 표시돼요.
-
-아바타·spinner·아바타 Skeleton과 RadioGroup·Slider의 원형 표시, Switch의 원형 손잡이는 형태를 유지해요. FilterChip·Switch의 트랙·스크롤바 손잡이는 pill이에요. 화면 가장자리에 붙는 Drawer 모서리는 0이고 모바일 하단 Drawer의 위쪽만 theme을 따라요. 간격의 정해진 단계와 그림자의 크기·투명도는 컴포넌트 규칙이며 theme은 그림자 색을 정해요.
+`scaling`은 글자 크기·간격·컨트롤 높이·아이콘 크기를 함께 바꿔요. 입력 글자는 자동 확대를 막기 위해 어느 값에서도 16px 이상이에요.
 
 <Canvas of={ThemeStories.Custom} />
+
+## 역할별 색 배치
+
+주요 실행에는 primary, 보조 실행에는 secondary(neutral-a3)를 사용해요. ToggleGroup·Select·Sidebar의 지속되는 선택은 brand-a3 배경과 brand-12 글자예요. Tabs는 primary 밑줄이에요. Checkbox·RadioGroup·Switch의 켜짐과 진행량은 primary, 오류·삭제는 danger 스케일이에요. hover·키보드로 탐색 중인 항목은 accent(neutral-a4)로 구분해요.
+
+<Canvas of={ThemeStories.StateColors} />
 
 <details>
   <summary>ThemeProvider 내부 구현 보기</summary>

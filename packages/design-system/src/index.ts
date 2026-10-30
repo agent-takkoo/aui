@@ -3,16 +3,35 @@ export {
   defineTheme,
   defaultTheme,
   creamTheme,
+  resolveScale,
+  themeStylesheet,
+  defaultTypography,
+  colorScaleNames,
+  neutralScaleNames,
+  radiusNames,
+  scalingNames,
   typographyRoleNames,
-  colorTokenNames,
 } from "./theme/index.js";
 export type {
   ThemeProviderProps,
+  LinkComponent,
+  LinkProps,
   Theme,
+  ThemeInput,
+  ThemeRadius,
+  ThemeScaling,
   ColorMode,
-  ColorTokens,
+  ColorScale,
+  ColorScaleName,
+  NeutralScale,
+  NeutralScaleName,
+  ColorSteps,
+  CustomColorScale,
+  ResolvedScale,
   TypographyTokens,
+  TypographyInput,
   TypographyRole,
+  TypographyWeights,
 } from "./theme/index.js";
 export { Button, IconButton, ButtonLink } from "./components/button.js";
 export type {
@@ -30,10 +49,19 @@ export type {
 } from "./components/field.js";
 export { Text, Heading, SectionLabel } from "./components/typography.js";
 export type { TextProps, HeadingProps } from "./components/typography.js";
-export { Stack, Inline, Container, Separator } from "./components/layout.js";
+export {
+  Stack,
+  Inline,
+  Grid,
+  Container,
+  Separator,
+} from "./components/layout.js";
 export type {
   StackProps,
   InlineProps,
+  GridProps,
+  GridColumns,
+  GridCollapse,
   ContainerProps,
   Space,
 } from "./components/layout.js";
@@ -50,10 +78,14 @@ export {
 } from "./components/surfaces.js";
 export type {
   CardProps,
+  CardTitleProps,
   BadgeProps,
   CalloutProps,
   LinkRowProps,
+  Tone,
 } from "./components/surfaces.js";
+export { ListItem } from "./components/list-item.js";
+export type { ListItemProps } from "./components/list-item.js";
 export { Avatar } from "./components/avatar.js";
 export type { AvatarProps } from "./components/avatar.js";
 export { SegmentedControl, FilterChip } from "./components/selection.js";
@@ -85,7 +117,14 @@ export type {
 } from "./components/dropdown-menu.js";
 export { Popover } from "./components/popover.js";
 export type { PopoverProps } from "./components/popover.js";
-export { Icon } from "./components/icon.js";
+export { Icon, iconNames } from "./components/icon.js";
+export type { IconProps, IconSource } from "./components/icon.js";
+export { PageHeader, ActionBar, AppShell } from "./components/shell.js";
+export type {
+  PageHeaderProps,
+  ActionBarProps,
+  AppShellProps,
+} from "./components/shell.js";
 export { Panel } from "./components/panel.js";
 export type { PanelProps } from "./components/panel.js";
 export { Sidebar } from "./components/sidebar.js";

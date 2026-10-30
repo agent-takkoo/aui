@@ -1,4 +1,4 @@
-import { Collapsible, Text } from "@ai-system/design-system";
+import { Collapsible, Text } from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 const meta = {
   title: "Component/Collapsible",

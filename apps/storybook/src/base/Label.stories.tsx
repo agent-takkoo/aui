@@ -1,4 +1,4 @@
-import { Input, Label, Stack } from "@ai-system/design-system";
+import { Input, Label, Stack } from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ReactNode } from "react";
 import { useId } from "react";

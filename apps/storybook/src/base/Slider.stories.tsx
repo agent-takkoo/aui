@@ -1,4 +1,4 @@
-import { Slider } from "@ai-system/design-system";
+import { Slider } from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 const meta = {
   title: "Base/Slider",

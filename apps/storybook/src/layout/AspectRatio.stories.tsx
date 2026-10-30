@@ -1,4 +1,4 @@
-import { AspectRatio, Text } from "@ai-system/design-system";
+import { AspectRatio, Text } from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 const meta = {
   title: "Layout/AspectRatio",

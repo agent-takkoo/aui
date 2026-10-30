@@ -9,7 +9,7 @@ import {
   defaultTheme,
   defineTheme,
   Input,
-} from "@ai-system/design-system";
+} from "@heogeon0/aui";
 import type { StoryObj } from "@storybook/react-vite";
 import type { CSSProperties } from "react";
 

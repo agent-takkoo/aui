@@ -1,4 +1,4 @@
-import { Accordion, Text } from "@ai-system/design-system";
+import { Accordion, Text } from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 const meta = {
   title: "Component/Accordion",

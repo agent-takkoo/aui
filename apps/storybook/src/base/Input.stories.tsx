@@ -1,5 +1,6 @@
-import { Container, Field, Input } from "@ai-system/design-system";
+import { Container, Field, Input } from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Example, ExampleGrid } from "../examples";
 
 const meta = {
   id: "base-input",
@@ -31,5 +32,70 @@ export const Default: Story = {
         <Input {...args} name="name" autoComplete="name" />
       </Field>
     </Container>
+  ),
+};
+
+export const Sizes: Story = {
+  name: "입력 크기",
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <ExampleGrid>
+      <Example title="md · 56px">
+        <Field label="이름">
+          <Input placeholder="기본 입력" />
+        </Field>
+      </Example>
+      <Example title="sm · 44px">
+        <Field label="검색">
+          <Input inputSize="sm" placeholder="작은 입력" />
+        </Field>
+      </Example>
+    </ExampleGrid>
+  ),
+};
+
+export const States: Story = {
+  name: "오류·필수·비활성·읽기 전용",
+  parameters: {
+    controls: { disable: true },
+    docs: { story: { height: "720px" } },
+  },
+  render: () => (
+    <ExampleGrid>
+      <Example title="필수와 설명">
+        <Field
+          label="이메일"
+          required
+          description="변경한 설정을 안내할 주소예요."
+        >
+          <Input
+            type="email"
+            autoComplete="email"
+            placeholder="name@example.com"
+          />
+        </Field>
+      </Example>
+      <Example title="오류">
+        <Field
+          label="프로젝트 이름"
+          error="다른 사람이 구분할 수 있도록 두 글자 이상의 이름을 입력해 주세요."
+        >
+          <Input defaultValue="A" aria-invalid />
+        </Field>
+      </Example>
+      <Example title="비활성">
+        <Field label="사용할 수 없는 이름">
+          <Input disabled defaultValue="관리자 설정" />
+        </Field>
+      </Example>
+      <Example title="읽기 전용">
+        <Field
+          label="복사할 수 있는 이름"
+          description="텍스트 선택과 복사는 가능해요."
+        >
+          <Input readOnly defaultValue="공유 프로젝트" />
+        </Field>
+      </Example>
+    </ExampleGrid>
   ),
 };

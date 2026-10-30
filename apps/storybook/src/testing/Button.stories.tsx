@@ -1,4 +1,4 @@
-import type { ButtonProps } from "@ai-system/design-system";
+import type { ButtonProps } from "@heogeon0/aui";
 import {
   Button,
   ButtonLink,
@@ -7,7 +7,7 @@ import {
   Inline,
   Stack,
   Text,
-} from "@ai-system/design-system";
+} from "@heogeon0/aui";
 import type { StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 
