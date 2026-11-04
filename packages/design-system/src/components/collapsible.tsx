@@ -5,10 +5,10 @@ import { Icon } from "./icon.js";
 export type CollapsibleProps = {
   label: string;
   children: ReactNode;
-  open?: boolean;
-  defaultOpen?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  disabled?: boolean;
+  open?: boolean | undefined;
+  defaultOpen?: boolean | undefined;
+  onOpenChange?: ((open: boolean) => void) | undefined;
+  disabled?: boolean | undefined;
 };
 export function Collapsible({
   label,

@@ -1,13 +1,17 @@
+"use client";
+
+import { useRef } from "react";
 import type { ReactNode } from "react";
+import { useMeasuredHeight } from "../internal/measured-height.js";
 import { Heading } from "./typography.js";
 
 export type PageHeaderProps = {
   title: string;
-  description?: string;
-  actions?: ReactNode;
-  breadcrumb?: ReactNode;
-  level?: 1 | 2;
-  size?: "title" | "display";
+  description?: string | undefined;
+  actions?: ReactNode | undefined;
+  breadcrumb?: ReactNode | undefined;
+  level?: 1 | 2 | undefined;
+  size?: "title" | "display" | undefined;
 };
 export function PageHeader({
   title,
@@ -41,9 +45,9 @@ export function PageHeader({
 
 export type ActionBarProps = {
   children: ReactNode;
-  justify?: "start" | "end" | "between" | "stretch";
-  sticky?: boolean;
-  label?: string;
+  justify?: "start" | "end" | "between" | "stretch" | undefined;
+  sticky?: boolean | undefined;
+  label?: string | undefined;
 };
 export function ActionBar({
   children,
@@ -66,22 +70,38 @@ export function ActionBar({
 
 export type AppShellProps = {
   children: ReactNode;
-  header?: ReactNode;
-  sidebar?: ReactNode;
-  sidebarWidth?: "sm" | "md";
+  header?: ReactNode | undefined;
+  sidebar?: ReactNode | undefined;
+  sidebarWidth?: "sm" | "md" | undefined;
+  sidebarSticky?: boolean | undefined;
 };
 export function AppShell({
   children,
   header,
   sidebar,
   sidebarWidth = "md",
+  sidebarSticky = true,
 }: AppShellProps) {
+  const shellRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  useMeasuredHeight(
+    headerRef,
+    shellRef,
+    "--ds-app-shell-header-height",
+    Boolean(header),
+  );
   return (
     <div
+      ref={shellRef}
       className={`ds-app-shell ds-app-shell-sidebar-${sidebarWidth}`}
       data-slot="app-shell"
+      data-sidebar-sticky={sidebarSticky || undefined}
     >
-      {header ? <div className="ds-app-shell-header">{header}</div> : null}
+      {header ? (
+        <div ref={headerRef} className="ds-app-shell-header">
+          {header}
+        </div>
+      ) : null}
       <div className="ds-app-shell-body">
         {sidebar ? <div className="ds-app-shell-sidebar">{sidebar}</div> : null}
         <main className="ds-app-shell-main">{children}</main>

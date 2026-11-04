@@ -163,6 +163,7 @@ const icons = {
   shield: Shield,
   "log-out": LogOut,
   star: Star,
+  "star-filled": Star,
   heart: Heart,
   bookmark: Bookmark,
   "thumbs-up": ThumbsUp,
@@ -213,7 +214,7 @@ export const iconNames = Object.freeze(
 ) as readonly IconName[];
 export type IconSource = LucideIcon;
 export type IconProps = {
-  size?: "sm" | "md";
+  size?: "sm" | "md" | undefined;
 } & (
   | { name: IconName; source?: undefined }
   | { source: IconSource; name?: undefined }
@@ -227,6 +228,7 @@ export function Icon({ name, source, size = "md" }: IconProps) {
       aria-hidden="true"
       focusable="false"
       strokeWidth={1.75}
+      {...(name === "star-filled" ? { fill: "currentColor" } : {})}
     />
   );
 }

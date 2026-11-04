@@ -268,6 +268,14 @@
   inline-size: var(--ds-control-md);
   min-block-size: var(--ds-control-md);
 }
+.ds-icon-button.ds-button-sm {
+  inline-size: var(--ds-control-sm);
+  min-block-size: var(--ds-control-sm);
+}
+.ds-icon-button.ds-button-sm .ds-icon {
+  inline-size: calc(1rem * var(--ds-scaling));
+  block-size: calc(1rem * var(--ds-scaling));
+}
 .ds-full-width {
   inline-size: 100%;
 }
@@ -596,6 +604,25 @@
 .ds-action-bar-stretch > * {
   flex: 1 1 0;
 }
+.ds-bottom-bar-space {
+  block-size: var(--ds-bottom-bar-height, 5rem);
+  flex-shrink: 0;
+}
+.ds-bottom-bar-fixed {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 10;
+}
+.ds-bottom-bar-fixed::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 100%;
+  block-size: var(--ds-space-md);
+  background: linear-gradient(to bottom, transparent, var(--ds-background));
+  pointer-events: none;
+}
 @media (max-width: 39.9375rem) {
   .ds-action-bar > .ds-button {
     flex: 1 1 auto;
@@ -647,6 +674,17 @@
 @media (min-width: 64rem) {
   .ds-app-shell-sidebar {
     display: block;
+  }
+  .ds-app-shell[data-sidebar-sticky]
+    > .ds-app-shell-body
+    > .ds-app-shell-sidebar {
+    position: sticky;
+    inset-block-start: var(--ds-app-shell-header-height, 0px);
+    align-self: flex-start;
+    block-size: max(0px, calc(100dvh - var(--ds-app-shell-header-height, 0px)));
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    min-inline-size: 0;
   }
 }
 .ds-app-shell-main {
@@ -1615,6 +1653,69 @@
   flex-direction: row;
   flex-wrap: wrap;
   gap: var(--ds-space-md);
+}
+.ds-chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-sm);
+  min-inline-size: 0;
+}
+.ds-choice-chip {
+  min-block-size: var(--ds-touch);
+  max-inline-size: 100%;
+  padding: var(--ds-space-sm) var(--ds-space-md);
+  border: 1px solid var(--ds-input);
+  border-radius: var(--ds-radius-control-sm);
+  background: var(--ds-background);
+  color: var(--ds-foreground);
+  font: inherit;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.ds-choice-chip[data-state="checked"] {
+  background: var(--ds-selected);
+  color: var(--ds-selected-foreground);
+  border-color: var(--ds-primary);
+}
+.ds-choice-chip:not(:disabled):not([data-state="checked"]):hover {
+  background: var(--ds-accent);
+}
+.ds-choice-chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.ds-chip-group[aria-invalid="true"] .ds-choice-chip {
+  border-color: var(--ds-destructive);
+}
+.ds-stat {
+  margin: 0;
+  min-inline-size: 0;
+  padding: var(--ds-card-padding);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-surface);
+  background: var(--ds-card);
+  color: var(--ds-card-foreground);
+}
+.ds-stat dd {
+  margin: var(--ds-space-xs) 0 0;
+}
+.ds-stat-label,
+.ds-stat-hint {
+  color: var(--ds-muted-foreground);
+  font-size: var(--ds-text-sub);
+  line-height: var(--ds-leading-sub);
+}
+.ds-stat-value {
+  display: block;
+  font-size: var(--ds-text-title);
+  line-height: var(--ds-leading-title);
+  font-weight: var(--ds-weight-title);
+  letter-spacing: var(--ds-tracking-title);
+  overflow-wrap: anywhere;
+}
+.ds-stat-hint {
+  display: block;
+  margin-block-start: var(--ds-space-xs);
 }
 .ds-switch {
   min-inline-size: 3rem;

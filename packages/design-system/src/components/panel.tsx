@@ -5,9 +5,9 @@ import type { ReactNode } from "react";
 
 export type PanelProps = {
   title: string;
-  description?: string;
+  description?: string | undefined;
   children: ReactNode;
-  footer?: ReactNode;
+  footer?: ReactNode | undefined;
 };
 
 /** 화면 흐름 안에 놓는 독립 영역. 열림 상태나 focus trap을 만들지 않는다. */

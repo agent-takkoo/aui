@@ -82,9 +82,9 @@ export type ColorSteps = readonly [
 export type CustomColorScale = Readonly<{
   light: ColorSteps;
   dark: ColorSteps;
-  lightAlpha?: ColorSteps;
-  darkAlpha?: ColorSteps;
-  contrast?: "light" | "dark";
+  lightAlpha?: ColorSteps | undefined;
+  darkAlpha?: ColorSteps | undefined;
+  contrast?: "light" | "dark" | undefined;
 }>;
 export type ColorScale = ColorScaleName | CustomColorScale;
 export type NeutralScale = NeutralScaleName | CustomColorScale;
@@ -117,9 +117,9 @@ export type ThemeInput = {
   brand: ColorScale;
   neutral: NeutralScale;
   radius: ThemeRadius;
-  scaling?: ThemeScaling;
+  scaling?: ThemeScaling | undefined;
   fontFamily: string;
-  typography?: TypographyInput;
+  typography?: TypographyInput | undefined;
 };
 export type Theme = Readonly<{
   name: string;

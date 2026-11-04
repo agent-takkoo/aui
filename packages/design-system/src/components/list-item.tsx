@@ -11,8 +11,8 @@ export type ListItemProps = Omit<
 > & {
   title: string;
   description?: string | undefined;
-  leading?: ReactNode;
-  trailing?: ReactNode;
+  leading?: ReactNode | undefined;
+  trailing?: ReactNode | undefined;
   size?: "sm" | "lg" | undefined;
   chevron?: boolean | undefined;
 };

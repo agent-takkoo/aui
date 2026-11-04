@@ -9,16 +9,16 @@ import { useLinkComponent } from "../theme/provider.js";
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "destructive";
 export type ButtonSize = "sm" | "md" | "lg";
 type ButtonDesign = {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  fullWidth?: boolean;
+  variant?: ButtonVariant | undefined;
+  size?: ButtonSize | undefined;
+  fullWidth?: boolean | undefined;
 };
 export type ButtonProps = DesignProps<"button"> &
   ButtonDesign & {
     children: ReactNode;
-    loading?: boolean;
-    leadingIcon?: ReactElement;
-    trailingIcon?: ReactElement;
+    loading?: boolean | undefined;
+    leadingIcon?: ReactElement | undefined;
+    trailingIcon?: ReactElement | undefined;
   };
 
 const recipe = cva("ds-button", {
@@ -72,7 +72,7 @@ export function Button({
 export type IconButtonProps = Omit<
   ButtonProps,
   "children" | "fullWidth" | "size" | "leadingIcon" | "trailingIcon"
-> & { icon: ReactElement; label: string; size?: "md" | "lg" };
+> & { icon: ReactElement; label: string; size?: ButtonSize | undefined };
 
 export function IconButton({
   icon,
@@ -93,6 +93,7 @@ export function IconButton({
       disabled={disabled || loading}
       data-slot="icon-button"
       data-variant={variant}
+      data-size={size}
       className={`${recipe({ variant, size })} ds-icon-button`}
     >
       {loading ? <span className="ds-spinner" aria-hidden="true" /> : icon}
@@ -104,8 +105,8 @@ export type ButtonLinkProps = DesignProps<"a"> &
   ButtonDesign & {
     href: string;
     children: ReactNode;
-    leadingIcon?: ReactElement;
-    trailingIcon?: ReactElement;
+    leadingIcon?: ReactElement | undefined;
+    trailingIcon?: ReactElement | undefined;
   };
 
 export function ButtonLink({

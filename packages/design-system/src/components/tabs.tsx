@@ -5,15 +5,15 @@ export type TabItem = {
   value: string;
   label: string;
   content: ReactNode;
-  disabled?: boolean;
+  disabled?: boolean | undefined;
 };
 export type TabsProps = {
   label: string;
   items: readonly TabItem[];
-  value?: string;
-  defaultValue?: string;
-  onValueChange?: (value: string) => void;
-  activationMode?: "automatic" | "manual";
+  value?: string | undefined;
+  defaultValue?: string | undefined;
+  onValueChange?: ((value: string) => void) | undefined;
+  activationMode?: "automatic" | "manual" | undefined;
 };
 export function Tabs({ label, items, defaultValue, ...props }: TabsProps) {
   return (

@@ -4,6 +4,9 @@ import { Sparkles } from "lucide-react";
 import {
   PageHeader,
   ActionBar,
+  BottomBar,
+  ChipGroup,
+  Stat,
   AppShell,
   ThemeProvider,
   defineTheme,
@@ -85,7 +88,7 @@ export function ThemeExample() {
     fontFamily: defaultTheme.fontFamily,
   });
   return (
-    <ThemeProvider theme={theme} mode="system">
+    <ThemeProvider theme={theme} mode="system" applyToDocument>
       <Button>저장</Button>
     </ThemeProvider>
   );
@@ -102,6 +105,7 @@ export function ButtonsExample() {
         설정 페이지
       </ButtonLink>
       <IconButton icon={<Icon name="plus" />} label="항목 추가" />
+      <IconButton size="sm" icon={<Icon name="edit" />} label="정책 수정" />
     </Inline>
   );
 }
@@ -110,6 +114,43 @@ export function InputExample() {
     <Field label="이메일" required>
       <Input name="email" type="email" autoComplete="email" />
     </Field>
+  );
+}
+
+export function BottomBarExample() {
+  return (
+    <>
+      <Container>
+        <Text>페이지 본문</Text>
+      </Container>
+      <BottomBar label="변경 사항 저장" justify="stretch">
+        <Button>저장</Button>
+      </BottomBar>
+    </>
+  );
+}
+export function ChipGroupExample() {
+  return (
+    <Field label="표시 범위" required>
+      <ChipGroup
+        name="visibility"
+        defaultValue="all"
+        options={[
+          { value: "all", label: "전체" },
+          { value: "mine", label: "내 문서" },
+          { value: "shared", label: "공유 문서" },
+          { value: "recent", label: "최근 문서" },
+        ]}
+      />
+    </Field>
+  );
+}
+export function StatExample() {
+  return (
+    <Grid columns={2} collapseBelow="none">
+      <Stat label="등록한 문서" value="24" hint="이번 달 기준" />
+      <Stat label="함께하는 구성원" value="8명" />
+    </Grid>
   );
 }
 export function TextareaExample() {
@@ -462,6 +503,7 @@ export function IconExample() {
     <Inline>
       <Button leadingIcon={<Icon name="plus" />}>추가</Button>
       <Icon name="calendar" />
+      <Icon name="star-filled" />
       <Icon source={Sparkles} size="sm" />
     </Inline>
   );

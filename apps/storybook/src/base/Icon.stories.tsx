@@ -55,3 +55,15 @@ export const Catalog: Story = {
     </Stack>
   ),
 };
+
+export const Favorites: Story = {
+  name: "즐겨찾기 두 상태",
+  render: () => (
+    <Inline>
+      <Icon name="star" />
+      <Text>즐겨찾기 전</Text>
+      <Icon name="star-filled" />
+      <Text>즐겨찾기 완료</Text>
+    </Inline>
+  ),
+};

@@ -165,6 +165,7 @@ export const Dense: Story = {
           <Button size="sm">작은 버튼</Button>
           <Button>기본 버튼</Button>
           <IconButton label="추가" icon={<Icon name="plus" />} />
+          <IconButton size="sm" label="작은 수정" icon={<Icon name="edit" />} />
         </Inline>
         <Checkbox label="동의" />
         <Switch label="알림" />
@@ -222,4 +223,49 @@ export const Router: Story = {
       </ThemeProvider>
     </MemoryRouter>
   ),
+};
+
+function DocumentThemeDemo() {
+  const [enabled, setEnabled] = useState(false);
+  const [second, setSecond] = useState(false);
+  const [mode, setMode] = useState<"light" | "dark" | "system">("dark");
+  const [theme, setTheme] = useState(defaultTheme);
+  return (
+    <Stack>
+      <Inline>
+        <Button onClick={() => setEnabled(!enabled)}>
+          문서 배경 {enabled ? "해제" : "적용"}
+        </Button>
+        <Button onClick={() => setMode(mode === "dark" ? "light" : "dark")}>
+          문서 모드 전환
+        </Button>
+        <Button onClick={() => setMode("system")}>시스템 모드 적용</Button>
+        <Button
+          onClick={() =>
+            setTheme(theme === defaultTheme ? creamTheme : defaultTheme)
+          }
+        >
+          문서 theme 교체
+        </Button>
+        <Button onClick={() => setSecond(!second)}>
+          두 번째 배경 {second ? "해제" : "적용"}
+        </Button>
+      </Inline>
+      <ThemeProvider theme={theme} mode={mode} applyToDocument={enabled}>
+        <Text>문서 배경을 적용한 영역</Text>
+        <ThemeProvider theme={creamTheme} mode="light">
+          <Text>문서 배경에 영향을 주지 않는 중첩 영역</Text>
+        </ThemeProvider>
+      </ThemeProvider>
+      {second ? (
+        <ThemeProvider theme={creamTheme} mode="dark" applyToDocument>
+          <Text>두 번째 문서 배경 영역</Text>
+        </ThemeProvider>
+      ) : null}
+    </Stack>
+  );
+}
+export const Document: Story = {
+  name: "문서 배경 적용과 복구",
+  render: () => <DocumentThemeDemo />,
 };

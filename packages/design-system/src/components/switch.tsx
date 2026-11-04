@@ -7,7 +7,7 @@ import type { RestrictedProps } from "../internal/props.js";
 import { useFieldControl } from "./field.js";
 export type SwitchProps = RestrictedProps<
   Omit<ComponentPropsWithRef<typeof Primitive.Root>, "children">
-> & { label?: string };
+> & { label?: string | undefined };
 export function Switch({ label, ...props }: SwitchProps) {
   const autoId = useId();
   const field = useFieldControl({

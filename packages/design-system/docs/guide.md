@@ -31,7 +31,7 @@ export function App() {
 1. 틀: 앱 전체는 `AppShell`(header·sidebar·본문), 페이지 본문은 `Container`로 폭을 정하고 `Stack gap="section"`으로 영역을 나눈다.
 2. 제목: 페이지마다 `PageHeader` 하나. 제목은 h1이고 주요 행동은 `actions`에 Button 최대 두 개, primary는 하나다.
 3. 내용: 2열 이상은 `Grid`, 가로 나열은 `Inline`, 세로 쌓기는 `Stack`. 묶음은 `Card`, 이름 있는 영역은 `Panel`.
-4. 입력: 모든 입력은 `Field`로 감싸고 `name`을 적는다. 제출 버튼은 `type="submit"`, 하단 고정 저장 바는 `ActionBar`.
+4. 입력: 모든 입력은 `Field`로 감싸고 `name`을 적는다. 제출 버튼은 `type="submit"`, 폼 안의 sticky 바는 `ActionBar`, 화면 하단에 항상 보이는 바는 `BottomBar`를 본문 뒤에 둔다.
 5. 상태: 비어 있으면 `EmptyState`, 실패는 `ErrorState`, 기다림은 `LoadingState`·`Skeleton`, 결과 알림은 `useToast`, 확인은 `ConfirmDialog`.
 6. 마무리: `pnpm lint`로 `@heogeon0/aui/eslint` 규칙을 통과시킨다.
 
@@ -42,6 +42,7 @@ export function App() {
 | 동의·개별 항목을 폼 값으로 고르기        | `Checkbox`                         |
 | 설정을 바로 켜고 끄기                    | `Switch`                           |
 | 보이는 선택지 중 하나를 폼 값으로 고르기 | `RadioGroup`                       |
+| 줄바꿈되는 칩에서 폼 값 하나 고르기      | `ChipGroup`                        |
 | 목록을 열어 하나 고르기                  | `Select`                           |
 | 적은 수의 필터 조건 하나 고르기          | `SegmentedControl`                 |
 | 적용된 필터를 표시하고 해제하기          | `FilterChip`                       |
@@ -61,6 +62,7 @@ export function App() {
 | 상태 표시                                | `Badge` (tone으로 의미 구분)       |
 | 영역 안의 안내·경고                      | `Callout`                          |
 | 데이터 표                                | `Table` 계열                       |
+| 라벨·값·보조 설명을 타일로 표시하기      | `Stat`, 여러 열은 `Grid`           |
 | 현재 위치·페이지 이동                    | `Breadcrumb`, `Pagination`         |
 
 의미가 다르면 서로 대체하지 않는다. ToggleGroup을 RadioGroup 대신 쓰거나 Tooltip 안에 입력을 넣지 않는다.
@@ -79,3 +81,5 @@ export function App() {
 - 팝업·Toast는 ThemeProvider 안에서만 열리고, 서버 렌더링 첫 화면에서는 열린 상태로 그릴 수 없다.
 - 라우터 Link를 쓰려면 ThemeProvider에 linkComponent를 넘긴다. LinkComponent는 href를 받으므로 React Router처럼 to를 쓰는 Link에는 `({ href, ...props }) => <Link to={href} {...props} />` adapter를 넘긴다. ButtonLink·LinkRow·Sidebar·Breadcrumb가 그 컴포넌트를 쓴다.
 - 일반 DOM props는 대표 항목만 표시한다. 전체 허용 범위는 패키지의 `.d.ts`를 따른다.
+- 모바일 문서 배경도 theme에 맞추려면 루트 ThemeProvider에 applyToDocument를 켠다. 해제하면 원래 html·body 스타일로 돌아간다.
+- 공개 optional prop에는 undefined를 넘길 수 있다. 금지된 style·className 등에는 이 규칙을 적용하지 않는다.

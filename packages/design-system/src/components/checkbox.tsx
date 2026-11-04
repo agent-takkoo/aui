@@ -7,7 +7,7 @@ import type { RestrictedProps } from "../internal/props.js";
 import { useFieldControl } from "./field.js";
 export type CheckboxProps = RestrictedProps<
   Omit<ComponentPropsWithRef<typeof Primitive.Root>, "children">
-> & { label?: string };
+> & { label?: string | undefined };
 export function Checkbox({ label, ...props }: CheckboxProps) {
   const autoId = useId();
   const field = useFieldControl({

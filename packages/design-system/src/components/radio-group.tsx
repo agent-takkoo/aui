@@ -5,7 +5,11 @@ import { useId } from "react";
 import { domProps } from "../internal/props.js";
 import type { RestrictedProps } from "../internal/props.js";
 import { useFieldControl } from "./field.js";
-export type ChoiceOption = { value: string; label: string; disabled?: boolean };
+export type ChoiceOption = {
+  value: string;
+  label: string;
+  disabled?: boolean | undefined;
+};
 export type RadioGroupProps = RestrictedProps<
   Omit<ComponentPropsWithRef<typeof Primitive.Root>, "children">
 > & { options: readonly ChoiceOption[] };
