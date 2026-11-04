@@ -51,6 +51,7 @@ test("scaling 90%에서도 터치 영역은 44px 이상이다", async ({
     page.getByRole("button", { name: "작은 버튼" }),
     page.getByRole("button", { name: "기본 버튼" }),
     page.getByRole("button", { name: "추가" }),
+    page.getByRole("button", { name: "작은 수정" }),
     page.getByRole("checkbox", { name: "동의" }),
     page.getByRole("switch", { name: "알림" }),
     page.getByRole("textbox", { name: "이름" }),

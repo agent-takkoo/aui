@@ -4,12 +4,16 @@
 ## 패키지가 처리하는 것
 
 - 터치 환경의 작은 버튼과 필터는 최소 44px, 입력 글자는 최소 16px을 사용해요.
+- `IconButton size="sm"`도 터치 환경에서는 최소 44px을 유지해요. PC의 마우스 환경에서는 기존 작은 Button과 같은 36px을 사용해요.
+- 화면 하단의 실행은 `BottomBar`, 줄바꿈되는 단일 선택은 `ChipGroup`, 수치 표시는 `Stat`과 `Grid`로 만들어요. BottomBar는 safe area와 실제 높이만큼 본문 아래 여백을 확보해요.
 - Drawer는 좁은 화면에서 아래에, 1024px 이상에서 오른쪽에 열려요. 입력은 theme의 input 역할을 사용하며 최소 16px을 유지해요.
 - 팝업은 `visualViewport`의 크기와 offset을 구독해 실제 보이는 범위 안에 놓아요. 안전 영역은 CSS `env(safe-area-inset-*)`로 처리해요.
 - 본문 스크롤과 고정 footer를 나누고 화면 키보드가 차지한 영역만큼 footer의 안전 영역 여백을 보정해요.
 - 키보드 포커스, Escape, 팝업을 닫은 뒤의 포커스 복귀와 `prefers-reduced-motion`을 지원해요.
 
 소비 앱의 viewport에는 `width=device-width, initial-scale=1, viewport-fit=cover`를 설정해요. 확대를 막는 `maximum-scale=1`은 사용하지 않아요.
+
+다크 모드에서 overscroll이나 키보드 전환 중 문서 배경이 드러나면 페이지 루트에 `<ThemeProvider mode="system" applyToDocument>`를 사용해요. html·body의 배경과 `color-scheme`이 theme을 따르고 해제하면 기존 inline style로 돌아가요. WebView 자체의 바깥 배경과 native 키보드 동작은 소비 앱에서 확인해요.
 
 ## 테스트 범위
 

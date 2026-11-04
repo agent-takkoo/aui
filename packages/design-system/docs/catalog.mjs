@@ -26,6 +26,7 @@ export const catalog = [
       "Theme 입력은 name·brand·neutral·radius·scaling·fontFamily·typography(선택)다. brand는 스케일 이름(blue·indigo·ruby 등) 또는 { light, dark } 12단계 배열이고 neutral은 gray·mauve·slate·sage·olive·sand다.",
       "radius는 none·small·medium·large·full, scaling은 90%·95%·100%·105%·110%다. 터치 영역은 어느 scaling에서도 44px 이상이다. 색 하나하나를 적지 않는다. 컴포넌트가 brand·neutral·danger·success·warning·info 스케일의 단계를 역할에 맞게 쓴다.",
       "채운 배경(primary 버튼·solid 배지)은 글자와 4.5:1을 만족하는 단계를 자동으로 고른다. 중첩 ThemeProvider와 Portal은 가까운 Theme 범위를 따르고 Theme 이름은 서로 달라야 한다.",
+      "applyToDocument는 기본 false다. 페이지 루트에서 켜면 html·body의 배경과 color-scheme에 현재 theme·mode를 적용하고 해제·언마운트 때 원래 스타일로 돌아간다. 시스템 모드와 theme 교체도 반영한다.",
     ],
   },
   {
@@ -34,12 +35,12 @@ export const catalog = [
       IconButton: "아이콘만 표시하는 행동에 접근 가능한 이름을 제공한다.",
       ButtonLink: "버튼 외형을 가진 실제 링크로 이동한다.",
     },
-    stories: ["Base/Button"],
+    stories: ["Base/Button", "Base/IconButton"],
     example: "ButtonsExample",
     rules: [
       "variant는 primary·secondary·ghost·destructive 네 가지다. 화면의 주요 행동 하나만 primary, 나머지 보조 행동은 secondary, 낮은 강조는 ghost, 삭제·되돌릴 수 없는 행동은 destructive다.",
       'Button은 type="button"이 기본이다. loading은 라벨을 유지하면서 중복 실행을 막는다. 아이콘은 leadingIcon·trailingIcon에 Icon을 넣는다.',
-      "IconButton은 icon과 label이 필수이고 size는 md·lg만 받는다. ButtonLink는 href가 필수이며 disabled·loading은 제공하지 않는다. ThemeProvider의 linkComponent가 있으면 그 Link로 렌더링한다.",
+      "IconButton은 icon과 label이 필수이고 size는 sm·md·lg다. 기본 md는 44px, lg는 48px이며 sm은 PC에서 36px·터치에서 최소 44px이다. 치수에는 theme scaling을 적용한다. ButtonLink는 href가 필수이며 disabled·loading은 제공하지 않는다. ThemeProvider의 linkComponent가 있으면 그 Link로 렌더링한다.",
     ],
   },
   {
@@ -140,6 +141,36 @@ export const catalog = [
     rules: [
       "sidebar는 1024px 이상에서만 보인다. 좁은 화면의 메뉴는 header의 IconButton으로 Drawer를 열어 같은 Sidebar를 넣는다.",
       "children이 main 영역이고 안에 Container로 폭을 정한다. sidebarWidth는 md(16rem)·sm(13rem)이다. 라우팅과 현재 위치는 소비 코드가 맡는다.",
+      "sidebarSticky는 기본 true다. 사이드바는 실제 헤더 높이 아래에 남고 긴 메뉴는 안에서 스크롤한다. 헤더가 없으면 화면 위에 붙는다. false로 주면 본문과 함께 스크롤한다.",
+    ],
+  },
+  {
+    components: {
+      BottomBar: "화면 하단에 실행 바를 고정하고 본문 끝 여백을 확보한다.",
+    },
+    stories: ["Layout/BottomBar"],
+    example: "BottomBarExample",
+    rules: [
+      "페이지 본문 뒤에 한 번 둔다. 내용이 줄바꿈되면 실제 높이를 다시 측정해 여백을 바꾼다. safe area와 위쪽 그라데이션을 포함한다.",
+      "justify·label은 ActionBar와 같다. 페이지 전체의 고정 바는 BottomBar, 폼 영역 안의 sticky 바는 ActionBar를 사용한다.",
+    ],
+  },
+  {
+    components: { ChipGroup: "줄바꿈되는 칩에서 폼 값 하나를 고른다." },
+    stories: ["Component/ChipGroup"],
+    example: "ChipGroupExample",
+    rules: [
+      "RadioGroup과 같은 options·value·defaultValue·onValueChange·name·required·disabled를 제공한다. Field로 이름·설명·오류를 연결한다.",
+      "options의 value는 비어 있지 않은 고유 문자열이다. ToggleGroup의 눌림 상태와 달리 radio 의미를 사용한다. 값이 제어되는 폼의 reset은 소비 코드에서 처리한다.",
+    ],
+  },
+  {
+    components: { Stat: "라벨·큰 값·보조 설명을 작은 표면에 표시한다." },
+    stories: ["Component/Stat"],
+    example: "StatExample",
+    rules: [
+      'label·value는 필수이고 hint는 선택이다. 여러 타일은 Grid로 배치한다. 작은 화면에서도 두 열을 유지하려면 collapseBelow="none"을 지정한다.',
+      "금액·거리 등 계산이나 서비스 상태는 소비 코드에서 정한다. 상호작용이 있는 카드로 사용하지 않는다.",
     ],
   },
   {
@@ -319,6 +350,7 @@ export const catalog = [
     example: "IconExample",
     rules: [
       "name은 iconNames 중 하나다. 목록에 없는 아이콘은 lucide-react에서 import해 source에 넘긴다. SVG를 직접 그리지 않는다.",
+      "즐겨찾기는 star·star-filled로 구분한다. 위치는 map-pin, 경고는 alert-triangle, 펼침과 이동은 chevron-down·chevron-right를 사용한다.",
       "Icon 자체는 aria-hidden이다. 아이콘만 있는 버튼은 IconButton의 label로 의미를 전달한다. size는 md(20px)·sm(16px)이고 색은 currentColor를 따른다.",
     ],
   },

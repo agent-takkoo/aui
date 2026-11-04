@@ -30,6 +30,11 @@ import {
   TableCell,
   ScrollArea,
   AspectRatio,
+  AppShell,
+  BottomBar,
+  ChipGroup,
+  Stat,
+  Field,
 } from "../src/index.js";
 import type { LinkProps } from "../src/index.js";
 import type React from "react";
@@ -52,7 +57,7 @@ export const valid = (
         autoComplete="off"
         onChange={(event) => event.currentTarget.select()}
       />
-      <IconButton label="추가" icon={<Icon name="plus" />} />
+      <IconButton label="추가" size="sm" icon={<Icon name="plus" />} />
       <ListItem
         ref={createRef<HTMLButtonElement>()}
         title="알림 설정"
@@ -72,6 +77,54 @@ export const valid = (
       </Drawer>
     </Stack>
   </ThemeProvider>
+);
+
+export const optionalUndefined = (
+  <ThemeProvider
+    theme={undefined}
+    mode={undefined}
+    applyToDocument={undefined}
+    linkComponent={undefined}
+  >
+    <AppShell sidebarWidth={undefined} sidebarSticky={undefined}>
+      <Drawer
+        title="선택"
+        description={undefined}
+        open={undefined}
+        onOpenChange={undefined}
+        size={undefined}
+      >
+        <Field
+          label="범위"
+          description={undefined}
+          error={undefined}
+          required={undefined}
+        >
+          <ChipGroup
+            name={undefined}
+            defaultValue={undefined}
+            onValueChange={undefined}
+            options={[{ value: "all", label: "전체", disabled: undefined }]}
+          />
+        </Field>
+      </Drawer>
+      <Stat label="문서" value="24" hint={undefined} />
+      <BottomBar justify={undefined} label={undefined}>
+        <Button size={undefined} loading={undefined} leadingIcon={undefined}>
+          저장
+        </Button>
+      </BottomBar>
+    </AppShell>
+  </ThemeProvider>
+);
+
+// @ts-expect-error 스타일 속성은 undefined를 전달하는 것도 허용하지 않는다.
+export const invalidUndefinedStyle = <Button style={undefined}>저장</Button>;
+// @ts-expect-error ChipGroup에서도 직접 스타일을 지정하지 않는다.
+export const invalidChipStyle = <ChipGroup options={[]} className="custom" />;
+export const invalidSmallIcon = (
+  // @ts-expect-error 작은 아이콘 버튼도 label이 필요하다.
+  <IconButton size="sm" icon={<Icon name="edit" />} />
 );
 
 // @ts-expect-error 화면에서 컴포넌트의 스타일을 덮어쓸 수 없다.
@@ -119,7 +172,7 @@ export const invalidRadius = defineTheme({
 type ToLinkProps = {
   to: string;
   children?: React.ReactNode;
-  className?: string;
+  className?: string | undefined;
 };
 declare function ToLink(props: ToLinkProps): React.ReactElement;
 export const routerAdapter = (

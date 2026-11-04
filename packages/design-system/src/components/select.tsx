@@ -23,16 +23,16 @@ export type SelectProps = RestrictedProps<
     "children" | "defaultValue" | "value" | "onChange"
   >
 > & {
-  inputSize?: "sm" | "md";
-  selectionTitle?: string;
+  inputSize?: "sm" | "md" | undefined;
+  selectionTitle?: string | undefined;
   options: readonly ChoiceOption[];
-  placeholder?: string;
-  value?: string;
-  defaultValue?: string;
-  onValueChange?: (value: string) => void;
-  name?: string;
-  required?: boolean;
-  autoComplete?: string;
+  placeholder?: string | undefined;
+  value?: string | undefined;
+  defaultValue?: string | undefined;
+  onValueChange?: ((value: string) => void) | undefined;
+  name?: string | undefined;
+  required?: boolean | undefined;
+  autoComplete?: string | undefined;
 };
 export function Select({
   inputSize = "md",

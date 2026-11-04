@@ -29,7 +29,9 @@ const projectTheme = defineTheme({
 
 theme은 색 하나하나가 아니라 `brand`·`neutral` 스케일 이름, `radius` 단계, `scaling` 밀도, `fontFamily`로 정해요. `brand`는 Radix 색 이름(`indigo`, `teal`, `ruby` 등) 또는 `{ light, dark }` 12단계 배열이고 `neutral`은 `gray`, `mauve`, `slate`, `sage`, `olive`, `sand`예요. 컴포넌트는 brand·neutral·danger·success·warning·info 스케일의 단계를 역할에 맞게 쓰므로 브랜드가 바뀌어도 위계가 같아요. 채운 배경의 글자는 4.5:1을 만족하는 단계를 자동으로 골라요.
 
-`mode`는 `light`, `dark`, `system`이에요. `linkComponent`를 넘기면 `ButtonLink`·`LinkRow`·`Sidebar`·`Breadcrumb`가 그 컴포넌트로 렌더링돼요. `LinkComponent`는 `href`를 받으므로 React Router처럼 `to`를 쓰는 Link에는 위 `RouterLink` 같은 adapter를 넘겨요. 같은 name으로 설정만 바꾼 theme 객체를 다시 넘겨도 stylesheet가 새로 등록돼요. 중첩 provider와 Portal도 가까운 theme을 사용하고 theme 이름은 서로 달라야 해요. `ThemeProvider`는 문서 전체의 class나 색을 바꾸지 않아요.
+`mode`는 `light`, `dark`, `system`이에요. `linkComponent`를 넘기면 `ButtonLink`·`LinkRow`·`Sidebar`·`Breadcrumb`가 그 컴포넌트로 렌더링돼요. `LinkComponent`는 `href`를 받으므로 React Router처럼 `to`를 쓰는 Link에는 위 `RouterLink` 같은 adapter를 넘겨요. 같은 name으로 설정만 바꾼 theme 객체를 다시 넘겨도 stylesheet가 새로 등록돼요. 중첩 provider와 Portal도 가까운 theme을 사용하고 theme 이름은 서로 달라야 해요.
+
+기본적으로 문서 전체의 색은 바꾸지 않아요. 페이지 루트의 `ThemeProvider`에 `applyToDocument`를 켜면 html·body의 배경과 `color-scheme`을 현재 theme·mode에 맞춰요. 시스템 모드 변경과 theme 교체도 반영하고, 옵션 해제·언마운트 때 이전 inline style을 복구해요. 여러 provider가 명시적으로 켜면 마지막으로 적용한 provider를 따르고, 마지막 provider까지 해제하면 원래 스타일로 돌아가요. 일반적인 중첩 provider에는 켜지 않아요.
 
 theme을 생략하면 `defaultTheme`(indigo·slate·medium)을 사용해요. Storybook의 `Global/Theme` 문서에서 필드, 스케일 단계, 역할 변수의 실제 값을 확인할 수 있어요.
 
@@ -37,8 +39,9 @@ theme을 생략하면 `defaultTheme`(indigo·slate·medium)을 사용해요. Sto
 
 - `Button`의 variant는 `primary`, `secondary`, `ghost`, `destructive` 네 가지예요. 화면의 주요 행동 하나만 primary이고 보조 행동은 secondary, 낮은 강조는 ghost예요. size는 `sm`, `md`, `lg`이고 기본은 `primary`·`md`예요.
 - `Button`은 기본 `type="button"`이에요. form 제출에는 `type="submit"`을 적어요. `loading`이면 라벨을 유지하고 실행을 막아요. `fullWidth`로 전체 폭을 선택하고 아이콘은 `leadingIcon`·`trailingIcon`에 `Icon`을 넣어요.
-- `IconButton`은 `icon`과 `label`이 필수예요. `ButtonLink`와 `LinkRow`는 `href`가 필수예요. `ThemeProvider`의 `linkComponent`가 있으면 그 Link로 렌더링돼요.
+- `IconButton`은 `icon`과 `label`이 필수예요. `size`는 `sm`·`md`·`lg`이고 기본은 `md`예요. 기본 scaling에서 sm은 PC 36px·터치 44px, md는 44px, lg는 48px인 정사각형이에요. sm의 아이콘과 radius는 작은 컨트롤에 맞춰요. `ButtonLink`와 `LinkRow`는 `href`가 필수예요. `ThemeProvider`의 `linkComponent`가 있으면 그 Link로 렌더링돼요.
 - `Icon`은 `name`을 `iconNames` 목록에서 고르고, 목록에 없는 아이콘은 `lucide-react`에서 import해 `source`로 넘겨요. SVG를 직접 그리지 않아요.
+- 즐겨찾기는 `star`·`star-filled`로 구분해요. 위치는 `map-pin`, 경고는 `alert-triangle`, 펼침과 이동은 `chevron-down`·`chevron-right`를 사용해요.
 - `Input`의 `inputSize`는 `md` 56px와 `sm` 44px예요. `Textarea`는 네 줄이 기본이에요. `name`, `type`, `inputMode`, `autoComplete`, ref, 기본 이벤트와 ARIA 속성을 유지해요.
 
 ```tsx
@@ -64,6 +67,23 @@ theme을 생략하면 `defaultTheme`(indigo·slate·medium)을 사용해요. Sto
 ```
 
 `RadioGroup`과 `Select`의 `options`는 `{ value, label, disabled? }` 배열이에요. `value`·`defaultValue`·`onValueChange`로 선택을 다뤄요. option의 value는 중복되지 않는 비어 있지 않은 문자열로 정해요. Select는 선택 전 문구를 `placeholder`로 받아요. `inputSize`는 Input과 같은 `md`(기본 56px)·`sm`(44px)이고 긴 선택지는 줄바꿈해 높이가 늘어나요. Field의 오류는 설명과 컨트롤 경계에 함께 표시해요.
+
+`ChipGroup`은 RadioGroup과 같은 props로 칩 모양의 단일 선택을 제공해요. 선택지가 많으면 다음 줄로 내려가고 방향키·필수값·disabled·폼 제출·reset을 지원해요. `Field`로 이름·설명·오류를 연결해요. 눌림 상태를 나타내는 ToggleGroup과 달리 폼의 radio 의미를 사용해요.
+
+```tsx
+<Field label="표시 범위" required>
+  <ChipGroup
+    name="visibility"
+    defaultValue="all"
+    options={[
+      { value: "all", label: "전체" },
+      { value: "mine", label: "내 문서" },
+      { value: "shared", label: "공유 문서" },
+      { value: "recent", label: "최근 문서" },
+    ]}
+  />
+</Field>
+```
 
 Select는 768px 미만에서 하단 Drawer로 열리고, 넓은 화면에서는 드롭다운으로 열려요. 모바일에서 항목을 고르면 바로 값을 반영하고 닫으며 트리거로 포커스가 돌아와요. 닫기·Escape는 값을 바꾸지 않아요. Drawer 제목은 `Field`의 label, `aria-label`, “항목 선택” 순서로 정하고 `selectionTitle`로 지정할 수도 있어요. 화면 크기가 바뀌면 열린 목록을 닫고 선택한 값은 유지해요. 두 표시 방식 모두 form 제출·reset·required·disabled를 지원해요.
 
@@ -107,6 +127,9 @@ Select는 768px 미만에서 하단 Drawer로 열리고, 넓은 화면에서는 
 - `Text`의 default는 부모 표면의 글자색을 물려받아요. Card에서는 cardForeground, Popover에서는 popoverForeground, primary 버튼 안에서는 primaryForeground를 유지해요.
 - `Stack`과 `Inline`의 gap은 `none`, `xs`, `sm`, `md`, `section`이에요. `Stack`의 align은 `stretch`, `start`, `center`, `end`이고 `Inline`의 justify는 `start`, `center`, `between`, `end`예요. `Inline`은 기본으로 줄바꿈해요. `Container`는 `form`, `content`, `wide` 폭을 제공해요.
 - `PageHeader`는 화면마다 하나만 두는 제목 영역이에요. `title`은 h1이고 `description`, `breadcrumb`, `actions`를 받아요. `ActionBar`는 하단에 고정되는 저장·취소 바이고 `justify`는 `end`, `start`, `between`, `stretch`예요. `AppShell`은 `header`, `sidebar`, 본문 틀이고 사이드바는 1024px 이상에서만 보여요.
+- `AppShell`의 `sidebarSticky`는 기본 `true`예요. 사이드바는 실제 헤더 높이 아래에 남고 메뉴가 길면 사이드바 안에서 스크롤해요. 헤더가 없으면 화면 맨 위에 붙어요. 본문과 함께 스크롤하려면 `false`로 지정해요.
+- `BottomBar`는 화면 하단에 항상 보이는 실행 바예요. 페이지 본문 뒤에 한 번 두면 실제 높이만큼 본문 끝 여백을 확보해요. 버튼이 줄바꿈되거나 내용이 바뀌면 여백도 갱신하고 safe area와 위쪽 그라데이션을 제공해요. `children`, `label`, `justify`는 ActionBar와 같아요. 폼 영역 안에서만 sticky로 붙일 때는 ActionBar를 사용해요.
+- `Stat`은 `label`·`value`와 선택적인 `hint`를 표시하는 정적인 타일이에요. 계산과 서비스 상태는 소비 코드에서 정해요. 여러 타일은 `Grid columns={2}`로 배치하고 모바일에서도 두 열을 유지하려면 `collapseBelow="none"`을 지정해요.
 - `Grid`는 같은 폭의 열로 나눠요. `columns`는 `1`, `2`, `3`, `4`, `auto`이고 기본 2예요. `collapseBelow`는 `none`, `sm`, `md`, `lg`이며 기본 `md`라 768px 미만에서 한 열로 쌓여요. 열 폭이 서로 다른 배치에는 쓰지 않아요.
 - `Card`는 `plain`과 `muted`를 제공해요. plain은 1px 경계로 배경과 구분되고 muted는 연한 면이에요. Header·Title·Description·Content·Footer를 조합하고 `CardTitle`의 `level`은 2·3·4예요. 정적인 카드에 클릭 동작을 추가하지 않아요.
 - `Badge`의 tone은 `neutral`(기본), `brand`, `success`, `warning`, `danger`, `info`이고 variant는 `soft`(기본), `solid`, `outline`, size는 `sm`, `md`, `lg`예요. 완료는 success, 진행 중·주의는 warning, 실패는 danger로 표시해요. 클릭하는 컨트롤이 아니에요. `Avatar`는 `name`, `size`, `avatarUrl`을 받고 배경색은 이름으로 정해져요. `toneIndex`를 주면 그 값으로 골라요.
@@ -233,6 +256,8 @@ function SaveNotice() {
 duration은 provider에서 정해요. 알림의 개수와 표시는 각 provider가 관리하므로 서로 다른 화면의 상태와 Theme가 섞이지 않아요. 실제 저장 요청과 오류 판단은 소비 코드가 맡아요.
 
 ## 소비 코드 검사
+
+공개 optional prop에는 `undefined`를 명시적으로 전달할 수 있어요. `exactOptionalPropertyTypes: true`에서도 `description={condition ? undefined : "설명"}`처럼 작성할 수 있어요. 금지된 `className`·`style`·`color` 등은 계속 허용하지 않아요.
 
 ```js
 import designSystem from "@heogeon0/aui/eslint";

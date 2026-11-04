@@ -4,6 +4,7 @@ import {
   createContext,
   useContext,
   useMemo,
+  useRef,
   useState,
   useSyncExternalStore,
 } from "react";
@@ -11,18 +12,20 @@ import type { AnchorHTMLAttributes, ComponentType, ReactNode } from "react";
 import { defaultTheme } from "./presets.js";
 import { themeKey, themeStylesheet } from "./tokens.js";
 import type { ColorMode, Theme } from "./tokens.js";
+import { useDocumentTheme } from "../internal/document-theme.js";
 
 export type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string;
-  children?: ReactNode;
+  children?: ReactNode | undefined;
 };
 export type LinkComponent = ComponentType<LinkProps>;
 
 export type ThemeProviderProps = {
   children: ReactNode;
-  theme?: Theme;
-  mode?: ColorMode | "system";
-  linkComponent?: LinkComponent;
+  theme?: Theme | undefined;
+  mode?: ColorMode | "system" | undefined;
+  linkComponent?: LinkComponent | undefined;
+  applyToDocument?: boolean | undefined;
 };
 
 type ThemeContextValue = {
@@ -45,6 +48,7 @@ export function ThemeProvider({
   theme = defaultTheme,
   mode = "light",
   linkComponent,
+  applyToDocument = false,
 }: ThemeProviderProps) {
   const systemMode = useSyncExternalStore(
     subscribeScheme,
@@ -56,6 +60,8 @@ export function ThemeProvider({
   const [portalHost, setPortalHost] = useState<HTMLDivElement | null>(null);
   const stylesheet = useMemo(() => themeStylesheet(theme), [theme]);
   const key = useMemo(() => themeKey(theme), [theme]);
+  const rootRef = useRef<HTMLDivElement>(null);
+  useDocumentTheme(rootRef, applyToDocument, resolvedMode, key);
   const value = useMemo(
     () => ({
       portalHost,
@@ -70,6 +76,7 @@ export function ThemeProvider({
         {stylesheet}
       </style>
       <div
+        ref={rootRef}
         className="ds-root"
         data-ds-theme={theme.name}
         data-ds-theme-key={key}

@@ -16,10 +16,10 @@ export type SliderProps = RestrictedProps<
     | "minStepsBetweenThumbs"
   >
 > & {
-  value?: number;
-  defaultValue?: number;
-  onValueChange?: (value: number) => void;
-  onValueCommit?: (value: number) => void;
+  value?: number | undefined;
+  defaultValue?: number | undefined;
+  onValueChange?: ((value: number) => void) | undefined;
+  onValueCommit?: ((value: number) => void) | undefined;
 };
 export function Slider({
   value,

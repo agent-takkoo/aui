@@ -4,6 +4,8 @@ AUI의 디자인 검수에는 Vercel의 구현 기준, Interface Design의 일�
 
 이를 적용한 기준은 [AUI 디자인 원칙](design-principles.md), 실제 변경과 검증 범위는 [개선 기록](design-review-2026-10-28.md)에 정리했다.
 
+2026-11-04에는 [모바일 화면 구성 요청 #3](https://github.com/agent-takkoo/aui/issues/3), [긴 문서의 사이드바 문제 #13](https://github.com/agent-takkoo/aui/issues/13), [작은 IconButton 요청 #14](https://github.com/agent-takkoo/aui/issues/14)를 소비 사례로 확인했다. 새 팔레트나 간격 체계를 가져오지 않고 기존 Theme의 컨트롤·radius·typography를 사용했다. ChipGroup의 상호작용은 기존 RadioGroup과 같은 Radix primitive를 따른다. 적용 조건과 확인한 화면은 [이슈 수정 검수 기록](design-review-2026-11-04.md)에 남겼다.
+
 ## 참고할 공개 스킬
 
 | 스킬과 원문                                                                                                                                                                                                                  | 주로 다루는 것                                                                                                                        | AUI에서 참고할 부분                                                                                                                               |

@@ -2,8 +2,8 @@
 import * as Primitive from "@radix-ui/react-progress";
 export type ProgressProps = {
   label: string;
-  value?: number | null;
-  max?: number;
+  value?: number | null | undefined;
+  max?: number | undefined;
 };
 export function Progress({ label, value = null, max = 100 }: ProgressProps) {
   const limit = Number.isFinite(max) && max > 0 ? max : 100;

@@ -3,10 +3,10 @@
 import type { ReactNode } from "react";
 import { Button } from "./button.js";
 import { useLinkComponent } from "../theme/provider.js";
-export type BreadcrumbItem = { label: string; href?: string };
+export type BreadcrumbItem = { label: string; href?: string | undefined };
 export type BreadcrumbProps = {
   items: readonly BreadcrumbItem[];
-  label?: string;
+  label?: string | undefined;
 };
 export function Breadcrumb({ items, label = "현재 위치" }: BreadcrumbProps) {
   const Link = useLinkComponent() ?? "a";
@@ -37,8 +37,8 @@ export type PaginationProps = {
   page: number;
   pageCount: number;
   onPageChange: (page: number) => void;
-  label?: string;
-  disabled?: boolean;
+  label?: string | undefined;
+  disabled?: boolean | undefined;
 };
 export function Pagination({
   page,

@@ -20,6 +20,10 @@ AUI의 공개 컴포넌트는 패키지 안의 Radix primitive를 감싸요. 소
 
 기존 Button·Input·Card·Dialog·Drawer 등과 함께 사용해요. `SegmentedControl`은 조건을 고르는 단일 선택이고, `Tabs`는 연결된 콘텐츠 패널을 전환해요. `Tooltip`의 설명은 필수 안내를 대신하지 않으며, 사용자 동작이 필요한 내용에는 Popover나 Dialog를 사용해요.
 
+모바일 화면의 반복 사례(#3)는 `ChipGroup`·`BottomBar`·`Stat`으로 제공해요. ChipGroup은 기존 RadioGroup과 같은 Radix radio primitive·Field 연결을 사용하고 칩 배치만 달리해요. BottomBar는 ActionBar의 버튼 배치와 safe area를 재사용하며, 실제 높이를 측정해 본문 끝 여백을 확보해요. Stat의 여러 열 배치는 기존 Grid로 처리하므로 별도 StatGrid를 추가하지 않아요.
+
+긴 PC 문서(#13)에서는 AppShell 사이드바가 실제 헤더 높이 아래에 남고 메뉴 안에서 스크롤해요. `sidebarSticky=false`로 기존 문서 스크롤 방식을 선택할 수 있어요. 편집기용 작은 IconButton(#14)은 기존 `--ds-control-sm`·작은 radius·아이콘 치수를 사용하고 터치 44px 하한을 유지해요.
+
 ## 비슷한 컴포넌트를 고를 때
 
 | 필요한 동작                              | 사용하는 컴포넌트                                                   |

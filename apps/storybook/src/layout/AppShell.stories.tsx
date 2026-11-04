@@ -18,6 +18,8 @@ import {
   Text,
 } from "@heogeon0/aui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { AppShellProps } from "@heogeon0/aui";
+import { useState } from "react";
 
 const items = [
   { id: "overview", label: "개요", href: "#overview" },
@@ -29,9 +31,10 @@ const meta = {
   id: "layout-app-shell",
   title: "Layout/AppShell",
   component: AppShell,
-  args: { children: null, sidebarWidth: "md" },
+  args: { children: null, sidebarWidth: "md", sidebarSticky: true },
   argTypes: {
     sidebarWidth: { control: "inline-radio", options: ["sm", "md"] },
+    sidebarSticky: { control: "boolean" },
   },
   parameters: {
     docs: {
@@ -103,4 +106,65 @@ export const Default: Story = {
       </Container>
     </AppShell>
   ),
+};
+
+function DocumentDemo({
+  withHeader = true,
+  ...args
+}: AppShellProps & { withHeader?: boolean }) {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <AppShell
+      {...args}
+      header={
+        withHeader ? (
+          <Stack gap="sm">
+            <Inline justify="between">
+              <Heading level={1}>문서 편집기</Heading>
+              <Button size="sm" onClick={() => setExpanded(!expanded)}>
+                도움말 {expanded ? "접기" : "펼치기"}
+              </Button>
+            </Inline>
+            {expanded ? (
+              <Text>
+                문서 내용을 편집하면서 왼쪽 메뉴로 다른 보기로 이동할 수 있어요.
+                메뉴가 길면 메뉴 안에서 스크롤해 주세요.
+              </Text>
+            ) : null}
+          </Stack>
+        ) : undefined
+      }
+      sidebar={
+        <Sidebar
+          label="문서 보기"
+          items={Array.from({ length: 40 }, (_, index) => ({
+            id: String(index),
+            label: `문서 ${index + 1}`,
+            href: `#document-${index + 1}`,
+          }))}
+        />
+      }
+    >
+      <Stack>
+        {Array.from({ length: 100 }, (_, index) => (
+          <Text key={index} id={`document-${index + 1}`}>
+            문서 본문 {index + 1}
+          </Text>
+        ))}
+      </Stack>
+    </AppShell>
+  );
+}
+export const LongDocument: Story = {
+  name: "긴 문서와 사이드바",
+  render: (args) => <DocumentDemo {...args} />,
+};
+export const WithoutHeader: Story = {
+  name: "헤더 없는 화면",
+  render: (args) => <DocumentDemo {...args} withHeader={false} />,
+};
+export const ScrollingSidebar: Story = {
+  name: "본문과 함께 스크롤",
+  args: { sidebarSticky: false },
+  render: (args) => <DocumentDemo {...args} />,
 };

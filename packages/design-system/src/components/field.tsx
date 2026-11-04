@@ -8,21 +8,22 @@ import type { DesignProps } from "../internal/props.js";
 type FieldContextValue = {
   id: string;
   label: string;
-  describedBy?: string;
+  describedBy?: string | undefined;
   invalid: boolean;
-  required?: boolean;
+  required?: boolean | undefined;
 };
 const FieldContext = createContext<FieldContextValue | null>(null);
 export function useFieldLabel() {
   return useContext(FieldContext)?.label;
 }
 export function useFieldControl(props: {
-  id?: string;
-  required?: boolean;
-  "aria-describedby"?: string;
-  "aria-labelledby"?: string;
-  "aria-label"?: string;
-  "aria-invalid"?: boolean | "true" | "false" | "grammar" | "spelling";
+  id?: string | undefined;
+  required?: boolean | undefined;
+  "aria-describedby"?: string | undefined;
+  "aria-labelledby"?: string | undefined;
+  "aria-label"?: string | undefined;
+  "aria-invalid"?:
+    boolean | "true" | "false" | "grammar" | "spelling" | undefined;
 }) {
   const field = useContext(FieldContext);
   return {
@@ -40,11 +41,11 @@ export function useFieldControl(props: {
   };
 }
 export type FieldProps = {
-  id?: string;
+  id?: string | undefined;
   label: string;
-  description?: string;
-  error?: string;
-  required?: boolean;
+  description?: string | undefined;
+  error?: string | undefined;
+  required?: boolean | undefined;
   children: ReactNode;
 };
 
@@ -98,7 +99,9 @@ export function Field({
   );
 }
 
-export type InputProps = DesignProps<"input"> & { inputSize?: "sm" | "md" };
+export type InputProps = DesignProps<"input"> & {
+  inputSize?: "sm" | "md" | undefined;
+};
 
 export function Input({
   inputSize = "md",

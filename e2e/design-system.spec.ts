@@ -375,11 +375,12 @@ test("폼의 라벨·검증·포커스·저장과 중복 실행 방지", async (
 test("세그먼트는 방향키로 선택하고 필터는 즉시 해제한다", async ({ page }) => {
   await openStory(page, "components-selection--default");
   await page.getByRole("radio", { name: "전체", exact: true }).focus();
-  await page.keyboard.press("ArrowRight", { delay: 60 });
+  await page.keyboard.down("ArrowRight");
   await expect(
     page.getByRole("radio", { name: "진행 중", exact: true }),
   ).toBeChecked();
   await expect(page.getByRole("status")).toHaveText("선택: 진행 중");
+  await page.keyboard.up("ArrowRight");
   await page.getByRole("button", { name: "내 항목 조건 해제" }).click();
   await expect(
     page.getByRole("button", { name: "내 항목 조건 해제" }),

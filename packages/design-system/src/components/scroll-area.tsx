@@ -4,7 +4,7 @@ import type { DesignProps } from "../internal/props.js";
 import { domProps } from "../internal/props.js";
 export type ScrollAreaProps = DesignProps<"div"> & {
   label: string;
-  height?: "sm" | "md" | "lg";
+  height?: "sm" | "md" | "lg" | undefined;
 };
 export function ScrollArea({
   label,

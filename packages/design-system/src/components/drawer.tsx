@@ -2,9 +2,9 @@ import type { ReactNode } from "react";
 import { DialogFrame } from "./dialog.js";
 import type { DialogProps } from "./dialog.js";
 export type DrawerProps = Omit<DialogProps, "size"> & {
-  side?: "responsive" | "left" | "right";
+  side?: "responsive" | "left" | "right" | undefined;
   /** 제목 아래에 고정할 검색창·필터 영역. */
-  header?: ReactNode;
+  header?: ReactNode | undefined;
   /** 하단 Drawer의 높이. 옆에서 열릴 때는 화면 높이를 채운다. */
   size?: "auto" | "half" | "tall" | "full" | undefined;
 };

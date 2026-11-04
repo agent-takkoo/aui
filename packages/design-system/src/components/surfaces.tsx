@@ -7,7 +7,9 @@ import { useLinkComponent } from "../theme/provider.js";
 export type Tone =
   "brand" | "neutral" | "success" | "warning" | "danger" | "info";
 
-export type CardProps = DesignProps<"div"> & { tone?: "plain" | "muted" };
+export type CardProps = DesignProps<"div"> & {
+  tone?: "plain" | "muted" | undefined;
+};
 export function Card({ tone = "plain", ...props }: CardProps) {
   return (
     <div
@@ -26,7 +28,9 @@ export function CardHeader(props: DesignProps<"div">) {
     />
   );
 }
-export type CardTitleProps = DesignProps<"h3"> & { level?: 2 | 3 | 4 };
+export type CardTitleProps = DesignProps<"h3"> & {
+  level?: 2 | 3 | 4 | undefined;
+};
 export function CardTitle({ level = 3, ...props }: CardTitleProps) {
   const Component = `h${level}` as "h3";
   return (
@@ -66,9 +70,9 @@ export function CardFooter(props: DesignProps<"div">) {
 }
 
 export type BadgeProps = DesignProps<"span"> & {
-  size?: "sm" | "md" | "lg";
-  tone?: Tone;
-  variant?: "soft" | "solid" | "outline";
+  size?: "sm" | "md" | "lg" | undefined;
+  tone?: Tone | undefined;
+  variant?: "soft" | "solid" | "outline" | undefined;
 };
 export function Badge({
   tone = "neutral",
@@ -88,8 +92,8 @@ export function Badge({
 
 export type CalloutProps = Omit<DesignProps<"section">, "title"> & {
   title: string;
-  tone?: "info" | "success" | "warning" | "danger";
-  action?: ReactNode;
+  tone?: "info" | "success" | "warning" | "danger" | undefined;
+  action?: ReactNode | undefined;
 };
 export function Callout({
   title,
@@ -120,8 +124,8 @@ export function Callout({
 export type LinkRowProps = Omit<DesignProps<"a">, "title"> & {
   href: string;
   title: string;
-  description?: string;
-  variant?: "card" | "plain";
+  description?: string | undefined;
+  variant?: "card" | "plain" | undefined;
 };
 export function LinkRow({
   title,

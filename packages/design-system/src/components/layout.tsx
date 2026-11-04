@@ -3,8 +3,8 @@ import { domProps } from "../internal/props.js";
 
 export type Space = "none" | "xs" | "sm" | "md" | "section";
 export type StackProps = DesignProps<"div"> & {
-  gap?: Space;
-  align?: "stretch" | "start" | "center" | "end";
+  gap?: Space | undefined;
+  align?: "stretch" | "start" | "center" | "end" | undefined;
 };
 export function Stack({ gap = "md", align = "stretch", ...props }: StackProps) {
   return (
@@ -16,10 +16,10 @@ export function Stack({ gap = "md", align = "stretch", ...props }: StackProps) {
 }
 
 export type InlineProps = DesignProps<"div"> & {
-  gap?: Space;
-  align?: "start" | "center" | "end";
-  justify?: "start" | "center" | "between" | "end";
-  wrap?: boolean;
+  gap?: Space | undefined;
+  align?: "start" | "center" | "end" | undefined;
+  justify?: "start" | "center" | "between" | "end" | undefined;
+  wrap?: boolean | undefined;
 };
 export function Inline({
   gap = "sm",
@@ -37,7 +37,7 @@ export function Inline({
 }
 
 export type ContainerProps = DesignProps<"div"> & {
-  width?: "form" | "content" | "wide";
+  width?: "form" | "content" | "wide" | undefined;
 };
 export function Container({ width = "content", ...props }: ContainerProps) {
   return (
@@ -55,9 +55,9 @@ export function Separator() {
 export type GridColumns = 1 | 2 | 3 | 4 | "auto";
 export type GridCollapse = "none" | "sm" | "md" | "lg";
 export type GridProps = DesignProps<"div"> & {
-  columns?: GridColumns;
-  gap?: Space;
-  collapseBelow?: GridCollapse;
+  columns?: GridColumns | undefined;
+  gap?: Space | undefined;
+  collapseBelow?: GridCollapse | undefined;
 };
 export function Grid({
   columns = 2,

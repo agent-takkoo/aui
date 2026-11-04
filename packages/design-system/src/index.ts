@@ -197,3 +197,10 @@ export type { ScrollAreaProps } from "./components/scroll-area.js";
 
 export { AspectRatio } from "./components/aspect-ratio.js";
 export type { AspectRatioProps } from "./components/aspect-ratio.js";
+
+export { BottomBar } from "./components/bottom-bar.js";
+export type { BottomBarProps } from "./components/bottom-bar.js";
+export { ChipGroup } from "./components/chip-group.js";
+export type { ChipGroupProps } from "./components/chip-group.js";
+export { Stat } from "./components/stat.js";
+export type { StatProps } from "./components/stat.js";
